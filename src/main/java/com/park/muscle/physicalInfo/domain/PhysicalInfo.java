@@ -1,6 +1,6 @@
 package com.park.muscle.physicalInfo.domain;
 
-import com.park.muscle.member.domain.Member;
+import com.park.muscle.user.domain.User;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class PhysicalInfo {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "physical_info_id")
     private long id;
     private int age;
@@ -21,6 +21,6 @@ public class PhysicalInfo {
     private String inBody;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -1,4 +1,4 @@
-package com.park.muscle.member.domain;
+package com.park.muscle.user.domain;
 
 import com.park.muscle.physicalInfo.domain.PhysicalInfo;
 import javax.persistence.CascadeType;
@@ -11,10 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Member {
+public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private long id;
     private String username;
     private String password;
@@ -23,6 +23,6 @@ public class Member {
     private String provider;
     private String providerId;
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PhysicalInfo physicalInfo;
 }
