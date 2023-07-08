@@ -12,17 +12,24 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Member {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "member_id")
-        private long id;
-        private String username;
-        private String password;
-        private String email;
-        private String role;
-        private String provider;
-        private String providerId;
 
-        @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-        private PhysicalInfo physicalInfo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    private long id;
+
+    private String username;
+
+    private String password;
+
+    private String email;
+
+    private String role;
+
+    private String provider;
+
+    private String providerId;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private PhysicalInfo physicalInfo;
 }
