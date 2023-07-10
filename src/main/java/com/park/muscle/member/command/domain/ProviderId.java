@@ -9,9 +9,10 @@ public class ProviderId {
     @Column(name = "provider_id")
     private String value;
 
-    protected ProviderId(){}
+    protected ProviderId() {
+    }
 
-    public ProviderId(String value){
+    public ProviderId(String value) {
         this.value = value;
     }
 }

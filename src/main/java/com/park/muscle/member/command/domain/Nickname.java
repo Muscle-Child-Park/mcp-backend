@@ -9,9 +9,10 @@ public class Nickname {
     @Column(name = "nickname")
     private String value;
 
-    protected Nickname(){}
+    protected Nickname() {
+    }
 
-    public Nickname(String value){
+    public Nickname(String value) {
         this.value = value;
     }
 }

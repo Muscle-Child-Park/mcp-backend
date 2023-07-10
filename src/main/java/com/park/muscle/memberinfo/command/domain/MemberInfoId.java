@@ -18,14 +18,18 @@ public class MemberInfoId implements Serializable {
         this.id = id;
     }
 
-    public Long getId(){
+    public Long getId() {
         return id;
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         MemberInfoId MemberInfoId = (MemberInfoId) obj;
         return Objects.equals(id, MemberInfoId.id);
     }
@@ -35,7 +39,7 @@ public class MemberInfoId implements Serializable {
         return Objects.hash(id);
     }
 
-    public static MemberInfoId of(Long id){
+    public static MemberInfoId of(Long id) {
         return new MemberInfoId(id);
     }
 }

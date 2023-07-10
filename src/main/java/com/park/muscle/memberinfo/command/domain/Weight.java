@@ -9,9 +9,10 @@ public class Weight {
     @Column(name = "weight")
     private String value;
 
-    protected Weight(){}
+    protected Weight() {
+    }
 
-    public Weight(String value){
+    public Weight(String value) {
         this.value = value;
     }
 }

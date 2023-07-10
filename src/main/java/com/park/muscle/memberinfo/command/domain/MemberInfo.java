@@ -24,9 +24,10 @@ public class MemberInfo {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    protected MemberInfo(){}
+    protected MemberInfo() {
+    }
 
-    public MemberInfo(Height height, Weight weight, InBody inBody){
+    public MemberInfo(Height height, Weight weight, InBody inBody) {
         this.height = height;
         this.weight = weight;
         this.inBody = inBody;

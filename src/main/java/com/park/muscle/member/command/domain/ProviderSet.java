@@ -9,9 +9,10 @@ public class ProviderSet {
     @Column(name = "provider")
     private String value;
 
-    protected ProviderSet(){}
+    protected ProviderSet() {
+    }
 
-    public ProviderSet(String value){
+    public ProviderSet(String value) {
         this.value = value;
     }
 }

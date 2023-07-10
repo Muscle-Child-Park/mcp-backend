@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-/**TODO: 2023-07-7, Fri, 18:40  -JEON
-*  TASK: Member가 아닐 경우 예외 발생 -> 스프링 시큐리티로 대체 가능할듯함
+/**
+ * TODO: 2023-07-7, Fri, 18:40  -JEON
+ *  TASK: Member가 아닐 경우 예외 발생 -> 스프링 시큐리티로 대체 가능할듯함
  *       상의 후 수정 | 삭제 예정
-*/
+ */
 @Service
 public class BlockMemberService {
 

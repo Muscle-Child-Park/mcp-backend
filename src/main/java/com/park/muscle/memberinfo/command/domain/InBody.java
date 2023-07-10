@@ -8,9 +8,10 @@ public class InBody {
     @Column(name = "inBody")
     private String value;
 
-    protected InBody(){}
+    protected InBody() {
+    }
 
-    public InBody(String value){
+    public InBody(String value) {
         this.value = value;
     }
 }

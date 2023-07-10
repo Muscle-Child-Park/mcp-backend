@@ -8,9 +8,10 @@ public class Height {
     @Column(name = "height")
     private String value;
 
-    protected Height(){}
+    protected Height() {
+    }
 
-    public Height(String value){
+    public Height(String value) {
         this.value = value;
     }
 }

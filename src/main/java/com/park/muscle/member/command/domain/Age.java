@@ -9,9 +9,10 @@ public class Age {
     @Column(name = "age")
     private String value;
 
-    protected Age(){}
+    protected Age() {
+    }
 
-    public Age(String value){
+    public Age(String value) {
         this.value = value;
     }
 }
