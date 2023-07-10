@@ -11,6 +11,7 @@ public class MemberRequest {
     private String providerId;
     private String provider;
     private Roles roles;
+    // TODO 사소하지만 필드와 메서드 간 공백이 2줄입니다!
 
 
     public String getId() {

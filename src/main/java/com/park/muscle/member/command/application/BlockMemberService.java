@@ -22,6 +22,7 @@ public class BlockMemberService {
         this.memberRepository = memberRepository;
     }
 
+    // TODO 서비스 단위가 아닌 api 단위로 인가 옵션을 걸어도 괜찮을것 같아요!
     @PreAuthorize("hasRole('MEMBER')")
     @Transactional
     public void block(String memberId) {

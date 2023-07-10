@@ -25,6 +25,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    // TODO Controller에서 민감한 도메인 로직을 다루기보단 도메인에게 직접 메시지를 보내도 좋을것 같아요!
     @PostMapping
     public ResponseEntity<String> createMember(@RequestBody MemberRequest memberRequest) {
 
