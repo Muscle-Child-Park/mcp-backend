@@ -45,17 +45,16 @@ jobs:
 
       - name: Docker build
         run: |
-          docker build -f Dockerfile -t mcpark .
+          docker build -f Dockerfile -t ondd/${{ secrets.DOCKER_REPO }} .
 
       - name: Docker tag
         run: |
-          docker tag mcpark:latest ${{ secrets.DOCKER_REPO }}/mcpark:latest
+          docker tag latest ondd/${{ secrets.DOCKER_REPO }}:latest
 
-      - name: Docker build & Push
+      - name: Docker Push
         run: |
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }}/mcpark .
-          docker push ${{ secrets.DOCKER_REPO }}/mcpark
+          docker push ondd/${{ secrets.DOCKER_REPO }}
       
       - name: Deploy to Prod
         uses: appleboy/ssh-action@master
@@ -68,6 +67,6 @@ jobs:
           script: |
              docker stop mcpark
              docker rm mcpark
-             sudo docker pull ${{ secrets.DOCKER_REPO }}/mcpark
-             docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}/mcpark
+             sudo docker pull ${{ secrets.DOCKER_REPO }}/mcpark:latest
+             docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}/mcpark:latest
              docker rmi -f $(docker images -f "dangling=true" -q)
