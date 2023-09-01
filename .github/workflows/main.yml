@@ -45,11 +45,11 @@ jobs:
         mysql password: 'test_password'
 
     #테스트를 위한 test properties 설정
-    - name: Make application-test.properties
+    - name: Make application-test.yml
       run: |
         cd ./src/test/resources
-        touch ./application.properties
-        echo "${{ secrets.PROPERTIES_TEST }}" > ./application.properties
+        touch ./application.yml
+        echo "${{ secrets.YML_TEST }}" > ./application.yml
       shell: bash
 
     - name: Build With Test
