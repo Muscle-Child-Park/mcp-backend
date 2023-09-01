@@ -49,7 +49,7 @@ jobs:
 
       - name: Docker tag
         run: |
-          docker tag latest ondd/${{ secrets.DOCKER_REPO }}:latest
+          docker tag ondd/${{ secrets.DOCKER_REPO }}:latest ondd/${{ secrets.DOCKER_REPO }}
 
       - name: Docker Push
         run: |
