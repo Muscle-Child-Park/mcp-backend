@@ -44,12 +44,12 @@ jobs:
         mysql user: 'test_user'
         mysql password: 'test_password'
 
-    #테스트를 위한 test properties 설정
+    #테스트를 위한 test yml 설정
     - name: Make application-test.yml
       run: |
         cd ./src/test/resources
-        touch ./application.yml
-        echo "${{ secrets.YML_TEST }}" > ./application.yml
+        touch ./application-test.yml
+        echo "${{ secrets.YML_TEST }}" > ./application-test.yml
       shell: bash
 
     - name: Build With Test
