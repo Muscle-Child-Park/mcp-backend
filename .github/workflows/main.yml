@@ -51,8 +51,8 @@ jobs:
     - name: Make application-test.yml
       run: |
         cd ./src/test/resources
-        touch ./application-test.yml
-        echo "${{ secrets.YML_TEST }}" > ./application-test.yml
+        touch ./application.yml
+        echo "${{ secrets.YML_TEST }}" > ./application.yml
       shell: bash
 
     - name: Build With Test
