@@ -37,6 +37,9 @@ jobs:
           echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
         shell: bash
 
+      - name: Create 'generated-snippets' Directory
+        run: mkdir -p build/generated-snippets
+
       - name: Build With Gradle
         run: ./gradlew build -x test
 
