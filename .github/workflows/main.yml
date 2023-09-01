@@ -31,6 +31,9 @@ jobs:
     ### CI
     - name: Grant Execute Permission For Gradlew
       run: chmod +x gradlew
+
+    - name: Create 'generated-snippets' Directory
+      run: mkdir -p build/generated-snippets
     
     - name: Build With Gradle
       run: ./gradlew build -x test
