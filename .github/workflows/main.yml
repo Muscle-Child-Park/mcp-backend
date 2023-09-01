@@ -1,0 +1,65 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+permissions: write-all
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        
+    - name: Gradle Caching
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+      
+    ### CI
+    - name: Grant Execute Permission For Gradlew
+      run: chmod +x gradlew
+
+    - name: Create 'generated-snippets' Directory
+      run: mkdir -p build/generated-snippets
+    
+    - name: Build With Gradle
+      run: ./gradlew build -x test
+
+    - name: Start MySQL
+      uses: samin/mysql-action@v1.3
+      with:
+        host port: 3305
+        container port: 3305
+        mysql database: 'test_database'
+        mysql user: 'test_user'
+        mysql password: 'test_password'
+
+    #테스트를 위한 test yml 설정
+    - name: Make application-test.yml
+      run: |
+        cd ./src/test/resources
+        touch ./application.yml
+        echo "${{ secrets.YML_TEST }}" > ./application.yml
+      shell: bash
+
+    - name: Build With Test
+      run: ./gradlew test
+
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: ${{ always() }}
+      with:
+        files: build/test-results/**/*.xml
