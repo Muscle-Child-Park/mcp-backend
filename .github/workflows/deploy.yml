@@ -56,6 +56,21 @@ jobs:
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ondd/${{ secrets.DOCKER_REPO }}
       
+#      - name: Deploy to Prod
+#        uses: appleboy/ssh-action@master
+#        id: deploy-prod
+#        with:
+#          host: ${{ secrets.EC2_HOST }}
+#          username: ${{ secrets.EC2_USERNAME }}
+#          key: ${{ secrets.EC2_PRIVATE_KEY }}
+#          envs: GITHUB_SHA
+#          script: |
+#             docker stop mcpark
+#             docker rm mcpark
+#             sudo docker pull ${{ secrets.DOCKER_REPO }}/mcpark:latest
+#             docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}/mcpark:latest
+#             docker rmi -f $(docker images -f "dangling=true" -q)
+
       - name: Deploy to Prod
         uses: appleboy/ssh-action@master
         id: deploy-prod
@@ -65,8 +80,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-             docker stop mcpark
-             docker rm mcpark
-             sudo docker pull ${{ secrets.DOCKER_REPO }}/mcpark:latest
-             docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}/mcpark:latest
-             docker rmi -f $(docker images -f "dangling=true" -q)
+            docker stop mcpark
+            docker rm mcpark
+            sudo docker pull nginx:1.15-alpine
+            docker run -d --name mcpark -p 8000:8000 nginx:1.15-alpine
+            docker rmi -f $(docker images -f "dangling=true" -q)
