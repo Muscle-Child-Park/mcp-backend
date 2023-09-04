@@ -20,11 +20,9 @@ jobs:
           distribution: adopt
 
       - name: Add +x permission
-        working-directory: mcp-backend
         run: chmod +x gradlew
 
       - name: Gradle Build
-        working-directory: mcp-backend
         run: ./gradlew clean build
 
       - name: Move app file
