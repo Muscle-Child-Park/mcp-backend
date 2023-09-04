@@ -82,6 +82,6 @@ jobs:
           script: |
             docker stop mcpark
             docker rm mcpark
-            sudo docker pull nginx:1.15-alpine
-            docker run -d --name mcpark -p 8000:8000 nginx:1.15-alpine
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/mcpark
+            docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}/mcpark
             docker rmi -f $(docker images -f "dangling=true" -q)
