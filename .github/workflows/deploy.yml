@@ -5,63 +5,74 @@ on:
     branches:
       - main
 
-permissions: write-all
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build Java App
+        uses: actions/setup-java@v2
         with:
-          java-version: '11'
-          distribution: 'temurin'
+          java-version: 11
+          distribution: adopt
 
-      - name: Gradle Caching
-        uses: actions/cache@v3
+      - name: Add +x permission
+        working-directory: java
+        run: chmod +x gradlew
+
+      - name: Gradle Build
+        working-directory: java
+        run: ./gradlew clean build
+
+      - name: Move app file
+        working-directory: java
+        run: mv ./build/libs/java*.jar ./app.jar
+
+      - name: Upload jar file to Artifact
+        uses: actions/upload-artifact@v2
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      
-      ### CD
-      - name: Make application-prod.yml
-        run: |
-          cd ./src/main/resources
-          touch ./application-prod.yml
-          echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
-        shell: bash
+          name: java-app
+          path: ./java/app.jar
+          retention-days: 1
 
-      - name: Create 'generated-snippets' Directory
-        run: mkdir -p build/generated-snippets
+      - name: Download Java App from Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: java-app
 
-      - name: Build With Gradle
-        run: ./gradlew build -x test
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
 
-      #도커 빌드 & 이미지 push
-      - name: Docker build & Push
-        run: |
-          docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }} .
-          docker push ${{ secrets.DOCKER_REPO }}
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKER_ID }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      #docker-compose 파일을 ec2 서버에 배포
+      - name: Move JAR file
+        run: mv java/app.jar ./
+
+      - name: Docker Build and Push
+        run: docker buildx build --platform linux/amd64,linux/arm64 -t inerplat/github-action-example:java${{ github.sha }} --push .
+
       - name: Deploy to Prod
         uses: appleboy/ssh-action@master
-        id: deploy-prod
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: |
-              docker stop mcpark
-              docker rm mcpark
-              sudo docker pull ${{ secrets.DOCKER_REPO }}
-              docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}
-              docker rmi -f $(docker images -f "dangling=true" -q)
+            docker stop mcpark
+            docker rm mcpark
+            sudo docker pull inerplat/github-action-example:java${{ github.sha }}
+            docker run -d --name mcpark -p 8000:8000 inerplat/github-action-example:java${{ github.sha }}
+            docker rmi -f $(docker images -f "dangling=true" -q)
