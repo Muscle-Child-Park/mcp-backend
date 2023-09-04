@@ -32,11 +32,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: ./java/app.jar
+          path: /run/app.jar
           retention-days: 1
 
       - name: Download Java App from Artifact
-        needs: Upload jar file to Artifact
         uses: actions/download-artifact@v2
         with:
           name: java-app
