@@ -25,14 +25,18 @@ jobs:
       - name: Gradle Build
         run: ./gradlew clean build
 
-      - name: Move app file
-        run: mv ./build/libs/muscle-0.0.1-SNAPSHOT.jar ./app.jar
+      - name: Make application-prod.yml
+        run: |
+          cd ./src/main/resources
+          touch ./application-prod.yml
+          echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
+        shell: bash
 
       - name: Upload jar file to Artifact
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: /run/app.jar
+          path: ./app.jar
           retention-days: 1
 
       - name: Download Java App from Artifact
@@ -54,9 +58,6 @@ jobs:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Move JAR file
-        run: mv java/app.jar ./
-
       - name: Docker Build and Push
         run: docker buildx build --platform linux/amd64,linux/arm64 -t inerplat/github-action-example:java${{ github.sha }} --push .
 
@@ -70,6 +71,6 @@ jobs:
           script: |
             docker stop mcpark
             docker rm mcpark
-            sudo docker pull inerplat/github-action-example:java${{ github.sha }}
-            docker run -d --name mcpark -p 8000:8000 inerplat/github-action-example:java${{ github.sha }}
+            sudo docker pull ${{ secrets.DOCKER_REPO }}
+            docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}
             docker rmi -f $(docker images -f "dangling=true" -q)
