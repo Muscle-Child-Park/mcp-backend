@@ -26,7 +26,6 @@ jobs:
         run: ./gradlew clean build
 
       - name: Move app file
-        working-directory: java
         run: mv ./build/libs/java*.jar ./app.jar
 
       - name: Upload jar file to Artifact
