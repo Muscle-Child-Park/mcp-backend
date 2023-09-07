@@ -58,8 +58,6 @@ jobs:
           docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker buildx create --use
           docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCKER_REPO }} --push .
-      #        docker build -f Dockerfile -t ${{ secrets.DOCKER_REPO }} .
-      #        docker push ${{ secrets.DOCKER_REPO }}
 
       #docker-compose 파일을 ec2 서버에 배포
       - name: Deploy to Prod
