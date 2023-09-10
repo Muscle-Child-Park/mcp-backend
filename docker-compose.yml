@@ -20,7 +20,7 @@ services: # 컨테이너 설정
   mcpark:
     build: .
     expose:
-      - 8000
+      - 8080
     depends_on:
       - database
 
