@@ -72,5 +72,5 @@ jobs:
             docker stop mcpark
             docker rm mcpark
             sudo docker pull ${{ secrets.DOCKER_REPO }}
-            docker run -d --name mcpark -p 8000:8000 ${{ secrets.DOCKER_REPO }}
+            docker run -d --name mcpark -p 8080:8080 ${{ secrets.DOCKER_REPO }}
             docker rmi -f $(docker images -f "dangling=true" -q)
