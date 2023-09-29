@@ -1,4 +1,4 @@
 # application.yml (공통 설정)
 spring:
   profiles:
-    active: prod # local || prod(operation) || test(not in use)
+    active: local # local || prod(operation) || test(not in use)
