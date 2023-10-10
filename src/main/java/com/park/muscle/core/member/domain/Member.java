@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Member extends BaseEntity {
 
@@ -28,13 +30,17 @@ public class Member extends BaseEntity {
     @Embedded
     private Phone phone;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     protected Member() {
     }
 
     @Builder
-    public Member(final SocialType socialType, final String socialId, final Phone phone) {
+    public Member(final SocialType socialType, final String socialId, final Phone phone, final Role role) {
         this.socialType = socialType;
         this.socialId = socialId;
         this.phone = phone;
+        this.role = role;
     }
 }
