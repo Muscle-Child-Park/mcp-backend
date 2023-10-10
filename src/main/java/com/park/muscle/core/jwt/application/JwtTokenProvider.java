@@ -42,12 +42,12 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
+    private static final Long ACCESS_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.ACCESS_TOKEN_EXPIRATION;
+    public static final Long REFRESH_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.REFRESH_TOKEN_EXPIRATION;
+
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    private static String secretKey = JwtProperties.SECRET;
-    public static final Long ACCESS_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.ACCESS_TOKEN_EXPIRATION;
-    public static final Long REFRESH_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.REFRESH_TOKEN_EXPIRATION;
+    private String secretKey = JwtProperties.SECRET;
     private Key key;
 
     @PostConstruct
@@ -96,11 +96,11 @@ public class JwtTokenProvider {
         return refreshToken;
     }
 
-    private Claims extractAllClaims(final String token) {
+    private Claims extractAllClaims(String token) {
         return checkClaims(token).getBody();
     }
 
-    private Jws<Claims> checkClaims(final String token) {
+    private Jws<Claims> checkClaims(String token) {
         try {
             byte[] secretKeyBytes = Base64.getDecoder().decode(secretKey);
             return Jwts.parserBuilder().setSigningKey(secretKeyBytes).build()
@@ -114,7 +114,7 @@ public class JwtTokenProvider {
         }
     }
 
-    private SessionUser getSessionUser(final long id) {
+    private SessionUser getSessionUser(long id) {
         log.info("session user를 만들기 위해 id : {} 인 사람을 찾습니다.", id);
         Optional<Member> optionalMember = memberRepository.findById(id);
         if (optionalMember.isEmpty()) {
@@ -123,7 +123,7 @@ public class JwtTokenProvider {
         return new SessionUser(optionalMember.get());
     }
 
-    private List<GrantedAuthority> getGrantedAuthorities(final String role) {
+    private List<GrantedAuthority> getGrantedAuthorities(String role) {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(role));
         return grantedAuthorities;

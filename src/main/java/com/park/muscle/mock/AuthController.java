@@ -3,7 +3,7 @@ package com.park.muscle.mock;
 import static com.park.muscle.core.member.domain.SocialType.KAKAO;
 
 import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.domain.Phone;
+import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.domain.Role;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +12,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/members/auth")
@@ -45,7 +52,7 @@ public class AuthController {
             @RequestParam String socialLoginId) {
         // 예시: 카카오 소셜 로그인 처리
         if ("KAKAO".equalsIgnoreCase(socialProvider)) {
-            Member member = new Member(KAKAO, socialLoginId, Phone.from("010-1111-2222"), Role.ROLE_MEMBER);
+            Member member = new Member(KAKAO, socialLoginId, Name.from("홍길동"), Role.ROLE_MEMBER);
             return ResponseEntity.ok(member);
         }
 

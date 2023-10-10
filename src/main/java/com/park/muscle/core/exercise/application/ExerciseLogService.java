@@ -7,20 +7,21 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ExerciseLogService {
-    public boolean addExerciseLog(final Long memberId, final ExerciseLogRequest logRequest) {
+
+    public boolean addExerciseLog(Long memberId, ExerciseLogRequest logRequest) {
         return false;
     }
 
-    public ExerciseLogResponse findPersonalExerciseLog(final Long memberId) {
+    public ExerciseLogResponse findPersonalExerciseLog(Long memberId) {
         return null;
     }
 
-    public boolean updateExerciseLog(final Long memberId, final Long logId, final ExerciseLogRequest logRequest) {
+    public boolean updateExerciseLog(Long memberId, Long logId, ExerciseLogRequest logRequest) {
         return false;
     }
 
-    public boolean addExerciseLogReflection(final Long memberId, final Long logId,
-                                            final ExerciseLogReflectionRequest request) {
+    public boolean addExerciseLogReflection(Long memberId, Long logId,
+                                            ExerciseLogReflectionRequest request) {
         return false;
     }
 }

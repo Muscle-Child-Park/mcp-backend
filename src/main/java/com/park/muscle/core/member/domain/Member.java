@@ -28,7 +28,7 @@ public class Member extends BaseEntity {
     private String socialId;
 
     @Embedded
-    private Phone phone;
+    private Name name;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -37,10 +37,17 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(final SocialType socialType, final String socialId, final Phone phone, final Role role) {
+    public Member(SocialType socialType, String socialId, Name name, Role role) {
         this.socialType = socialType;
         this.socialId = socialId;
-        this.phone = phone;
-        this.role = role;
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void updateName(String name) {
+        this.name = Name.from(name);
     }
 }

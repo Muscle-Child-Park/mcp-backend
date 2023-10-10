@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class SessionUser implements Serializable {
+
     private final Long uuid;
     private final String authority;
 

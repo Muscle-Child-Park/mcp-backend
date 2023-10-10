@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TrainerService {
 
-    public String completeSignUp(final Trainer trainer) {
+    public String completeSignUp(Trainer trainer) {
         return null;
     }
 
-    public boolean approveMemberRegistration(final Long trainerId, final Long memberId,
-                                             final ClassRegistrationRequest classRegistrationRequest) {
+    public boolean approveMemberRegistration(Long trainerId, Long memberId,
+                                             ClassRegistrationRequest classRegistrationRequest) {
         return false;
     }
 
-    public Member getMemberInfo(final Long trainerId, final Long memberId) {
+    public Member getMemberInfo(Long trainerId, Long memberId) {
         return null;
     }
 }
