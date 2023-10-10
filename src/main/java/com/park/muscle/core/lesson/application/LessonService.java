@@ -13,23 +13,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LessonService {
 
-    public static List<Lesson> getMemberReservations(final Long memberId) {
+    public static List<Lesson> getMemberReservations(Long memberId) {
         return null;
     }
 
-    public boolean reserveSchedule(final Long trainerId, final ReserveRequest reserveRequest) {
+    public boolean reserveSchedule(Long trainerId, ReserveRequest reserveRequest) {
         return false;
     }
 
-    public boolean registerLesson(final LessonRequest lessonRequest) {
+    public boolean registerLesson(LessonRequest lessonRequest) {
         return false;
     }
 
-    public boolean addMemberExercise(final Long memberId, final MemberExerciseRequest exerciseRequest) {
+    public boolean addMemberExercise(Long memberId, MemberExerciseRequest exerciseRequest) {
         return false;
     }
 
-    public boolean addFeedback(final Long lessonId, final FeedbackRequest feedbackRequest) {
+    public boolean addFeedback(Long lessonId, FeedbackRequest feedbackRequest) {
         return false;
     }
 }

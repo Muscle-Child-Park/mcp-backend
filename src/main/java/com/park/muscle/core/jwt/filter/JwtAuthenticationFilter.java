@@ -23,12 +23,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         //사용자의 요청 헤더에서 Authorization 값을 가져온다.
         String header = request.getHeader(AUTHORIZATION);
 
-        if(validateHeader(header)) {
+        if (validateHeader(header)) {
             // 헤더에서 JWT를 받아온다.
             String accessToken = header.substring(7);
 

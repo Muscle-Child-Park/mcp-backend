@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Api(tags = "토큰 관련 컨트롤러")
 public class JwtController {
+
     private final JwtTokenReissueService jwtTokenReissueService;
 
     @GetMapping("/api/v1/jwt/refresh")

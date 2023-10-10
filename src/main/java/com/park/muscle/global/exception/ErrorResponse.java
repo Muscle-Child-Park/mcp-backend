@@ -22,35 +22,36 @@ public class ErrorResponse {
     private List<FieldError> errors;
     private String code;
 
-    private ErrorResponse(final ErrorCode errorCode, final List<FieldError> errors) {
+    private ErrorResponse(ErrorCode errorCode, List<FieldError> errors) {
         this.message = errorCode.getMessage();
         this.status = errorCode.getStatus();
         this.errors = errors;
         this.code = errorCode.getCode();
     }
 
-    private ErrorResponse(final ErrorCode errorCode) {
+    private ErrorResponse(ErrorCode errorCode) {
         this.message = errorCode.getMessage();
         this.status = errorCode.getStatus();
         this.code = errorCode.getCode();
         this.errors = new ArrayList<>();
     }
 
-    public static ErrorResponse of(final ErrorCode errorCode, final BindingResult bindingResult) {
+    public static ErrorResponse of(ErrorCode errorCode, BindingResult bindingResult) {
         return new ErrorResponse(errorCode, FieldError.of(bindingResult));
     }
 
-    public static ErrorResponse of(final ErrorCode errorCode) {
+    public static ErrorResponse of(ErrorCode errorCode) {
         return new ErrorResponse(errorCode);
     }
 
-    public static ErrorResponse of(final ErrorCode errorCode, final List<FieldError> errors) {
+    public static ErrorResponse of(ErrorCode errorCode, List<FieldError> errors) {
         return new ErrorResponse(errorCode, errors);
     }
 
     public static ErrorResponse of(MethodArgumentTypeMismatchException ex) {
         final String value = Objects.requireNonNull(ex.getValue()).toString();
-        final List<ErrorResponse.FieldError> errors =ErrorResponse.FieldError.of(ex.getName(), value, ex.getErrorCode());
+        final List<ErrorResponse.FieldError> errors = ErrorResponse.FieldError.of(ex.getName(), value,
+                ex.getErrorCode());
         return new ErrorResponse(ErrorCode.INVALID_INPUT_VALUE, errors);
     }
 
@@ -59,6 +60,7 @@ public class ErrorResponse {
         private final String field;
         private final String value;
         private final String reason;
+
         private FieldError(final String field, final String value, final String reason) {
             this.field = field;
             this.value = value;

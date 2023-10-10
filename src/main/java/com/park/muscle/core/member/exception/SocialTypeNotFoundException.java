@@ -3,9 +3,9 @@ package com.park.muscle.core.member.exception;
 import com.park.muscle.global.exception.BusinessException;
 import com.park.muscle.global.exception.ErrorCode;
 
-public class MemberNotFoundException extends BusinessException {
+public class SocialTypeNotFoundException extends BusinessException {
 
-    public MemberNotFoundException() {
-        super(ErrorCode.MEMBER_NOT_FOUND);
+    public SocialTypeNotFoundException() {
+        super(ErrorCode.SOCIAL_TYPE_NOT_FOUND);
     }
 }

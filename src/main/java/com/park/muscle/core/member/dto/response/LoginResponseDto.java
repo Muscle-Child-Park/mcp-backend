@@ -12,9 +12,9 @@ public class LoginResponseDto {
     private final String refreshToken;
 
     @ApiModelProperty("멤버의 id만 반환되는 dto")
-    private final MemberSimpleInfoResponse member;
+    private final SignUpResponse member;
 
-    public LoginResponseDto(String accessToken, String refreshToken, MemberSimpleInfoResponse member) {
+    public LoginResponseDto(String accessToken, String refreshToken, SignUpResponse member) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.member = member;
