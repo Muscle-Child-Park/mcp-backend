@@ -1,6 +1,7 @@
 package com.park.muscle.core.member.domain;
 
 import com.park.muscle.global.entity.BaseEntity;
+import com.park.muscle.global.enumerate.SocialType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
