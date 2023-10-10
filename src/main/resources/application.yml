@@ -1,4 +1,10 @@
 # application.yml (공통 설정)
+
 spring:
   profiles:
     active: local # local || prod(operation) || test(not in use)
+
+  #swagger
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
