@@ -26,15 +26,23 @@ public class Member extends BaseEntity {
     private String socialId;
 
     @Embedded
-    private Phone phone;
+    private Name name;
 
     protected Member() {
     }
 
     @Builder
-    public Member(final SocialType socialType, final String socialId, final Phone phone) {
+    public Member(final SocialType socialType, final String socialId, final Name name) {
         this.socialType = socialType;
         this.socialId = socialId;
-        this.phone = phone;
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void updateName(final String name) {
+        this.name = Name.from(name);
     }
 }
