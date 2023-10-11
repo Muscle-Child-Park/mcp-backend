@@ -12,10 +12,11 @@ import lombok.Getter;
 @Entity
 public class Gym extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "gym_id")
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "gym_id")
+    private Long id;
 
-  private String name;
+    @Column(nullable = false)
+    private String name;
 }
