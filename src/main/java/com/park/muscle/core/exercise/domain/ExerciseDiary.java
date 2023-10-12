@@ -3,8 +3,8 @@ package com.park.muscle.core.exercise.domain;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -27,6 +28,7 @@ public class ExerciseDiary extends BaseEntity {
     @Column(name = "EXERCISE_DIARY_ID")
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -46,6 +48,6 @@ public class ExerciseDiary extends BaseEntity {
     @Column(nullable = false)
     private String status;
 
-    @OneToMany(mappedBy = "exerciseDiary", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    List<Exercise> exercises;
+    @OneToMany(mappedBy = "exerciseDiary")
+    List<Exercise> exercises = new ArrayList<>();
 }

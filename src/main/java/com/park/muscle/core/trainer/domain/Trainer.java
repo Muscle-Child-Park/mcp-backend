@@ -1,11 +1,10 @@
 package com.park.muscle.core.trainer.domain;
 
 import com.park.muscle.core.course.domain.Course;
-import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -43,13 +42,20 @@ public class Trainer extends BaseEntity {
 
     private String trainerTag;
 
-    @OneToMany(mappedBy = "trainer", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Course> courses;
+    @OneToMany(mappedBy = "trainer")
+    private List<Course> courses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "trainer", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<Member> members;
+    @OneToMany(mappedBy = "trainer")
+    private List<DayOff> dayOffs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "trainer", orphanRemoval = true, cascade = CascadeType.REMOVE)
-    private List<DayOff> dayOffs;
+    public void changeGym(Gym gym) {
+        this.gym = gym;
+        gym.getTrainers().add(this);
+    }
+
+    public void addDayOffs(DayOff dayOff) {
+        this.dayOffs.add(dayOff);
+        dayOff.setTrainer(this);
+    }
 
 }
