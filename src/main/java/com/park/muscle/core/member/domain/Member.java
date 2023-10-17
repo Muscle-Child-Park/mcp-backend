@@ -41,6 +41,7 @@ public class Member extends BaseEntity {
         this.socialType = socialType;
         this.socialId = socialId;
         this.name = name;
+        this.role = role;
     }
 
     public Long getId() {

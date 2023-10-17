@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -42,7 +41,7 @@ public class SwaggerConfig {
                 .groupName("Non-Security API")
                 .select()
                 .apis(withoutMethodAnnotation(PreAuthorize.class))
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.domain"))
+                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.core"))
                 .apis(RequestHandlerSelectors.basePackage("com.park.muscle"))
                 .build()
                 .apiInfo(apiInfo());
@@ -56,7 +55,7 @@ public class SwaggerConfig {
                 .securitySchemes(List.of(apiKey()))
                 .select()
                 .apis(RequestHandlerSelectors.withMethodAnnotation(PreAuthorize.class))
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.domain"))
+                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.core"))
                 .build()
                 .apiInfo(apiInfo());
     }

@@ -1,12 +1,16 @@
 package com.park.muscle.core.member.dto.request;
 
+import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.member.domain.Name;
+import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.member.domain.SocialType;
 import javax.validation.constraints.NotBlank;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SignUpRequest {
+public class LoginRequest {
 
+    public Member toEntity;
     @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
     private String socialId;
 
@@ -16,13 +20,19 @@ public class SignUpRequest {
     @NotBlank(message = "이름은 반드시 존재해야 합니다.")
     private String name;
 
-    private SignUpRequest() {
+    public String createUserNumber() {
+        return String.format("%s#%s", SocialType.KAKAO, this.getSocialId());
     }
 
-    @Builder
-    private SignUpRequest(String socialId, String socialType, String name) {
-        this.socialId = socialId;
-        this.socialType = socialType;
-        this.name = name;
+    private LoginRequest() {
+    }
+
+    public Member toEntity() {
+        return Member.builder()
+                .socialId(createUserNumber())
+                .socialType(SocialType.findType(this.socialType))
+                .name(Name.from(this.name))
+                .role(Role.ROLE_MEMBER)
+                .build();
     }
 }
