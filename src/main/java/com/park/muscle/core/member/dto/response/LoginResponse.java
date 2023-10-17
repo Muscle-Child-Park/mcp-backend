@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 @Getter
-public class LoginResponseDto {
+public class LoginResponse {
     @ApiModelProperty("발급된 액세스 토큰")
     private final String accessToken;
 
@@ -14,7 +14,7 @@ public class LoginResponseDto {
     @ApiModelProperty("멤버의 id만 반환되는 dto")
     private final SignUpResponse member;
 
-    public LoginResponseDto(String accessToken, String refreshToken, SignUpResponse member) {
+    public LoginResponse(String accessToken, String refreshToken, SignUpResponse member) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.member = member;

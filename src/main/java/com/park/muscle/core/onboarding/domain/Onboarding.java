@@ -30,6 +30,8 @@ public class Onboarding extends BaseEntity {
 
     private String eatingHabit;
 
+    private String name;
+
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
@@ -38,13 +40,14 @@ public class Onboarding extends BaseEntity {
 
     @Builder
     private Onboarding(String firstPurpose, String secondPurpose, String balance, String interest, String lifeStyle,
-                       String eatingHabit, Member member) {
+                       String eatingHabit, String name, Member member) {
         this.firstPurpose = firstPurpose;
         this.secondPurpose = secondPurpose;
         this.balance = balance;
         this.interest = interest;
         this.lifeStyle = lifeStyle;
         this.eatingHabit = eatingHabit;
+        this.name = name;
         this.member = member;
     }
 }

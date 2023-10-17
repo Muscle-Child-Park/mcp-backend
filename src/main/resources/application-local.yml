@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
   datasource:
     url: jdbc:h2:tcp://localhost/~/muscle;MODE=MySQL;DATABASE_TO_UPPER=false
     username: sa

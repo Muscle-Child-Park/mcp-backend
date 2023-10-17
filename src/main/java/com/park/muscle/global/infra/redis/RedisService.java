@@ -1,5 +1,6 @@
 package com.park.muscle.global.infra.redis;
 
+import static com.park.muscle.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 import static com.park.muscle.global.exception.ErrorCode.REFRESH_JWT_EXPIRED;
 
 import com.park.muscle.core.jwt.exception.JwtException;

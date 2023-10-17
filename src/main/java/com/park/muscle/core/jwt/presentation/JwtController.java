@@ -1,6 +1,6 @@
 package com.park.muscle.core.jwt.presentation;
 
-import static com.park.muscle.core.member.application.MemberService.setCookieAndHeader;
+import static com.park.muscle.core.member.application.MemberAuthService.setCookieAndHeader;
 
 import com.park.muscle.core.jwt.application.JwtTokenReissueService;
 import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
