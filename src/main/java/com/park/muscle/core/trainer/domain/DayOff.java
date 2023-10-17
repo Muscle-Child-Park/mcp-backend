@@ -1,7 +1,5 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.trainer.domain;
 
-import com.park.muscle.core.course.domain.Course;
-import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -12,33 +10,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
-public class Lesson extends BaseEntity {
+public class DayOff extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lesson_id")
+    @Column(name = "day_off_id")
     private Long id;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXERCISE_DIARY_ID", nullable = false)
-    private ExerciseDiary exerciseDiary;
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
 
     @Column(nullable = false)
-    private LocalDateTime lessonDate;
+    private LocalDateTime startDate;
+
+    @Column(nullable = false)
+    private LocalDateTime endDate;
 
     @Column(nullable = false)
     private String timeSlot;
 
-    private String memoir;
-    private String feedback;
+    @Column(nullable = false)
+    private String cycleStatus;
 
 }

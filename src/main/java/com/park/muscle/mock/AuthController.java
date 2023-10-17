@@ -1,6 +1,6 @@
 package com.park.muscle.mock;
 
-import static com.park.muscle.core.member.domain.SocialType.KAKAO;
+import static com.park.muscle.global.enumerate.SocialType.KAKAO;
 
 import com.park.muscle.core.member.application.MemberAuthService;
 import com.park.muscle.core.member.domain.Member;

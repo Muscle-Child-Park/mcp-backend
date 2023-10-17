@@ -1,4 +1,4 @@
-package com.park.muscle.core.member.domain;
+package com.park.muscle.global.enumerate;
 
 import com.park.muscle.core.member.exception.SocialTypeNotFoundException;
 import java.util.Arrays;
