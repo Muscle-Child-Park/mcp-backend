@@ -27,6 +27,7 @@ public class TrainerService {
     }
 
     public Member getMemberInfo(Long trainerId, Long memberId) {
-        return null;
+        Member memberInfo = trainerRepository.getMemberInfo(trainerId, memberId);
+        return memberInfo;
     }
 }
