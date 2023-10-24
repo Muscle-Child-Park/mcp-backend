@@ -1,10 +1,10 @@
-package com.park.muscle.core.course.application;
+package com.park.muscle.core.ticket.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CourseService {
+public class TicketService {
 
 }

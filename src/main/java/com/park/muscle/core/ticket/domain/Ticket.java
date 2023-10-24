@@ -1,4 +1,4 @@
-package com.park.muscle.core.course.domain;
+package com.park.muscle.core.ticket.domain;
 
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
@@ -19,7 +19,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Course extends BaseEntity {
+public class Ticket extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +39,16 @@ public class Course extends BaseEntity {
     @Column(nullable = false)
     private int leftQuantity;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "ticket")
     private List<Lesson> lessons = new ArrayList<>();
 
     public void changeTrainer(Trainer trainer) {
         this.trainer = trainer;
-        trainer.getCourses().add(this);
+        trainer.getCours().add(this);
     }
 
     public void changeMember(Member member) {
         this.member = member;
-        member.getCourses().add(this);
+        member.getCours().add(this);
     }
 }

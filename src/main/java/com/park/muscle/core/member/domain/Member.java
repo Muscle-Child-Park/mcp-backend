@@ -1,6 +1,6 @@
 package com.park.muscle.core.member.domain;
 
-import com.park.muscle.core.course.domain.Course;
+import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
     private String socialId;
 
     @OneToMany(mappedBy = "member")
-    private List<Course> courses = new ArrayList<>();
+    private List<Ticket> cours = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<ExerciseDiary> diaries = new ArrayList<>();
