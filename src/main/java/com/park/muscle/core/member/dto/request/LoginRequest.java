@@ -3,7 +3,7 @@ package com.park.muscle.core.member.dto.request;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.domain.Role;
-import com.park.muscle.core.member.domain.SocialType;
+import com.park.muscle.global.enumerate.SocialType;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
