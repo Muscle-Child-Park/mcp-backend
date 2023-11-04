@@ -25,7 +25,7 @@ public class Lesson extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "ticket_id", nullable = false)
     private Ticket ticket;
 
     @OneToOne(fetch = FetchType.LAZY)

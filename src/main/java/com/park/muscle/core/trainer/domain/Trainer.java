@@ -43,7 +43,7 @@ public class Trainer extends BaseEntity {
     private String trainerTag;
 
     @OneToMany(mappedBy = "trainer")
-    private List<Ticket> cours = new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
     private List<DayOff> dayOffs = new ArrayList<>();

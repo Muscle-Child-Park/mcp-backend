@@ -44,11 +44,11 @@ public class Ticket extends BaseEntity {
 
     public void changeTrainer(Trainer trainer) {
         this.trainer = trainer;
-        trainer.getCours().add(this);
+        trainer.getTickets().add(this);
     }
 
     public void changeMember(Member member) {
         this.member = member;
-        member.getCours().add(this);
+        member.getTickets().add(this);
     }
 }

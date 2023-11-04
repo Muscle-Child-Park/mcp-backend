@@ -37,7 +37,7 @@ public class Member extends BaseEntity {
     private String socialId;
 
     @OneToMany(mappedBy = "member")
-    private List<Ticket> cours = new ArrayList<>();
+    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<ExerciseDiary> diaries = new ArrayList<>();
