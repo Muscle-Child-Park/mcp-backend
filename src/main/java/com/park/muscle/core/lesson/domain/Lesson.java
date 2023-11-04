@@ -1,6 +1,6 @@
 package com.park.muscle.core.lesson.domain;
 
-import com.park.muscle.core.course.domain.Course;
+import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
@@ -25,8 +25,8 @@ public class Lesson extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    @JoinColumn(name = "ticket_id", nullable = false)
+    private Ticket ticket;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EXERCISE_DIARY_ID", nullable = false)

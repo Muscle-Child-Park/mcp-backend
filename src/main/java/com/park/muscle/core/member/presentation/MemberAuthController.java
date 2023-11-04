@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javax.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,14 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/members/auth")
+@RequiredArgsConstructor
 @RestController
-public class MemberController {
+public class MemberAuthController {
 
     private final MemberAuthService memberAuthService;
-
-    public MemberController(MemberAuthService memberAuthService) {
-        this.memberAuthService = memberAuthService;
-    }
 
     @ApiOperation(value = "회원 등록", response = Member.class)
     @ApiResponses(value = {
@@ -54,6 +52,7 @@ public class MemberController {
         memberAuthService.addOnboardingQuestion(memberId, onboardingQuestionRequest);
         return ResponseEntity.ok().build();
     }
+
 
     @ApiOperation(value = "멤버 계정 삭제")
     @ApiResponses(value = {

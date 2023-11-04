@@ -3,7 +3,7 @@ package com.park.muscle.core.member.dto.request;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.domain.Role;
-import com.park.muscle.core.member.domain.SocialType;
+import com.park.muscle.global.enumerate.SocialType;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -11,6 +11,7 @@ import lombok.Getter;
 public class LoginRequest {
 
     public Member toEntity;
+
     @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
     private String socialId;
 
