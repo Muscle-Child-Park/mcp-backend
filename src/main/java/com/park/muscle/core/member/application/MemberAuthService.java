@@ -1,7 +1,6 @@
 package com.park.muscle.core.member.application;
 
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
-import com.park.muscle.core.jwt.application.JwtTokenReissueService;
 import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.MemberRepository;
@@ -12,7 +11,6 @@ import com.park.muscle.core.member.dto.response.SignUpResponse;
 import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
 import com.park.muscle.global.enumerate.SocialType;
-import com.park.muscle.global.infra.redis.RedisService;
 import com.park.muscle.global.util.CookieUtil;
 import com.park.muscle.global.util.HttpHeaderUtil;
 import java.util.Optional;
@@ -29,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberAuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtTokenReissueService jwtTokenReissueService;
-    private final RedisService redisService;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final OnboardingRepository onboardingRepository;

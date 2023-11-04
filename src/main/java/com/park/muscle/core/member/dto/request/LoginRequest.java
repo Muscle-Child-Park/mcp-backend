@@ -11,6 +11,7 @@ import lombok.Getter;
 public class LoginRequest {
 
     public Member toEntity;
+
     @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
     private String socialId;
 
