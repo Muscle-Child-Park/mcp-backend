@@ -57,5 +57,4 @@ public class Trainer extends BaseEntity {
         this.dayOffs.add(dayOff);
         dayOff.setTrainer(this);
     }
-
 }
