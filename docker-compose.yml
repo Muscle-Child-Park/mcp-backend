@@ -1,6 +1,14 @@
 version: "3" # 버전 지정
 
 services: # 컨테이너 설정
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - redis-network
   database:
     container_name: mysql # 컨테이너 이름
     image: mysql/mysql-server:latest # 컨테이너에서 사용하는 base image 지정
