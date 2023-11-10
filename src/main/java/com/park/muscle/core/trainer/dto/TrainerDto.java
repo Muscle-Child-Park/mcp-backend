@@ -20,7 +20,7 @@ public class TrainerDto {
     @AllArgsConstructor
     public static class LoginRequest {
 
-        public Trainer toEntity;
+        private Trainer toEntity;
 
         @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
         private String socialId;
@@ -83,7 +83,7 @@ public class TrainerDto {
 
         public SignUpResponse(Trainer trainer) {
             this.trainerId = trainer.getId().toString();
-            this.trainerTag = trainer.getUniqueTag().getFormattedId();
+            this.trainerTag = trainer.getUniqueTag().formattedId();
         }
     }
 }

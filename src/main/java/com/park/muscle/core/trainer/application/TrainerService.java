@@ -2,18 +2,20 @@ package com.park.muscle.core.trainer.application;
 
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.member.exception.MemberNotFoundException;
+import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
-import com.park.muscle.core.trainer.dto.TrainerDto;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginResponse;
-import com.park.muscle.core.trainer.dto.TrainerDto.SignUpRequest;
 import com.park.muscle.core.trainer.dto.TrainerDto.SignUpResponse;
 import com.park.muscle.core.trainer.dto.request.ClassRegistrationRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
-import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.enumerate.SocialType;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,6 @@ public class TrainerService {
 
     private Trainer singUp(final LoginRequest loginRequest) {
         Trainer trainer = loginRequest.toEntity();
-        trainer.setUniqueTag(new UniqueTag());
         uniqueTagRepository.save(trainer.getUniqueTag());
         return trainerRepository.save(trainer);
     }
@@ -62,11 +63,28 @@ public class TrainerService {
         return new LoginResponse(accessToken, refreshToken, new SignUpResponse(trainer));
     }
 
-    public boolean approveMemberRegistration(final Long trainerId, final Long memberId, final ClassRegistrationRequest classRegistrationRequest) {
+    public boolean approveMemberRegistration(final Long trainerId, final Long memberId,
+                                             final ClassRegistrationRequest classRegistrationRequest) {
         return false;
     }
 
     public Member getMemberInfo(final Long trainerId, final Long memberId) {
         return null;
+    }
+
+    public Trainer getTrainerById(final Long trainerId) {
+        log.info("해당 uuid를 가진 멤버를 찾습니다.");
+        return trainerRepository.findById(trainerId)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    public List<TrainerTicketResponse> getTrainerTickets(final List<Ticket> tickets) {
+        return tickets.stream()
+                .map(ticket -> new TrainerTicketResponse(
+                        ticket.getTrainer(),
+                        ticket.getMember(),
+                        ticket.getTotalQuantity(),
+                        ticket.isAccepted()))
+                .collect(Collectors.toList());
     }
 }

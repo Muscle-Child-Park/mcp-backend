@@ -1,5 +1,7 @@
 package com.park.muscle.core.trainer.presentation;
 
+import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginRequest;
@@ -8,11 +10,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -39,6 +43,15 @@ public class TrainerController {
                 .body(loginResponse);
     }
 
+    @GetMapping("/{trainerId}/tickets")
+    public ResponseEntity<List<TrainerTicketResponse>> getTrainerTickets(
+            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        List<Ticket> tickets = trainer.getTickets();
+        List<TrainerTicketResponse> trainerTicketResponse = trainerService.getTrainerTickets(tickets);
+        return ResponseEntity.ok(trainerTicketResponse);
+    }
+
     @ApiOperation(value = "트레이너 프로필 업데이트", response = Trainer.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "트레이너 프로필 업데이트 성공"),
@@ -62,7 +75,6 @@ public class TrainerController {
     @DeleteMapping("auth/delete/{trainerId}")
     public ResponseEntity<Void> deleteTrainerAccount(
             @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
-
         // 삭제가 성공한 경우 204 No Content 반환
         return ResponseEntity.noContent().build();
     }
