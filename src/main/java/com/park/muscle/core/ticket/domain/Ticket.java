@@ -15,10 +15,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Ticket extends BaseEntity {
 
     @Id
@@ -39,6 +43,9 @@ public class Ticket extends BaseEntity {
     @Column(nullable = false)
     private int leftQuantity;
 
+    @Column(nullable = false)
+    private boolean accepted;
+
     @OneToMany(mappedBy = "ticket")
     private List<Lesson> lessons = new ArrayList<>();
 
@@ -50,5 +57,28 @@ public class Ticket extends BaseEntity {
     public void changeMember(Member member) {
         this.member = member;
         member.getTickets().add(this);
+    }
+
+    public void usedTicket() {
+        this.leftQuantity--;
+    }
+
+    public int currentLeftQuantity() {
+        return leftQuantity;
+    }
+
+    public void accept() {
+        this.accepted = true;
+        trainer.getTickets().add(this);
+        member.getTickets().add(this);
+    }
+
+    @Builder
+    public Ticket(Trainer trainer, Member member, int totalQuantity) {
+        this.trainer = trainer;
+        this.member = member;
+        this.totalQuantity = totalQuantity;
+        this.leftQuantity = totalQuantity;
+        this.accepted = false;
     }
 }
