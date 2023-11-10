@@ -68,7 +68,7 @@ public class QTrainer extends EntityPathBase<Trainer> {
         super(type, metadata, inits);
         this.gym = inits.isInitialized("gym") ? new QGym(forProperty("gym")) : null;
         this.name = inits.isInitialized("name") ? new QName(forProperty("name")) : null;
-        this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag")) : null;
+        this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag"), inits.get("uniqueTag")) : null;
     }
 
 }

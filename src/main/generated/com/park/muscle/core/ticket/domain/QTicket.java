@@ -24,6 +24,8 @@ public class QTicket extends EntityPathBase<Ticket> {
 
     public final com.park.muscle.global.entity.QBaseEntity _super = new com.park.muscle.global.entity.QBaseEntity(this);
 
+    public final BooleanPath accepted = createBoolean("accepted");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
