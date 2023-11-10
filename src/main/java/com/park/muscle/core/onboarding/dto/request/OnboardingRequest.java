@@ -22,6 +22,8 @@ public class OnboardingRequest {
 
     private final String name;
 
+    private final String uniqueTag;
+
     public OnboardingRequest(Onboarding onboarding) {
         this.id = onboarding.getId();
         this.firstPurpose = onboarding.getFirstPurpose();
@@ -31,5 +33,6 @@ public class OnboardingRequest {
         this.lifeStyle = onboarding.getLifeStyle();
         this.eatingHabit = onboarding.getEatingHabit();
         this.name = onboarding.getName();
+        this.uniqueTag = onboarding.getMemberTag();
     }
 }

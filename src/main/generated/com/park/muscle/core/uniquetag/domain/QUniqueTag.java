@@ -21,7 +21,7 @@ public class QUniqueTag extends EntityPathBase<UniqueTag> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final ComparablePath<java.util.UUID> uniqueTag = createComparable("uniqueTag", java.util.UUID.class);
+    public final StringPath uniqueTag = createString("uniqueTag");
 
     public QUniqueTag(String variable) {
         super(UniqueTag.class, forVariable(variable));

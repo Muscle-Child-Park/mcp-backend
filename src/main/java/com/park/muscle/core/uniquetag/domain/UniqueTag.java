@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 @Entity
 public class UniqueTag {
+    private final static int LIMIT_LENGTH = 99999;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,13 +19,31 @@ public class UniqueTag {
     private Long id;
 
     @Column(name = "unique_tag")
-    private UUID uniqueTag;
+    private String uniqueTag;
 
     public UniqueTag() {
-        this.uniqueTag = UUID.randomUUID();
+        this.uniqueTag = generateUniqueTag();
     }
 
-    public String getUniqueTag() {
-        return uniqueTag.toString();
+    public String getFormattedId() {
+        String formattedNumber = String.format("#%d", id);
+        if (isFormatted()) {
+            formattedNumber = String.format("#%05d", id);
+            return formattedNumber;
+        }
+        return formattedNumber;
+    }
+
+    private boolean isFormatted() {
+        return id <= LIMIT_LENGTH;
+    }
+
+    private String generateUniqueTag() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
+    }
+
+    public String removeHash(String clientTag) {
+        return clientTag.replace("#", "");
     }
 }

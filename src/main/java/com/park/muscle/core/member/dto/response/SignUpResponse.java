@@ -10,7 +10,11 @@ public class SignUpResponse {
     @ApiModelProperty("member의 고유 ID")
     private final String memberId;
 
+    @ApiModelProperty("member의 고유 TAG")
+    private final String memberTag;
+
     public SignUpResponse(Member member) {
         this.memberId = member.getId().toString();
+        this.memberTag = member.getUniqueTag().getFormattedId();
     }
 }

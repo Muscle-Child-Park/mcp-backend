@@ -42,6 +42,10 @@ public class Onboarding extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    public String getMemberTag() {
+        return member.getUniqueTag().getFormattedId();
+    }
+
     @Builder
     private Onboarding(String firstPurpose, String secondPurpose, String balance, String interest, String lifeStyle,
                        String eatingHabit, String name, Member member) {

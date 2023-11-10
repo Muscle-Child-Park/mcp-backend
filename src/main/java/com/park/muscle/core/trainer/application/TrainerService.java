@@ -4,9 +4,11 @@ import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
+import com.park.muscle.core.trainer.dto.TrainerDto;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginResponse;
 import com.park.muscle.core.trainer.dto.TrainerDto.SignUpRequest;
+import com.park.muscle.core.trainer.dto.TrainerDto.SignUpResponse;
 import com.park.muscle.core.trainer.dto.request.ClassRegistrationRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
@@ -57,7 +59,7 @@ public class TrainerService {
         String refreshToken = jwtTokenProvider.createRefreshToken(trainer.getId());
 
         jwtTokenProvider.saveTrainerTokenInRedis(trainer, refreshToken);
-        return new LoginResponse(accessToken, refreshToken, new SignUpRequest(trainer));
+        return new LoginResponse(accessToken, refreshToken, new SignUpResponse(trainer));
     }
 
     public boolean approveMemberRegistration(final Long trainerId, final Long memberId, final ClassRegistrationRequest classRegistrationRequest) {

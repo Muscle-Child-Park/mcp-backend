@@ -59,7 +59,7 @@ public class TrainerDto {
         private String refreshToken;
 
         @ApiModelProperty("트레이너의 id만 반환되는 dto")
-        private SignUpRequest trainer;
+        private SignUpResponse trainer;
     }
 
     @Getter
@@ -75,12 +75,15 @@ public class TrainerDto {
     }
 
     @Getter
-    @Builder
     @ApiModel("Trainer-SingUpResponseDTO")
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class SignUpResponse {
-        @ApiModelProperty("trainer의 고유 ID")
-        private String trainerId;
+        @ApiModelProperty("trainer의 고유 태그")
+        private final String trainerId;
+        private final String trainerTag;
+
+        public SignUpResponse(Trainer trainer) {
+            this.trainerId = trainer.getId().toString();
+            this.trainerTag = trainer.getUniqueTag().getFormattedId();
+        }
     }
 }
