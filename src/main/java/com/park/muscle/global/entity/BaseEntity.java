@@ -30,7 +30,7 @@ public abstract class BaseEntity {
     }
 
     @PreUpdate
-    public void preUpdate(){
+    public void preUpdate() {
         this.modifiedDate = LocalDateTime.now();
     }
 }

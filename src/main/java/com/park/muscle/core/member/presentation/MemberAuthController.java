@@ -26,13 +26,13 @@ public class MemberAuthController {
 
     private final MemberAuthService memberAuthService;
 
-    @ApiOperation(value = "회원 등록", response = Member.class)
+    @ApiOperation(value = "회원 등록 또는 로그인", response = Member.class)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully registered a new member"),
+            @ApiResponse(code = 200, message = "회원 로그인 또는 가입 및 아이디 발급 성공"),
             @ApiResponse(code = 400, message = "Bad request")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(loginResponse);

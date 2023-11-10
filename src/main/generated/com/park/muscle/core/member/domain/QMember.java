@@ -44,6 +44,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket> tickets = this.<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket>createList("tickets", com.park.muscle.core.ticket.domain.Ticket.class, com.park.muscle.core.ticket.domain.QTicket.class, PathInits.DIRECT2);
 
+    public final com.park.muscle.core.uniquetag.domain.QUniqueTag uniqueTag;
+
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);
     }
@@ -63,6 +65,7 @@ public class QMember extends EntityPathBase<Member> {
     public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.name = inits.isInitialized("name") ? new QName(forProperty("name")) : null;
+        this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag")) : null;
     }
 
 }

@@ -5,6 +5,7 @@ import com.park.muscle.core.jwt.dto.SessionUser;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.MemberRepository;
 import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.infra.redis.RefreshToken;
 import com.park.muscle.global.infra.redis.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
@@ -139,7 +140,11 @@ public class JwtTokenProvider {
         return (Duration.between(now, expiration).compareTo(Duration.ofDays(3)) >= 0);
     }
 
-    public void saveRefreshTokenInRedis(Member member, String refreshToken) {
+    public void saveMemberTokenInRedis(Member member, String refreshToken) {
         refreshTokenRepository.save(new RefreshToken(member.getId(), refreshToken));
+    }
+
+    public void saveTrainerTokenInRedis(Trainer trainer, String refreshToken) {
+        refreshTokenRepository.save(new RefreshToken(trainer.getId(), refreshToken));
     }
 }

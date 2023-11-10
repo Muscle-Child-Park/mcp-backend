@@ -36,15 +36,17 @@ public class QTrainer extends EntityPathBase<Trainer> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
-    public final StringPath name = createString("name");
+    public final QName name;
 
-    public final StringPath social = createString("social");
+    public final EnumPath<com.park.muscle.core.member.domain.Role> role = createEnum("role", com.park.muscle.core.member.domain.Role.class);
+
+    public final StringPath socialId = createString("socialId");
 
     public final EnumPath<com.park.muscle.global.enumerate.SocialType> socialType = createEnum("socialType", com.park.muscle.global.enumerate.SocialType.class);
 
     public final ListPath<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket> tickets = this.<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket>createList("tickets", com.park.muscle.core.ticket.domain.Ticket.class, com.park.muscle.core.ticket.domain.QTicket.class, PathInits.DIRECT2);
 
-    public final StringPath trainerTag = createString("trainerTag");
+    public final com.park.muscle.core.uniquetag.domain.QUniqueTag uniqueTag;
 
     public QTrainer(String variable) {
         this(Trainer.class, forVariable(variable), INITS);
@@ -65,6 +67,8 @@ public class QTrainer extends EntityPathBase<Trainer> {
     public QTrainer(Class<? extends Trainer> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.gym = inits.isInitialized("gym") ? new QGym(forProperty("gym")) : null;
+        this.name = inits.isInitialized("name") ? new QName(forProperty("name")) : null;
+        this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag")) : null;
     }
 
 }

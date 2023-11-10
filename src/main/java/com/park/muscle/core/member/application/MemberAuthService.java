@@ -10,6 +10,8 @@ import com.park.muscle.core.member.dto.response.LoginResponse;
 import com.park.muscle.core.member.dto.response.SignUpResponse;
 import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
+import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
+import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.enumerate.SocialType;
 import com.park.muscle.global.util.CookieUtil;
 import com.park.muscle.global.util.HttpHeaderUtil;
@@ -30,6 +32,7 @@ public class MemberAuthService {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final OnboardingRepository onboardingRepository;
+    private final UniqueTagRepository uniqueTagRepository;
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
@@ -49,6 +52,8 @@ public class MemberAuthService {
 
     private Member singUp(final LoginRequest loginRequest) {
         Member member = loginRequest.toEntity();
+        member.setUniqueTag(new UniqueTag());
+        uniqueTagRepository.save(member.getUniqueTag());
         return memberService.saveSocialInfo(member);
     }
 
@@ -56,7 +61,7 @@ public class MemberAuthService {
         String accessToken = jwtTokenProvider.createAccessToken(member.getId(), member.getRole());
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
 
-        jwtTokenProvider.saveRefreshTokenInRedis(member, refreshToken);
+        jwtTokenProvider.saveMemberTokenInRedis(member, refreshToken);
         return new LoginResponse(accessToken, refreshToken, new SignUpResponse(member));
     }
 

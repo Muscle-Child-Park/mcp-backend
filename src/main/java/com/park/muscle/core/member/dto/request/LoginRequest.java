@@ -3,6 +3,7 @@ package com.park.muscle.core.member.dto.request;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.enumerate.SocialType;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -29,11 +30,13 @@ public class LoginRequest {
     }
 
     public Member toEntity() {
-        return Member.builder()
+        Member member = Member.builder()
                 .socialId(createUserNumber())
                 .socialType(SocialType.findType(this.socialType))
                 .name(Name.from(this.name))
                 .role(Role.ROLE_MEMBER)
                 .build();
+        member.setUniqueTag(new UniqueTag());
+        return member;
     }
 }

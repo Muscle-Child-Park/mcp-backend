@@ -19,14 +19,16 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
+@EnableSwagger2
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Mock-API")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.park.muscle.mock"))
@@ -37,19 +39,18 @@ public class SwaggerConfig {
 
     @Bean
     public Docket nonSecurityApi() {
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Non-Security API")
                 .select()
-                .apis(withoutMethodAnnotation(PreAuthorize.class))
+//                .apis(withoutMethodAnnotation(PreAuthorize.class))
                 .apis(RequestHandlerSelectors.basePackage("com.park.muscle.core"))
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle"))
                 .build()
                 .apiInfo(apiInfo());
     }
 
     @Bean
     public Docket securedApi() {
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Security API")
                 .securityContexts(List.of(securityContext()))
                 .securitySchemes(List.of(apiKey()))

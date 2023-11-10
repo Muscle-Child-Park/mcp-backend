@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class SignUpResponse {
 
-    @ApiModelProperty("member의 고유 Id")
+    @ApiModelProperty("member의 고유 ID")
     private final String memberId;
 
     public SignUpResponse(Member member) {

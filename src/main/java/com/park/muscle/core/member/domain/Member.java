@@ -2,6 +2,7 @@ package com.park.muscle.core.member.domain;
 
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,16 +38,20 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String socialId;
 
-    @OneToMany(mappedBy = "member")
-    private List<Ticket> tickets = new ArrayList<>();
-    @OneToMany(mappedBy = "member")
-    private List<ExerciseDiary> diaries = new ArrayList<>();
-
     @Embedded
     private Name name;
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne
+    private UniqueTag uniqueTag;
+
+    @OneToMany(mappedBy = "member")
+    private List<Ticket> tickets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<ExerciseDiary> diaries = new ArrayList<>();
 
     @Builder
     public Member(SocialType socialType, String socialId, Name name, Role role) {
@@ -57,6 +63,10 @@ public class Member extends BaseEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public void setUniqueTag(UniqueTag uniqueTag) {
+        this.uniqueTag = uniqueTag;
     }
 
     public void updateName(String name) {
