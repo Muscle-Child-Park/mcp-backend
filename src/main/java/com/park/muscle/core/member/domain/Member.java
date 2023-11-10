@@ -7,6 +7,7 @@ import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
@@ -59,14 +61,11 @@ public class Member extends BaseEntity {
         this.socialId = socialId;
         this.name = name;
         this.role = role;
+        this.uniqueTag = UniqueTag.builder().member(this).build();
     }
 
     public Long getId() {
         return id;
-    }
-
-    public void setUniqueTag(UniqueTag uniqueTag) {
-        this.uniqueTag = uniqueTag;
     }
 
     public void updateName(String name) {

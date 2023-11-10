@@ -52,7 +52,6 @@ public class MemberAuthService {
 
     private Member singUp(final LoginRequest loginRequest) {
         Member member = loginRequest.toEntity();
-        member.setUniqueTag(new UniqueTag());
         uniqueTagRepository.save(member.getUniqueTag());
         return memberService.saveSocialInfo(member);
     }
