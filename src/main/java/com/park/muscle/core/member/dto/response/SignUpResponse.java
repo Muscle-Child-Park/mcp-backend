@@ -15,6 +15,6 @@ public class SignUpResponse {
 
     public SignUpResponse(Member member) {
         this.memberId = member.getId().toString();
-        this.memberTag = member.getUniqueTag().getFormattedId();
+        this.memberTag = member.getUniqueTag().formattedId();
     }
 }

@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 public class LoginRequest {
 
-    public Member toEntity;
+    private Member toEntity;
 
     @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
     private String socialId;
@@ -30,13 +30,11 @@ public class LoginRequest {
     }
 
     public Member toEntity() {
-        Member member = Member.builder()
+        return Member.builder()
                 .socialId(createUserNumber())
                 .socialType(SocialType.findType(this.socialType))
                 .name(Name.from(this.name))
                 .role(Role.ROLE_MEMBER)
                 .build();
-        member.setUniqueTag(new UniqueTag());
-        return member;
     }
 }
