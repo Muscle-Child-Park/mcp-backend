@@ -1,4 +1,4 @@
-package com.park.muscle.core.uniqueid.domain;
+package com.park.muscle.core.uniquetag.domain;
 
 import java.util.UUID;
 import javax.persistence.Column;

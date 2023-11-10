@@ -1,6 +1,6 @@
-package com.park.muscle.core.uniqueid.domain;
+package com.park.muscle.core.uniquetag.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UniqueIdRepository extends JpaRepository<UniqueTag, Long> {
+public interface UniqueTagRepository extends JpaRepository<UniqueTag, Long> {
 }
