@@ -1,11 +1,14 @@
 package com.park.muscle.core.trainer.domain;
 
+import com.park.muscle.core.member.domain.Role;
 import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,10 +19,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Trainer extends BaseEntity {
 
     @Id
@@ -35,18 +43,39 @@ public class Trainer extends BaseEntity {
     private SocialType socialType;
 
     @Column(nullable = false)
-    private String social;
+    private String socialId;
 
-    @Column(nullable = false)
-    private String name;
+    @Embedded
+    private Name name;
 
-    private String trainerTag;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToOne
+    private UniqueTag uniqueTag;
 
     @OneToMany(mappedBy = "trainer")
     private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
     private List<DayOff> dayOffs = new ArrayList<>();
+
+    @Builder
+    public Trainer(Gym gym, SocialType socialType, String socialId, Name name, Role role) {
+        this.socialType = socialType;
+        this.socialId = socialId;
+        this.gym = gym;
+        this.name = name;
+        this.role = role;
+    }
+
+    public void setUniqueTag(UniqueTag uniqueTag) {
+        this.uniqueTag = uniqueTag;
+    }
+
+    public void updateName(String name) {
+        this.name = Name.from(name);
+    }
 
     public void changeGym(Gym gym) {
         this.gym = gym;
