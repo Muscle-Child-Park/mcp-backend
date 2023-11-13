@@ -29,8 +29,6 @@ public class QExerciseDiary extends EntityPathBase<ExerciseDiary> {
 
     public final DateTimePath<java.time.LocalDateTime> excerciseDate = createDateTime("excerciseDate", java.time.LocalDateTime.class);
 
-    public final ListPath<Exercise, QExercise> exercises = this.<Exercise, QExercise>createList("exercises", Exercise.class, QExercise.class, PathInits.DIRECT2);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.park.muscle.core.member.domain.QMember member;

@@ -25,10 +25,10 @@ public class TicketDto {
 
     @Getter
     public static class TrainerTicketResponse {
-        private String trainer;
-        private String member;
-        private int totalQuantity;
-        private boolean accepted;
+        private final String trainer;
+        private final String member;
+        private final int totalQuantity;
+        private final boolean accepted;
 
         public TrainerTicketResponse(Trainer trainer, Member member, int totalQuantity, boolean accepted) {
             this.trainer = trainer.getUniqueTag().formattedId();

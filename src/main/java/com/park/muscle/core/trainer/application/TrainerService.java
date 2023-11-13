@@ -10,7 +10,6 @@ import com.park.muscle.core.trainer.domain.TrainerRepository;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerDto.LoginResponse;
 import com.park.muscle.core.trainer.dto.TrainerDto.SignUpResponse;
-import com.park.muscle.core.trainer.dto.request.ClassRegistrationRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.List;
@@ -61,11 +60,6 @@ public class TrainerService {
 
         jwtTokenProvider.saveTrainerTokenInRedis(trainer, refreshToken);
         return new LoginResponse(accessToken, refreshToken, new SignUpResponse(trainer));
-    }
-
-    public boolean approveMemberRegistration(final Long trainerId, final Long memberId,
-                                             final ClassRegistrationRequest classRegistrationRequest) {
-        return false;
     }
 
     public Member getMemberInfo(final Long trainerId, final Long memberId) {

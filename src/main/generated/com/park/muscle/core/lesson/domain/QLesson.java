@@ -29,13 +29,13 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public final com.park.muscle.core.exercise.domain.QExerciseDiary exerciseDiary;
 
+    public final ListPath<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise> exercises = this.<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise>createList("exercises", com.park.muscle.core.exercise.domain.Exercise.class, com.park.muscle.core.exercise.domain.QExercise.class, PathInits.DIRECT2);
+
     public final StringPath feedback = createString("feedback");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> lessonDate = createDateTime("lessonDate", java.time.LocalDateTime.class);
-
-    public final StringPath memoir = createString("memoir");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;

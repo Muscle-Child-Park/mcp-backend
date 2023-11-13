@@ -38,5 +38,4 @@ public class DayOff extends BaseEntity {
 
     @Column(nullable = false)
     private String cycleStatus;
-
 }

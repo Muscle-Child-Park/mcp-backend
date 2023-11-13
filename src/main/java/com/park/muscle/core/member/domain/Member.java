@@ -50,10 +50,10 @@ public class Member extends BaseEntity {
     private UniqueTag uniqueTag;
 
     @OneToMany(mappedBy = "member")
-    private List<Ticket> tickets = new ArrayList<>();
+    private final List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<ExerciseDiary> diaries = new ArrayList<>();
+    private final List<ExerciseDiary> diaries = new ArrayList<>();
 
     @Builder
     public Member(SocialType socialType, String socialId, Name name, Role role) {

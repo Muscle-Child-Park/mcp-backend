@@ -1,11 +1,7 @@
 package com.park.muscle.core.lesson.application;
 
 import com.park.muscle.core.lesson.domain.Lesson;
-import com.park.muscle.core.lesson.dto.request.LessonRequest;
-import com.park.muscle.core.lesson.dto.request.ReserveRequest;
-import com.park.muscle.core.member.dto.request.MemberExerciseRequest;
-import com.park.muscle.core.trainer.dto.request.FeedbackRequest;
-import java.util.List;
+import com.park.muscle.core.lesson.domain.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +9,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LessonService {
 
-    public static List<Lesson> getMemberReservations(Long memberId) {
+    private final LessonRepository lessonRepository;
+
+/*    public static List<Lesson> getMemberReservations(Long memberId) {
         return null;
     }
 
@@ -31,5 +29,9 @@ public class LessonService {
 
     public boolean addFeedback(Long lessonId, FeedbackRequest feedbackRequest) {
         return false;
+    }*/
+
+    public void save(final Lesson lesson) {
+        lessonRepository.save(lesson);
     }
 }

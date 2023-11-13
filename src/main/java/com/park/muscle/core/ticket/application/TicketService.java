@@ -9,6 +9,7 @@ import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.create;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
+import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,5 +35,10 @@ public class TicketService {
               .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
         ticket.accept();
         ticketRepository.save(ticket);
+    }
+
+    public Ticket findById(final Long ticketId) {
+        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
+        return ticket.orElse(null);
     }
 }
