@@ -1,11 +1,8 @@
 package com.park.muscle.core.lesson.dto;
 
-import com.park.muscle.core.exercise.domain.Exercise;
-import com.park.muscle.core.exercise.dto.ExerciseRequestDto;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.ticket.domain.Ticket;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +13,8 @@ public class LessonRequestDto {
     @Getter
     @NoArgsConstructor
     public static class Create {
-        @NotNull(message = "Ticket ID is required")
-        private Long ticketId;
-
-        private List<ExerciseRequestDto.Create> exercises;
+        @NotNull(message = "Lesson ticket-ID is required")
+        private long ticketId;
 
         @NotNull(message = "Lesson date is required")
         private LocalDateTime lessonDate;
@@ -27,12 +22,14 @@ public class LessonRequestDto {
         @NotNull(message = "Lesson time slot is required")
         private String timeSlot;
 
-        public Lesson toEntity(Ticket ticket, List<Exercise> exercises) {
+        private String feedback;
+
+        public Lesson toEntity(Ticket ticket) {
             return Lesson.builder()
-                    .ticket(ticket)
-                    .exercises(exercises)
                     .lessonDate(lessonDate)
                     .timeSlot(timeSlot)
+                    .feedback(feedback)
+                    .ticket(ticket)
                     .build();
         }
     }

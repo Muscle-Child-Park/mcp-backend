@@ -1,6 +1,6 @@
 //package com.park.muscle.mock;
 //
-//import com.park.muscle.core.exercise.domain.Exercise;
+//import com.park.muscle.core.lesson.domain.Exercise;
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 //import io.swagger.annotations.ApiParam;

@@ -1,4 +1,4 @@
-package com.park.muscle.core.exercise.domain;
+package com.park.muscle.core.lesson.domain;
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;

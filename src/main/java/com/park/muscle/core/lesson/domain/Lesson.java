@@ -1,12 +1,9 @@
 package com.park.muscle.core.lesson.domain;
 
-import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,20 +26,8 @@ public class Lesson extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lesson_id")
+    @Column(name = "LESSON_ID")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticket_id", nullable = false)
-    private Ticket ticket;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "lesson_id", nullable = false)
-    private List<Exercise> exercises;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "EXERCISE_DIARY_ID")
-    private ExerciseDiary exerciseDiary;
 
     @Column(nullable = false)
     private LocalDateTime lessonDate;
@@ -53,11 +38,22 @@ public class Lesson extends BaseEntity {
     @Column
     private String feedback;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TICKET_ID", nullable = false)
+    private Ticket ticket;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lesson")
+    private List<Exercise> exercises;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EXERCISE_DIARY_ID")
+    private ExerciseDiary exerciseDiary;
+
     @Builder
-    public Lesson(Ticket ticket, List<Exercise> exercises, LocalDateTime lessonDate, String timeSlot) {
-        this.ticket = ticket;
-        this.exercises = exercises;
+    public Lesson(LocalDateTime lessonDate, String timeSlot, String feedback, Ticket ticket) {
         this.lessonDate = lessonDate;
         this.timeSlot = timeSlot;
+        this.feedback = feedback;
+        this.ticket = ticket;
     }
 }

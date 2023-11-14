@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Role {
-
     ROLE_MEMBER("member"),
     ROLE_TRAINER("trainer");
 

@@ -27,9 +27,9 @@ public class QLesson extends EntityPathBase<Lesson> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final com.park.muscle.core.exercise.domain.QExerciseDiary exerciseDiary;
+    public final QExerciseDiary exerciseDiary;
 
-    public final ListPath<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise> exercises = this.<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise>createList("exercises", com.park.muscle.core.exercise.domain.Exercise.class, com.park.muscle.core.exercise.domain.QExercise.class, PathInits.DIRECT2);
+    public final ListPath<Exercise, QExercise> exercises = this.<Exercise, QExercise>createList("exercises", Exercise.class, QExercise.class, PathInits.DIRECT2);
 
     public final StringPath feedback = createString("feedback");
 
@@ -62,7 +62,7 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public QLesson(Class<? extends Lesson> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
+        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
         this.ticket = inits.isInitialized("ticket") ? new com.park.muscle.core.ticket.domain.QTicket(forProperty("ticket"), inits.get("ticket")) : null;
     }
 

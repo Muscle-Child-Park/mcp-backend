@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +25,7 @@ import lombok.NoArgsConstructor;
 public class Ticket extends BaseEntity {
 
     @Id
+    @Column(name = "TICKET_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -49,6 +49,15 @@ public class Ticket extends BaseEntity {
     @OneToMany(mappedBy = "ticket")
     private List<Lesson> lessons = new ArrayList<>();
 
+    @Builder
+    public Ticket(Trainer trainer, Member member, int totalQuantity) {
+        this.trainer = trainer;
+        this.member = member;
+        this.totalQuantity = totalQuantity;
+        this.leftQuantity = totalQuantity;
+        this.accepted = false;
+    }
+
     public void changeTrainer(Trainer trainer) {
         this.trainer = trainer;
         trainer.getTickets().add(this);
@@ -71,14 +80,5 @@ public class Ticket extends BaseEntity {
         this.accepted = true;
         trainer.getTickets().add(this);
         member.getTickets().add(this);
-    }
-
-    @Builder
-    public Ticket(Trainer trainer, Member member, int totalQuantity) {
-        this.trainer = trainer;
-        this.member = member;
-        this.totalQuantity = totalQuantity;
-        this.leftQuantity = totalQuantity;
-        this.accepted = false;
     }
 }

@@ -1,13 +1,12 @@
 package com.park.muscle.core.member.domain;
 
+import com.park.muscle.core.lesson.domain.ExerciseDiary;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,7 +15,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.AccessLevel;
@@ -24,10 +22,17 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
+
+    @OneToMany(mappedBy = "member")
+    private final List<Ticket> tickets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private final List<ExerciseDiary> diaries = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,12 +53,6 @@ public class Member extends BaseEntity {
 
     @OneToOne
     private UniqueTag uniqueTag;
-
-    @OneToMany(mappedBy = "member")
-    private final List<Ticket> tickets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private final List<ExerciseDiary> diaries = new ArrayList<>();
 
     @Builder
     public Member(SocialType socialType, String socialId, Name name, Role role) {

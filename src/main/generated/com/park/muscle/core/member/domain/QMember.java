@@ -27,7 +27,7 @@ public class QMember extends EntityPathBase<Member> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final ListPath<com.park.muscle.core.exercise.domain.ExerciseDiary, com.park.muscle.core.exercise.domain.QExerciseDiary> diaries = this.<com.park.muscle.core.exercise.domain.ExerciseDiary, com.park.muscle.core.exercise.domain.QExerciseDiary>createList("diaries", com.park.muscle.core.exercise.domain.ExerciseDiary.class, com.park.muscle.core.exercise.domain.QExerciseDiary.class, PathInits.DIRECT2);
+    public final ListPath<com.park.muscle.core.lesson.domain.ExerciseDiary, com.park.muscle.core.lesson.domain.QExerciseDiary> diaries = this.<com.park.muscle.core.lesson.domain.ExerciseDiary, com.park.muscle.core.lesson.domain.QExerciseDiary>createList("diaries", com.park.muscle.core.lesson.domain.ExerciseDiary.class, com.park.muscle.core.lesson.domain.QExerciseDiary.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
