@@ -1,6 +1,6 @@
-package com.park.muscle.core.lesson.dto;
+package com.park.muscle.core.exercise.dto;
 
-import com.park.muscle.core.lesson.domain.Exercise;
+import com.park.muscle.core.exercise.domain.Exercise;
 import lombok.Builder;
 import lombok.Getter;
 

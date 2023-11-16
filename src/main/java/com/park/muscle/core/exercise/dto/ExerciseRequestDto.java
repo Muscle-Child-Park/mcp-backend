@@ -1,8 +1,7 @@
-package com.park.muscle.core.lesson.dto;
+package com.park.muscle.core.exercise.dto;
 
-import com.park.muscle.core.lesson.domain.Exercise;
-import com.park.muscle.core.lesson.domain.ExerciseType;
-import com.park.muscle.core.lesson.domain.Lesson;
+import com.park.muscle.core.exercise.domain.Exercise;
+import com.park.muscle.core.exercise.domain.ExerciseType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -30,7 +29,7 @@ public class ExerciseRequestDto {
 
         private Long lessonId;
 
-        public Exercise toEntity(Lesson lesson) {
+        public Exercise toEntity() {
             return Exercise.builder()
                     .exerciseType(ExerciseType.findType(exerciseType))
                     .name(name)
@@ -38,7 +37,6 @@ public class ExerciseRequestDto {
                     .weight(weight)
                     .count(count)
                     .runTime(runTime)
-                    .lesson(lesson)
                     .build();
         }
     }

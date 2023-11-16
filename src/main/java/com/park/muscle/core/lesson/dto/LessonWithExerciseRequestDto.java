@@ -1,5 +1,6 @@
 package com.park.muscle.core.lesson.dto;
 
+import com.park.muscle.core.exercise.dto.ExerciseRequestDto;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

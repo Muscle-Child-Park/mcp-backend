@@ -1,5 +1,6 @@
 package com.park.muscle.core.ticket.application;
 
+import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
@@ -9,11 +10,14 @@ import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.create;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
+import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -33,12 +37,20 @@ public class TicketService {
     public void acceptTicket(final Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
               .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
-        ticket.accept();
+        ticket.assignToMemberAndTrainer(ticket.getMember(), ticket.getTrainer());
         ticketRepository.save(ticket);
     }
 
     public Ticket findById(final Long ticketId) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
         return ticket.orElse(null);
+    }
+
+    public List<Lesson> findAllLessonsByTicketId(final Long ticketId) {
+        return ticketRepository.findAllLessonsByTicketId(ticketId);
+    }
+
+    public void saveTicket(final Ticket ticket) {
+        ticketRepository.save(ticket);
     }
 }

@@ -1,15 +1,12 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.exercise.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class Exercise {
 
     @Id
-    @Column(name = "EXERCISE_ID")
+    @Column(name = "exercise_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -44,18 +41,13 @@ public class Exercise {
     @Column(nullable = false)
     private int runTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "LESSON_ID", nullable = false)
-    private Lesson lesson;
-
     @Builder
-    public Exercise(ExerciseType exerciseType, String name, String kind, String weight, int count, int runTime, Lesson lesson) {
+    public Exercise(ExerciseType exerciseType, String name, String kind, String weight, int count, int runTime) {
         this.exerciseType = exerciseType;
         this.name = name;
         this.kind = kind;
         this.weight = weight;
         this.count = count;
         this.runTime = runTime;
-        this.lesson = lesson;
     }
 }

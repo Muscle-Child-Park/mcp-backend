@@ -1,4 +1,4 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.exercise.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

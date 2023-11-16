@@ -7,7 +7,6 @@ import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,6 +29,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Trainer extends BaseEntity {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,10 +56,10 @@ public class Trainer extends BaseEntity {
     private UniqueTag uniqueTag;
 
     @OneToMany(mappedBy = "trainer")
-    private final List<Ticket> tickets = new ArrayList<>();
+    private final List<DayOff> dayOffs = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
-    private final List<DayOff> dayOffs = new ArrayList<>();
+    private final List<Ticket> tickets = new ArrayList<>();
 
     @Builder
     public Trainer(Gym gym, SocialType socialType, String socialId, Name name, Role role) {
@@ -68,7 +68,7 @@ public class Trainer extends BaseEntity {
         this.gym = gym;
         this.name = name;
         this.role = role;
-        this.uniqueTag = UniqueTag.builder().trainer(this).build(); // UniqueTag 생성 및 설정
+        this.uniqueTag = UniqueTag.builder().trainer(this).build();
     }
 
     public void updateName(String name) {

@@ -2,6 +2,7 @@ package com.park.muscle.core.lesson.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.park.muscle.core.exercise.domain.Exercise;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -24,6 +25,8 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public final com.park.muscle.global.entity.QBaseEntity _super = new com.park.muscle.global.entity.QBaseEntity(this);
 
+    public final BooleanPath completionToggle = createBoolean("completionToggle");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
@@ -40,7 +43,7 @@ public class QLesson extends EntityPathBase<Lesson> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
-    public final com.park.muscle.core.ticket.domain.QTicket ticket;
+    public final ListPath<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket> ticket = this.<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket>createList("ticket", com.park.muscle.core.ticket.domain.Ticket.class, com.park.muscle.core.ticket.domain.QTicket.class, PathInits.DIRECT2);
 
     public final StringPath timeSlot = createString("timeSlot");
 
@@ -63,7 +66,6 @@ public class QLesson extends EntityPathBase<Lesson> {
     public QLesson(Class<? extends Lesson> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
-        this.ticket = inits.isInitialized("ticket") ? new com.park.muscle.core.ticket.domain.QTicket(forProperty("ticket"), inits.get("ticket")) : null;
     }
 
 }

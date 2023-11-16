@@ -33,7 +33,7 @@ public class QTicket extends EntityPathBase<Ticket> {
 
     public final NumberPath<Integer> leftQuantity = createNumber("leftQuantity", Integer.class);
 
-    public final ListPath<com.park.muscle.core.lesson.domain.Lesson, com.park.muscle.core.lesson.domain.QLesson> lessons = this.<com.park.muscle.core.lesson.domain.Lesson, com.park.muscle.core.lesson.domain.QLesson>createList("lessons", com.park.muscle.core.lesson.domain.Lesson.class, com.park.muscle.core.lesson.domain.QLesson.class, PathInits.DIRECT2);
+    public final com.park.muscle.core.lesson.domain.QLesson lesson;
 
     public final com.park.muscle.core.member.domain.QMember member;
 
@@ -62,6 +62,7 @@ public class QTicket extends EntityPathBase<Ticket> {
 
     public QTicket(Class<? extends Ticket> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.lesson = inits.isInitialized("lesson") ? new com.park.muscle.core.lesson.domain.QLesson(forProperty("lesson"), inits.get("lesson")) : null;
         this.member = inits.isInitialized("member") ? new com.park.muscle.core.member.domain.QMember(forProperty("member"), inits.get("member")) : null;
         this.trainer = inits.isInitialized("trainer") ? new com.park.muscle.core.trainer.domain.QTrainer(forProperty("trainer"), inits.get("trainer")) : null;
     }

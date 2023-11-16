@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 public class TrainerDto {
 
     @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class LoginRequest {
 
         private Trainer toEntity;

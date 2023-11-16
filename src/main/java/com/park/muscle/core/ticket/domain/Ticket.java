@@ -4,8 +4,7 @@ import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.entity.BaseEntity;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,17 +23,9 @@ import lombok.NoArgsConstructor;
 public class Ticket extends BaseEntity {
 
     @Id
-    @Column(name = "TICKET_ID")
+    @Column(name = "ticket_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "trainer_id", nullable = false)
-    private Trainer trainer;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
 
     @Column(nullable = false)
     private int totalQuantity;
@@ -46,8 +36,17 @@ public class Ticket extends BaseEntity {
     @Column(nullable = false)
     private boolean accepted;
 
-    @OneToMany(mappedBy = "ticket")
-    private List<Lesson> lessons = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "lesson_id")
+    private Lesson lesson;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
     public Ticket(Trainer trainer, Member member, int totalQuantity) {
@@ -58,9 +57,12 @@ public class Ticket extends BaseEntity {
         this.accepted = false;
     }
 
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
+    }
+
     public void changeTrainer(Trainer trainer) {
         this.trainer = trainer;
-        trainer.getTickets().add(this);
     }
 
     public void changeMember(Member member) {
@@ -76,9 +78,11 @@ public class Ticket extends BaseEntity {
         return leftQuantity;
     }
 
-    public void accept() {
+    public void assignToMemberAndTrainer(Member member, Trainer trainer) {
+        this.member = member;
+        this.trainer = trainer;
         this.accepted = true;
-        trainer.getTickets().add(this);
         member.getTickets().add(this);
+        trainer.getTickets().add(this);
     }
 }

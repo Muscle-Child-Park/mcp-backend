@@ -1,4 +1,4 @@
-package com.park.muscle.core.lesson.exception;
+package com.park.muscle.core.exercise.exception;
 
 import com.park.muscle.global.exception.BusinessException;
 import com.park.muscle.global.exception.ErrorCode;

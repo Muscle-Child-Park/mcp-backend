@@ -2,6 +2,7 @@ package com.park.muscle.core.lesson.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
+import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -27,7 +28,7 @@ public class QExerciseDiary extends EntityPathBase<ExerciseDiary> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DateTimePath<java.time.LocalDateTime> excerciseDate = createDateTime("excerciseDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> exerciseDate = createDateTime("exerciseDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

@@ -1,4 +1,4 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.exercise.domain;
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
@@ -17,12 +17,12 @@ import lombok.Setter;
 
 @Getter
 @Entity
-@Table(name = "EXERCISE_DIARY")
+@Table(name = "exercise_diary")
 public class ExerciseDiary extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EXERCISE_DIARY_ID")
+    @Column(name = "exercise_diary_id")
     private Long id;
 
     @Setter
@@ -37,7 +37,7 @@ public class ExerciseDiary extends BaseEntity {
     private String memo;
 
     @Column(nullable = false)
-    private LocalDateTime excerciseDate;
+    private LocalDateTime exerciseDate;
 
     @Column(nullable = false)
     private String timeSlot;
