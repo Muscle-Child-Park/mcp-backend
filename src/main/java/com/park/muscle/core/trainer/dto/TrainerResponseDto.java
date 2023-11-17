@@ -1,52 +1,17 @@
 package com.park.muscle.core.trainer.dto;
 
-import com.park.muscle.core.member.domain.Role;
-import com.park.muscle.core.trainer.domain.Name;
 import com.park.muscle.core.trainer.domain.Trainer;
-import com.park.muscle.global.enumerate.SocialType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-public class TrainerDto {
-
-    @Getter
-    public static class LoginRequest {
-
-        private Trainer toEntity;
-
-        @NotBlank(message = "소셜 UID는 반드시 존재해야 합니다.")
-        private String socialId;
-
-        @NotBlank(message = "소셜 타입은 반드시 존재해야 합니다.")
-        private String socialType;
-
-        @NotBlank(message = "이름은 반드시 존재해야 합니다.")
-        private String name;
-
-        public String createUserNumber() {
-            return String.format("%s#%s", SocialType.KAKAO, this.getSocialId());
-        }
-
-        public Trainer toEntity() {
-            return Trainer.builder()
-                    .socialId(createUserNumber())
-                    .socialType(SocialType.findType(this.socialType))
-                    .name(Name.from(this.name))
-                    .role(Role.ROLE_TRAINER)
-                    .build();
-        }
-    }
+public class TrainerResponseDto {
 
     @Getter
     @Builder
     @ApiModel("Trainer-LoginResponseDTO")
-    @NoArgsConstructor
-    @AllArgsConstructor
     public static class LoginResponse {
 
         @ApiModelProperty("발급된 액세스 토큰")
@@ -57,10 +22,17 @@ public class TrainerDto {
 
         @ApiModelProperty("트레이너의 id만 반환되는 dto")
         private SignUpResponse trainer;
+
+        public static LoginResponse fromEntity(String accessToken, String refreshToken, SignUpResponse trainer) {
+            return LoginResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .trainer(trainer)
+                    .build();
+        }
     }
 
     @Getter
-    @NoArgsConstructor
     @ApiModel("Trainer-SignUpRequestDTO")
     public static class SignUpRequest {
         @ApiModelProperty("trainer의 고유 ID")
@@ -83,4 +55,27 @@ public class TrainerDto {
             this.trainerTag = trainer.getUniqueTag().formattedId();
         }
     }
+
+    @Getter
+    @Builder
+    @ApiModel("Trainer-findResponseDTO")
+    public static class FindResponse {
+        private Long trainerId;
+        private String name;
+        private LocalDateTime ticketGenerateInfo;
+        private int totalQuantity;
+        private int leftQuantity;
+
+        public static TrainerResponseDto.FindResponse fromEntity(Long trainerId, String name, LocalDateTime ticketGenerateInfo, int totalQuantity, int leftQuantity) {
+            return FindResponse.builder()
+                    .trainerId(trainerId)
+                    .name(name)
+                    .ticketGenerateInfo(ticketGenerateInfo)
+                    .totalQuantity(totalQuantity)
+                    .leftQuantity(leftQuantity)
+                    .build();
+        }
+    }
+
+
 }

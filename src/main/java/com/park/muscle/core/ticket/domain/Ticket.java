@@ -2,7 +2,6 @@ package com.park.muscle.core.ticket.domain;
 
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.entity.BaseEntity;
 import javax.persistence.CascadeType;
@@ -14,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,9 +47,6 @@ public class Ticket extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-
-    @OneToOne(mappedBy = "ticket")
-    private Reservation reservation;
 
     @Builder
     public Ticket(Trainer trainer, Member member, int totalQuantity) {

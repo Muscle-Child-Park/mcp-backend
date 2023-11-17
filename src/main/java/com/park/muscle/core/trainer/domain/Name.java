@@ -25,6 +25,10 @@ public class Name {
         return new Name(name);
     }
 
+    public String getName() {
+        return this.value;
+    }
+
     private static void validate(String name) {
         if (name.length() > LIMIT_LENGTH) {
             throw new InvalidNameLengthException();

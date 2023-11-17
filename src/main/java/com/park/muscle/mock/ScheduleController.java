@@ -3,7 +3,6 @@ package com.park.muscle.mock;
 import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.application.MemberService;
-import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,21 +28,21 @@ public class ScheduleController {
     private final LessonService lessonService;
     private final MemberService memberService;
 
-    @ApiOperation(value = "멤버가 트레이너의 정보 확인", notes = "멤버가 특정 트레이너의 정보를 확인합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "트레이너 정보 조회 성공", response = Trainer.class),
-            @ApiResponse(code = 404, message = "트레이너를 찾을 수 없습니다.")
-    })
-    @GetMapping("/member/{memberId}/trainer/{trainerId}")
-    public ResponseEntity<Trainer> getTrainerInfoByMember(
-            @ApiParam(value = "멤버 ID", required = true) @PathVariable Long memberId,
-            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
-        Trainer trainer = memberService.getTrainerInfo(memberId, trainerId);
-        if (trainer != null) {
-            return ResponseEntity.ok(trainer);
-        }
-        return ResponseEntity.notFound().build();
-    }
+//    @ApiOperation(value = "멤버가 트레이너의 정보 확인", notes = "멤버가 특정 트레이너의 정보를 확인합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "트레이너 정보 조회 성공", response = Trainer.class),
+//            @ApiResponse(code = 404, message = "트레이너를 찾을 수 없습니다.")
+//    })
+//    @GetMapping("/member/{memberId}/trainer/{trainerId}")
+//    public ResponseEntity<Trainer> getTrainerInfoByMember(
+//            @ApiParam(value = "멤버 ID", required = true) @PathVariable Long memberId,
+//            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
+//        List<Trainer> trainer = memberService.getTrainerInfo(memberId);
+//        if (trainer != null) {
+//            return ResponseEntity.ok(trainer);
+//        }
+//        return ResponseEntity.notFound().build();
+//    }
 
     @ApiOperation(value = "트레이너의 스케줄 조회")
     @ApiResponses(value = {

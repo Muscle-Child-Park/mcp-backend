@@ -22,7 +22,7 @@ public class JwtTokenReissueService {
 
     public ReIssueTokenDto reIssueToken(String refreshToken) {
         Long memberId = redisService.findMemberByToken(refreshToken);
-        Member member = memberService.getMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
         String newAccessToken = jwtTokenProvider.createAccessToken(memberId, member.getRole());
 
         if (jwtTokenProvider.isTokenExpirationSafe(refreshToken)) {

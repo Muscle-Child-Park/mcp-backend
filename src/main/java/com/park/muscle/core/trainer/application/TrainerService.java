@@ -1,5 +1,8 @@
 package com.park.muscle.core.trainer.application;
 
+import static com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponseDto.SignUpResponse;
+
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.exception.MemberNotFoundException;
@@ -7,9 +10,7 @@ import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
-import com.park.muscle.core.trainer.dto.TrainerDto.LoginRequest;
-import com.park.muscle.core.trainer.dto.TrainerDto.LoginResponse;
-import com.park.muscle.core.trainer.dto.TrainerDto.SignUpResponse;
+import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.List;
@@ -59,7 +60,7 @@ public class TrainerService {
         String refreshToken = jwtTokenProvider.createRefreshToken(trainer.getId());
 
         jwtTokenProvider.saveTrainerTokenInRedis(trainer, refreshToken);
-        return new LoginResponse(accessToken, refreshToken, new SignUpResponse(trainer));
+        return LoginResponse.fromEntity(accessToken, refreshToken, new SignUpResponse(trainer));
     }
 
     public Member getMemberInfo(final Long trainerId, final Long memberId) {
@@ -67,7 +68,6 @@ public class TrainerService {
     }
 
     public Trainer getTrainerById(final Long trainerId) {
-        log.info("해당 uuid를 가진 멤버를 찾습니다.");
         return trainerRepository.findById(trainerId)
                 .orElseThrow(MemberNotFoundException::new);
     }

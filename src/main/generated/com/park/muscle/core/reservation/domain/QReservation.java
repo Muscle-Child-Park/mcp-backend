@@ -18,13 +18,9 @@ public class QReservation extends EntityPathBase<Reservation> {
 
     private static final long serialVersionUID = -715215059L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QReservation reservation = new QReservation("reservation");
 
     public final com.park.muscle.global.entity.QBaseEntity _super = new com.park.muscle.global.entity.QBaseEntity(this);
-
-    public final BooleanPath confirm = createBoolean("confirm");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
@@ -42,27 +38,16 @@ public class QReservation extends EntityPathBase<Reservation> {
 
     public final ListPath<ReserveTimeSlot, QReserveTimeSlot> reserveTimeSlots = this.<ReserveTimeSlot, QReserveTimeSlot>createList("reserveTimeSlots", ReserveTimeSlot.class, QReserveTimeSlot.class, PathInits.DIRECT2);
 
-    public final com.park.muscle.core.ticket.domain.QTicket ticket;
-
     public QReservation(String variable) {
-        this(Reservation.class, forVariable(variable), INITS);
+        super(Reservation.class, forVariable(variable));
     }
 
     public QReservation(Path<? extends Reservation> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QReservation(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QReservation(PathMetadata metadata, PathInits inits) {
-        this(Reservation.class, metadata, inits);
-    }
-
-    public QReservation(Class<? extends Reservation> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.ticket = inits.isInitialized("ticket") ? new com.park.muscle.core.ticket.domain.QTicket(forProperty("ticket"), inits.get("ticket")) : null;
+        super(Reservation.class, metadata);
     }
 
 }

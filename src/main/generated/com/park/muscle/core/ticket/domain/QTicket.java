@@ -40,8 +40,6 @@ public class QTicket extends EntityPathBase<Ticket> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
-    public final com.park.muscle.core.reservation.domain.QReservation reservation;
-
     public final NumberPath<Integer> totalQuantity = createNumber("totalQuantity", Integer.class);
 
     public final com.park.muscle.core.trainer.domain.QTrainer trainer;
@@ -66,7 +64,6 @@ public class QTicket extends EntityPathBase<Ticket> {
         super(type, metadata, inits);
         this.lesson = inits.isInitialized("lesson") ? new com.park.muscle.core.lesson.domain.QLesson(forProperty("lesson"), inits.get("lesson")) : null;
         this.member = inits.isInitialized("member") ? new com.park.muscle.core.member.domain.QMember(forProperty("member"), inits.get("member")) : null;
-        this.reservation = inits.isInitialized("reservation") ? new com.park.muscle.core.reservation.domain.QReservation(forProperty("reservation"), inits.get("reservation")) : null;
         this.trainer = inits.isInitialized("trainer") ? new com.park.muscle.core.trainer.domain.QTrainer(forProperty("trainer"), inits.get("trainer")) : null;
     }
 

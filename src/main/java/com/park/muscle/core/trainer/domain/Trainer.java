@@ -2,6 +2,7 @@ package com.park.muscle.core.trainer.domain;
 
 import com.park.muscle.core.member.domain.Role;
 import com.park.muscle.core.reservation.domain.Reservation;
+import com.park.muscle.core.reservation.domain.ReserveTimeSlot;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
@@ -30,7 +31,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Trainer extends BaseEntity {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -65,6 +65,9 @@ public class Trainer extends BaseEntity {
     @OneToMany
     private final List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany
+    private final List<ReserveTimeSlot> reserveTimeSlots = new ArrayList<>();
+
     @Builder
     public Trainer(Gym gym, SocialType socialType, String socialId, Name name, Role role) {
         this.socialType = socialType;
@@ -77,6 +80,10 @@ public class Trainer extends BaseEntity {
 
     public void updateName(String name) {
         this.name = Name.from(name);
+    }
+
+    public String getName() {
+        return name.getName();
     }
 
     public void changeGym(Gym gym) {

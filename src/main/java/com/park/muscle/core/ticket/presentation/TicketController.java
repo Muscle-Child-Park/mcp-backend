@@ -1,6 +1,8 @@
 package com.park.muscle.core.ticket.presentation;
 
 import com.park.muscle.core.lesson.domain.Lesson;
+import com.park.muscle.core.member.application.MemberService;
+import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.dto.TicketDto;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/tickets")
 public class TicketController {
     private final TicketService ticketService;
+    private final MemberService memberService;
 
     @PostMapping("/ticket/request")
     public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketDto.create ticketCreateDto) {
-        TicketCreateResponse ticketCreateResponse = ticketService.createTicket(ticketCreateDto);
+        Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
+        TicketCreateResponse ticketCreateResponse = ticketService.createTicket(member, ticketCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketCreateResponse);
     }

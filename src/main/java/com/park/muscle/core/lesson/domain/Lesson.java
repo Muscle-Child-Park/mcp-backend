@@ -2,6 +2,7 @@ package com.park.muscle.core.lesson.domain;
 
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
@@ -45,6 +46,9 @@ public class Lesson extends BaseEntity {
 
     @Column
     private boolean completionToggle;
+
+    @OneToOne
+    private Reservation reservation;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Ticket> ticket;

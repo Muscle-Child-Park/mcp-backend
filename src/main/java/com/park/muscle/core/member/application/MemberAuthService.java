@@ -4,14 +4,13 @@ import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.MemberRepository;
-import com.park.muscle.core.member.dto.request.OnboardingQuestionRequest;
 import com.park.muscle.core.member.dto.request.LoginRequest;
+import com.park.muscle.core.member.dto.request.OnboardingQuestionRequest;
 import com.park.muscle.core.member.dto.response.LoginResponse;
 import com.park.muscle.core.member.dto.response.SignUpResponse;
 import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
-import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.enumerate.SocialType;
 import com.park.muscle.global.util.CookieUtil;
 import com.park.muscle.global.util.HttpHeaderUtil;
@@ -88,7 +87,7 @@ public class MemberAuthService {
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberService.getMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
         memberRepository.delete(member);
     }
 

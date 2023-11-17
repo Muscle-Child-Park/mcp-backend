@@ -22,11 +22,13 @@ public class QReserveTimeSlot extends EntityPathBase<ReserveTimeSlot> {
 
     public static final QReserveTimeSlot reserveTimeSlot = new QReserveTimeSlot("reserveTimeSlot");
 
+    public final BooleanPath accessible = createBoolean("accessible");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final QReservation reservation;
 
-    public final StringPath time = createString("time");
+    public final TimePath<java.time.LocalTime> time = createTime("time", java.time.LocalTime.class);
 
     public QReserveTimeSlot(String variable) {
         this(ReserveTimeSlot.class, forVariable(variable), INITS);
@@ -46,7 +48,7 @@ public class QReserveTimeSlot extends EntityPathBase<ReserveTimeSlot> {
 
     public QReserveTimeSlot(Class<? extends ReserveTimeSlot> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.reservation = inits.isInitialized("reservation") ? new QReservation(forProperty("reservation"), inits.get("reservation")) : null;
+        this.reservation = inits.isInitialized("reservation") ? new QReservation(forProperty("reservation")) : null;
     }
 
 }
