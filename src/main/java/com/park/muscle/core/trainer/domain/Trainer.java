@@ -1,6 +1,7 @@
 package com.park.muscle.core.trainer.domain;
 
 import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
@@ -60,6 +61,9 @@ public class Trainer extends BaseEntity {
 
     @OneToMany(mappedBy = "trainer")
     private final List<Ticket> tickets = new ArrayList<>();
+
+    @OneToMany
+    private final List<Reservation> reservations = new ArrayList<>();
 
     @Builder
     public Trainer(Gym gym, SocialType socialType, String socialId, Name name, Role role) {

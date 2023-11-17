@@ -1,6 +1,7 @@
 package com.park.muscle.core.member.domain;
 
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
@@ -51,6 +52,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private final List<ExerciseDiary> diaries = new ArrayList<>();
+
+    @OneToMany
+    private final List<Reservation> reservations = new ArrayList<>();
 
     @OneToOne
     private UniqueTag uniqueTag;

@@ -2,7 +2,6 @@ package com.park.muscle.core.lesson.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.park.muscle.core.exercise.domain.Exercise;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -30,9 +29,9 @@ public class QLesson extends EntityPathBase<Lesson> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final QExerciseDiary exerciseDiary;
+    public final com.park.muscle.core.exercise.domain.QExerciseDiary exerciseDiary;
 
-    public final ListPath<Exercise, QExercise> exercises = this.<Exercise, QExercise>createList("exercises", Exercise.class, QExercise.class, PathInits.DIRECT2);
+    public final ListPath<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise> exercises = this.<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise>createList("exercises", com.park.muscle.core.exercise.domain.Exercise.class, com.park.muscle.core.exercise.domain.QExercise.class, PathInits.DIRECT2);
 
     public final StringPath feedback = createString("feedback");
 
@@ -65,7 +64,7 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public QLesson(Class<? extends Lesson> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
+        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
     }
 
 }

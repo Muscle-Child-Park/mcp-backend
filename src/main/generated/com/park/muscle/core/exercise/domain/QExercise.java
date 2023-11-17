@@ -1,9 +1,7 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.exercise.domain;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.park.muscle.core.exercise.domain.Exercise;
-import com.park.muscle.core.exercise.domain.ExerciseType;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;
@@ -17,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QExercise extends EntityPathBase<Exercise> {
 
-    private static final long serialVersionUID = -1971974027L;
+    private static final long serialVersionUID = -2110196011L;
 
     public static final QExercise exercise = new QExercise("exercise");
 
