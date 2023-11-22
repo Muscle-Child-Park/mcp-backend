@@ -1,11 +1,13 @@
 package com.park.muscle.core.lesson.presentation;
 
 import static com.park.muscle.core.exercise.dto.ExerciseRequestDto.Create;
+import static com.park.muscle.core.exercise.dto.LogRequestDto.LogReflectionDto;
 import static com.park.muscle.core.lesson.dto.LessonResponseDto.LessonCreateResponse;
 
 import com.park.muscle.core.exercise.application.ExerciseService;
-import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.exercise.domain.Exercise;
+import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
+import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.lesson.dto.LessonResponseDto.LessonRetrieveResponse;
 import com.park.muscle.core.lesson.dto.LessonWithExerciseRequestDto;
@@ -35,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(tags = "Lesson Management")
 public class LessonController {
-
     private final LessonService lessonService;
     private final ExerciseService exerciseService;
     private final TicketService ticketService;
@@ -86,5 +87,16 @@ public class LessonController {
                                                       @PathVariable final long lessonId) {
         lessonService.addFeedback(lessonId, feedback.get("feedback"));
         return ResponseEntity.status(HttpStatus.OK).body("피드백이 성공적으로 추가되었습니다.");
+    }
+
+    @ApiOperation(value = "회고 추가", notes = "수업에 대한 회고를 추가합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "회고가 성공적으로 추가되었습니다."),
+            @ApiResponse(code = 400, message = "Bad request")
+    })
+    @PostMapping("/log")
+    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(@RequestBody LogReflectionDto logReflectionDto) {
+        LogReflectionResponseDto logReflectionResponseDto = lessonService.addExerciseDiary(logReflectionDto);
+        return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
     }
 }

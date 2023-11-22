@@ -1,7 +1,13 @@
 package com.park.muscle.core.lesson.application;
 
+import com.park.muscle.core.exercise.application.ExerciseLogService;
+import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.exercise.dto.LogRequestDto.LogReflectionDto;
+import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.lesson.domain.LessonRepository;
+import com.park.muscle.core.member.application.MemberService;
+import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.mock.ReserveRequest;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LessonService {
-
+    private final ExerciseLogService exerciseLogService;
+    private final MemberService memberService;
     private final LessonRepository lessonRepository;
 
     public static List<Lesson> getMemberReservations(final Long memberId) {
@@ -36,5 +43,15 @@ public class LessonService {
 
     public boolean reserveSchedule(final Long trainerId, final ReserveRequest reserveRequest) {
         return false;
+    }
+
+    public LogReflectionResponseDto addExerciseDiary(LogReflectionDto logReflectionDto) {
+        Member member = memberService.findMemberById(logReflectionDto.getMemberId());
+        ExerciseDiary exerciseDiary = logReflectionDto.toEntity(member, logReflectionDto.getLog());
+        exerciseLogService.save(exerciseDiary);
+        Lesson lesson = getOwnLessonById(logReflectionDto.getLessonId());
+        lesson.addExerciseDiary(exerciseDiary);
+        lessonRepository.save(lesson);
+        return LogReflectionResponseDto.fromEntity(exerciseDiary);
     }
 }

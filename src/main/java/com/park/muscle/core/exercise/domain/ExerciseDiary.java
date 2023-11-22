@@ -2,7 +2,6 @@ package com.park.muscle.core.exercise.domain;
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,12 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "exercise_diary")
+@NoArgsConstructor
 public class ExerciseDiary extends BaseEntity {
 
     @Id
@@ -31,17 +33,11 @@ public class ExerciseDiary extends BaseEntity {
     private Member member;
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
     private String memo;
 
-    @Column(nullable = false)
-    private LocalDateTime exerciseDate;
-
-    @Column(nullable = false)
-    private String timeSlot;
-
-    @Column(nullable = false)
-    private String status;
+    @Builder
+    public ExerciseDiary(Member member, String memo) {
+        this.member = member;
+        this.memo = memo;
+    }
 }
