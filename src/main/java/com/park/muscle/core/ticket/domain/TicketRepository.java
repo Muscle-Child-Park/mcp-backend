@@ -15,4 +15,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Lesson> findAllLessonsByTicketId(@Param("ticketId") Long ticketId);
 
     List<Ticket> findAllTicketByMemberId(Long memberId);
+
+    List<Ticket> findAllTicketByTrainerId(Long trainerId);
 }

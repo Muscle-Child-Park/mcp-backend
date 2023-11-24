@@ -27,8 +27,6 @@ public class QExerciseDiary extends EntityPathBase<ExerciseDiary> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DateTimePath<java.time.LocalDateTime> exerciseDate = createDateTime("exerciseDate", java.time.LocalDateTime.class);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.park.muscle.core.member.domain.QMember member;
@@ -37,12 +35,6 @@ public class QExerciseDiary extends EntityPathBase<ExerciseDiary> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
-
-    public final StringPath status = createString("status");
-
-    public final StringPath timeSlot = createString("timeSlot");
-
-    public final StringPath title = createString("title");
 
     public QExerciseDiary(String variable) {
         this(ExerciseDiary.class, forVariable(variable), INITS);

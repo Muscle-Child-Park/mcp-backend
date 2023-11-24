@@ -1,93 +1,96 @@
 package com.park.muscle.global.infra.swagger;
 
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.prepost.PreAuthorize;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.ApiKey;
-import springfox.documentation.service.AuthorizationScope;
-import springfox.documentation.service.SecurityReference;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@EnableSwagger2
-@RequiredArgsConstructor
+//@SecurityScheme(type = SecuritySchemeType.APIKEY, name = "Access-Token", in = SecuritySchemeIn.HEADER)
+//@OpenAPIDefinition(security = {@SecurityRequirement(name = "Access-Token")})
 public class SwaggerConfig {
 
     @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("Mock-API")
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.mock"))
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
-    }
-
-    @Bean
-    public Docket nonSecurityApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("Non-Security API")
-                .select()
-//                .apis(withoutMethodAnnotation(PreAuthorize.class))
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.core"))
-                .build()
-                .apiInfo(apiInfo());
-    }
-
-    @Bean
-    public Docket securedApi() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("Security API")
-                .securityContexts(List.of(securityContext()))
-                .securitySchemes(List.of(apiKey()))
-                .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(PreAuthorize.class))
-                .apis(RequestHandlerSelectors.basePackage("com.park.muscle.core"))
-                .build()
-                .apiInfo(apiInfo());
-    }
-
-    public static Predicate<RequestHandler> withoutMethodAnnotation(
-            final Class<? extends Annotation> annotation) {
-        return input -> !input.isAnnotatedWith(annotation);
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
+    public GroupedOpenApi publicJwtApi() {
+        return GroupedOpenApi.builder()
+                .group("JWT")
+                .pathsToMatch("/api/jwt/**")
                 .build();
     }
 
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("Authorization", authorizationScopes));
-    }
-
-    private ApiKey apiKey() {
-        return new ApiKey("Authorization", "Bearer", "header");
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("MC-PARK Swagger API")
-                .description("Team Muscle Child Park Swagger docs")
-                .version("1.0")
+    @Bean
+    public GroupedOpenApi publicLessonApi() {
+        return GroupedOpenApi.builder()
+                .group("Lesson")
+                .pathsToMatch("/api/lesson/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi publicMemberApi() {
+        return GroupedOpenApi.builder()
+                .group("Member")
+                .pathsToMatch("/api/member/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi publicProfileApi() {
+        return GroupedOpenApi.builder()
+                .group("On-boarding")
+                .pathsToMatch("/api/profile/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi publicTicketApi() {
+        return GroupedOpenApi.builder()
+                .group("Ticket")
+                .pathsToMatch("/api/tickets/**")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi publicTrainerApi() {
+        return GroupedOpenApi.builder()
+                .group("Trainer")
+                .pathsToMatch("/api/trainers/**")
+                .build();
+    }
+
+    @Bean
+    public OpenAPI springShopOpenAPI() {
+        String title = "TEAM MC-PARK API DOCS";
+        String description = "Mave API end-point Description";
+
+        Info info = new Info().title(title)
+                .description(description)
+                .version("1.0.0");
+
+        return new OpenAPI()
+                .components(new Components())
+                .info(info);
+    }
+
+//    public ApiResponse createApiResponse(String message, Content content) {
+//        return new ApiResponse().description(message).content(content);
+//    }
+//
+//    @Bean
+//    public GlobalOpenApiCustomizer customerGlobalHeaderOpenApiCustomiser() {
+//        return openApi -> {
+//            // 공통으로 사용되는 response 설정
+//            openApi.getPaths().values().forEach(pathItem -> pathItem.readOperations().forEach(operation -> {
+//                ApiResponses apiResponses = operation.getResponses();
+//                apiResponses.addApiResponse("200", createApiResponse(apiResponses.get("200").getDescription(),
+//                        apiResponses.get("200").getContent()));
+//                apiResponses.addApiResponse("201", createApiResponse(apiResponses.get("201").getDescription(), apiResponses.get("201").getContent()));
+//                apiResponses.addApiResponse("400", createApiResponse(apiResponses.get("400").getDescription(), apiResponses.get("400").getContent()));
+//                apiResponses.addApiResponse("401", createApiResponse(apiResponses.get("401").getDescription(), apiResponses.get("401").getContent()));
+//                apiResponses.addApiResponse("500", createApiResponse(apiResponses.get("500").getDescription(), apiResponses.get("500").getContent()));
+//            }));
+//        };
+//    }
 }

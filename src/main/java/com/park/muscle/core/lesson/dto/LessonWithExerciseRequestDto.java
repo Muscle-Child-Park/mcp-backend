@@ -1,6 +1,6 @@
 package com.park.muscle.core.lesson.dto;
 
-import com.park.muscle.core.exercise.dto.ExerciseRequestDto;
+import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LessonWithExerciseRequestDto {
     private LessonRequestDto.Create lessonRequestDto;
-    private List<ExerciseRequestDto.Create> exerciseRequestDtos;
+    private List<CreateExerciseWithLesson> exerciseRequestDtos;
 }

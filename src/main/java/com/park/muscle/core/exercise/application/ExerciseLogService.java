@@ -20,11 +20,18 @@ public class ExerciseLogService {
         return false;
     }
 
-    public boolean updateExerciseLog(final Long memberId, final Long logId) {
-        return false;
+    public ExerciseDiary updateExerciseLog(final Long logId, final String log) {
+        ExerciseDiary exerciseDiary = getOwnLogById(logId);
+        exerciseDiary.updateLog(log);
+        exerciseLogRepository.save(exerciseDiary);
+        return exerciseDiary;
     }
 
     public void save(final ExerciseDiary exerciseDiary) {
         exerciseLogRepository.save(exerciseDiary);
+    }
+
+    public ExerciseDiary getOwnLogById(final long exerciseDiaryId) {
+        return exerciseLogRepository.findById(exerciseDiaryId).orElseThrow(IllegalArgumentException::new);
     }
 }

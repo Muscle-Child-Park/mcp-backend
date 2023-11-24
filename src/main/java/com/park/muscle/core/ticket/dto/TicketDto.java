@@ -3,7 +3,7 @@ package com.park.muscle.core.ticket.dto;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.trainer.domain.Trainer;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 public class TicketDto {
@@ -40,13 +40,14 @@ public class TicketDto {
 
     @Getter
     public static class TicketResponse {
-        @ApiModelProperty("member의 고유 ID")
+
+        @Schema(description = "member의 고유 ID")
         private final String memberId;
 
-        @ApiModelProperty("trainer 고유 ID")
+        @Schema(description = "trainer 고유 ID")
         private final String trainerId;
 
-        @ApiModelProperty("ticket 고유 ID")
+        @Schema(description = "ticket 고유 ID")
         private final String ticketId;
 
         public TicketResponse(Member member, Trainer trainer, Ticket ticket) {
@@ -58,7 +59,7 @@ public class TicketDto {
 
     @Getter
     public static class TicketCreateResponse {
-        @ApiModelProperty("멤버, 트레이너, 티켓 id가 반환되는 dto")
+        @Schema(description = "멤버, 트레이너, 티켓 id가 반환되는 dto")
         private final TicketResponse ticket;
 
         public TicketCreateResponse(TicketResponse ticket) {

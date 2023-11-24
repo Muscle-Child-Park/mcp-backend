@@ -1,10 +1,8 @@
-package com.park.muscle.core.lesson.domain;
+package com.park.muscle.core.personalexercise.domain;
 
+import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
-import com.park.muscle.core.reservation.domain.Reservation;
-import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.global.entity.BaseEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +21,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
 @Entity
-@Table(name = "lesson")
+@Table(name = "personal_exercise")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Lesson extends BaseEntity {
+public class PersonalExercise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lesson_id")
+    @Column(name = "personal_exercise_id")
     private Long id;
 
     @Column(nullable = false)
@@ -44,43 +40,29 @@ public class Lesson extends BaseEntity {
     private String timeSlot;
 
     @Column
-    private String feedback;
-
-    @Column
     private boolean completionToggle;
 
-    @OneToOne
-    private Reservation reservation;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Ticket> ticket;
+    @Column
+    private ClassType classType;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Exercise> exercises;
+    private List<Exercise> exercises = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "exercise_diary_id")
     private ExerciseDiary exerciseDiary;
 
     @Builder
-    public Lesson(LocalDateTime lessonDate, String timeSlot, String feedback, List<Exercise> exercises) {
+    public PersonalExercise(LocalDateTime lessonDate, String timeSlot, List<Exercise> exercises, ClassType classType) {
         this.lessonDate = lessonDate;
         this.timeSlot = timeSlot;
-        this.feedback = feedback;
         this.exercises = exercises;
         this.completionToggle = false;
+        this.classType = classType;
     }
 
     public void addExerciseDiary(ExerciseDiary exerciseDiary) {
         this.exerciseDiary = exerciseDiary;
-    }
-
-    public void addFeedback(String feedback) {
-        if (lessonDate.isBefore(LocalDateTime.now())) {
-            this.feedback = feedback;
-        } else {
-            throw new IllegalStateException("수업이 종료되지 않았습니다.");
-        }
     }
 
     public void updateExercise(final List<Exercise> exercises) {
@@ -88,14 +70,6 @@ public class Lesson extends BaseEntity {
             this.exercises = new ArrayList<>();
         }
         this.exercises.addAll(exercises);
-    }
-
-    public boolean checkLessonCompletion() {
-        LocalDateTime current = lessonDate.plusMinutes(Integer.parseInt(this.timeSlot));
-        if (lessonDate.isBefore(current)) {
-            return completionToggle;
-        }
-        return completionToggle = true;
     }
 
     public void updateExerciseDiary(final ExerciseDiary exerciseDiary) {

@@ -1,7 +1,6 @@
 package com.park.muscle.core.member.presentation;
 
 import com.park.muscle.core.exercise.application.ExerciseLogService;
-import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/member/log")
-@Api(tags = "Member-log Management")
 public class MemberLogController {
 
     private final ExerciseLogService exerciseLogService;

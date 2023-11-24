@@ -5,8 +5,10 @@ import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.dto.request.OnboardingRequest;
 import com.park.muscle.core.onboarding.dto.request.UpdateOnboardingRequest;
 import com.park.muscle.core.onboarding.dto.response.UpdateOnboardingResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,20 +21,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/profile")
-@Api(value = "OnboardingController", tags = "Onboarding management system")
+@Tag(name = "On-boarding Management", description = "APIs related to managing On-boarding")
 public class OnboardingController {
     private final OnboardingService onboardingService;
 
+    @Operation(summary = "회원 페이지 정보 조회", description = "특정 회원의 페이지 정보를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 정보가 조회 되었습니다."),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @GetMapping("/{memberId}/my-page")
-    @ApiOperation(value = "회원 페이지 정보 조회", notes = "특정 회원의 페이지 정보를 조회합니다.")
     public ResponseEntity<OnboardingRequest> getMemberPage(@PathVariable Long memberId) {
         Onboarding onboarding = onboardingService.findOwn(memberId);
         OnboardingRequest onboardingRequest = new OnboardingRequest(onboarding);
         return ResponseEntity.ok(onboardingRequest);
     }
 
+    @Operation(summary = "회원 페이지 정보 업데이트", description = "특정 회원의 페이지 정보를 업데이트합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 정보가 성공적으로 업데이트 되었습니다."),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @PutMapping("/{memberId}/my-page")
-    @ApiOperation(value = "회원 페이지 정보 업데이트", notes = "특정 회원의 페이지 정보를 업데이트합니다.")
     public ResponseEntity<UpdateOnboardingResponse> updateOnboarding(@PathVariable Long memberId,
                                                                      @RequestBody UpdateOnboardingRequest request) {
         UpdateOnboardingResponse updateOnboardingResponse = onboardingService.update(memberId, request);

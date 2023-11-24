@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "onboarding")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Onboarding extends BaseEntity {
 

@@ -6,6 +6,8 @@ import static com.park.muscle.core.trainer.dto.TrainerResponseDto.SignUpResponse
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.exception.MemberNotFoundException;
+import com.park.muscle.core.reservation.application.ReservationService;
+import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
@@ -28,6 +30,7 @@ public class TrainerService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final TrainerRepository trainerRepository;
+    private final ReservationService reservationService;
     private final UniqueTagRepository uniqueTagRepository;
 
     @Transactional
@@ -63,10 +66,6 @@ public class TrainerService {
         return LoginResponse.fromEntity(accessToken, refreshToken, new SignUpResponse(trainer));
     }
 
-    public Member getMemberInfo(final Long trainerId, final Long memberId) {
-        return null;
-    }
-
     public Trainer getTrainerById(final Long trainerId) {
         return trainerRepository.findById(trainerId)
                 .orElseThrow(MemberNotFoundException::new);
@@ -79,6 +78,17 @@ public class TrainerService {
                         ticket.getMember(),
                         ticket.getTotalQuantity(),
                         ticket.isAccepted()))
+                .collect(Collectors.toList());
+    }
+
+    public List<ReservationInfoResponse> getReserveMembers(final List<Ticket> tickets) {
+        return reservationService.findReservationsInfo(tickets);
+    }
+
+    public List<Member> findPendingMembers(final List<Ticket> tickets) {
+        return tickets.stream()
+                .filter(ticket -> !ticket.isAccepted())
+                .map(Ticket::getMember)
                 .collect(Collectors.toList());
     }
 }

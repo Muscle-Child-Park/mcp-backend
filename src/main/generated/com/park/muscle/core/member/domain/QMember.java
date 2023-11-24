@@ -29,12 +29,16 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.park.muscle.core.exercise.domain.ExerciseDiary, com.park.muscle.core.exercise.domain.QExerciseDiary> diaries = this.<com.park.muscle.core.exercise.domain.ExerciseDiary, com.park.muscle.core.exercise.domain.QExerciseDiary>createList("diaries", com.park.muscle.core.exercise.domain.ExerciseDiary.class, com.park.muscle.core.exercise.domain.QExerciseDiary.class, PathInits.DIRECT2);
 
+    public final ListPath<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise> exercises = this.<com.park.muscle.core.exercise.domain.Exercise, com.park.muscle.core.exercise.domain.QExercise>createList("exercises", com.park.muscle.core.exercise.domain.Exercise.class, com.park.muscle.core.exercise.domain.QExercise.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final QName name;
+
+    public final ListPath<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise> personalExercises = this.<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise>createList("personalExercises", com.park.muscle.core.personalexercise.domain.PersonalExercise.class, com.park.muscle.core.personalexercise.domain.QPersonalExercise.class, PathInits.DIRECT2);
 
     public final ListPath<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation> reservations = this.<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation>createList("reservations", com.park.muscle.core.reservation.domain.Reservation.class, com.park.muscle.core.reservation.domain.QReservation.class, PathInits.DIRECT2);
 

@@ -1,15 +1,15 @@
 package com.park.muscle.core.member.presentation;
 
 
-import static com.park.muscle.core.trainer.dto.TrainerResponseDto.FindResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
 
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationRequest;
 import com.park.muscle.core.ticket.application.TicketService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,30 +23,32 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/member/reverse")
-@Api(tags = "Member-reservation Management")
+@Tag(name = "member-reservation")
 public class MemberReservationController {
     private final ReservationService reservationService;
     private final TicketService ticketService;
 
-    @PostMapping
-    @ApiOperation(value = "Register Reservation", notes = "Register a new reservation")
+    @Operation(summary = "Register Reservation", description = "Register a new reservation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Reservation registered successfully"),
-            @ApiResponse(code = 400, message = "Invalid input"),
-            @ApiResponse(code = 500, message = "Server error")
+            @ApiResponse(responseCode = "200", description = "Reservation registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
+    @PostMapping
     public void registerReservation(@RequestBody ReservationRequest.Create request) {
         reservationService.registerReservation(request);
     }
 
-    @GetMapping("/{memberId}")
-    @ApiOperation(value = "Get Trainer List by Member ID", response = FindResponse.class, responseContainer = "List")
+
+    @Operation(summary = "Get Trainer List by Member ID", description = "Register a new reservation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved the trainer list"),
-            @ApiResponse(code = 404, message = "Trainer list not found")
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved the trainer list"),
+            @ApiResponse(responseCode = "404", description = "Trainer list not found"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
-    public ResponseEntity<List<FindResponse>> getTrainerList(@PathVariable Long memberId) {
-        List<FindResponse> findResponses = ticketService.getTrainerReservations(memberId);
-        return ResponseEntity.ok().body(findResponses);
+    @GetMapping("/{memberId}")
+    public ResponseEntity<List<TrainerResponse>> getTrainerList(@PathVariable Long memberId) {
+        List<TrainerResponse> trainerResponse = ticketService.getTrainerReservations(memberId);
+        return ResponseEntity.ok().body(trainerResponse);
     }
 }

@@ -22,7 +22,7 @@ public class QReserveTimeSlot extends EntityPathBase<ReserveTimeSlot> {
 
     public static final QReserveTimeSlot reserveTimeSlot = new QReserveTimeSlot("reserveTimeSlot");
 
-    public final BooleanPath accessible = createBoolean("accessible");
+    public final BooleanPath accessibleTime = createBoolean("accessibleTime");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

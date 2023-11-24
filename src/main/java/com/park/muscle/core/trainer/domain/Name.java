@@ -1,11 +1,11 @@
 package com.park.muscle.core.trainer.domain;
 
 import com.park.muscle.core.member.exception.InvalidNameLengthException;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
-@ApiModel("Trainer-Name")
+@Tag(name = "Trainer Name")
 @Embeddable
 public class Name {
     private static final int LIMIT_LENGTH = 10;

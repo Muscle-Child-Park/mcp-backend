@@ -40,4 +40,8 @@ public class ExerciseDiary extends BaseEntity {
         this.member = member;
         this.memo = memo;
     }
+
+    public void updateLog(final String log) {
+        this.memo = log;
+    }
 }

@@ -3,7 +3,9 @@ package com.park.muscle.core.member.domain;
 import com.park.muscle.core.member.exception.InvalidNameLengthException;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import lombok.Getter;
 
+@Getter
 @Embeddable
 public class Name {
 

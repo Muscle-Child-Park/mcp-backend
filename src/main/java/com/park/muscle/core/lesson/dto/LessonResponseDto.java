@@ -1,6 +1,7 @@
 package com.park.muscle.core.lesson.dto;
 
 import com.park.muscle.core.exercise.domain.Exercise;
+import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.domain.Lesson;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,15 +31,18 @@ public class LessonResponseDto {
         private String feedback;
         private boolean isCompleted;
         private List<Exercise> exercise;
+        private LogReflectionResponseDto logReflectionResponseDto;
 
         public static LessonRetrieveResponse fromEntity(Lesson lesson,
-                                                        List<Exercise> exercise) {
+                                                        List<Exercise> exercise,
+                                                        LogReflectionResponseDto logReflectionResponseDto) {
             return LessonRetrieveResponse.builder()
                     .lessonDate(lesson.getLessonDate())
                     .timeSlot(lesson.getTimeSlot())
                     .feedback(lesson.getFeedback())
                     .isCompleted(lesson.checkLessonCompletion())
                     .exercise(exercise)
+                    .logReflectionResponseDto(logReflectionResponseDto)
                     .build();
         }
     }

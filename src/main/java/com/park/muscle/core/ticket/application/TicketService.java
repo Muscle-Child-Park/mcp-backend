@@ -9,7 +9,7 @@ import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.create;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
-import com.park.muscle.core.trainer.dto.TrainerResponseDto.FindResponse;
+import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +65,16 @@ public class TicketService {
         return trainers;
     }
 
-    public List<FindResponse> getTrainerReservations(final Long memberId) {
+    public List<Member> findAllMemberByTrainerId(final Long trainerId) {
+        List<Ticket> allTicketByTrainerId = ticketRepository.findAllTicketByTrainerId(trainerId);
+        List<Member> members = new LinkedList<>();
+        for (Ticket ticket : allTicketByTrainerId) {
+            members.add(ticket.getMember());
+        }
+        return members;
+    }
+
+    public List<TrainerResponse> getTrainerReservations(final Long memberId) {
         List<Trainer> trainers = findAllTrainerByMemberId(memberId);
         List<Ticket> tickets = ticketRepository.findAllTicketByMemberId(memberId);
 
@@ -76,7 +85,7 @@ public class TicketService {
                 .filter(ticket -> trainerMap.containsKey(ticket.getTrainer().getId()))
                 .map(ticket -> {
                     Trainer trainer = trainerMap.get(ticket.getTrainer().getId());
-                    return FindResponse.builder()
+                    return TrainerResponse.builder()
                             .trainerId(trainer.getId())
                             .name(trainer.getName())
                             .ticketGenerateInfo(ticket.getCreatedDate())

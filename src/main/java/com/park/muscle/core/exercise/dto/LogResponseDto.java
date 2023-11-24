@@ -10,12 +10,13 @@ public class LogResponseDto {
     @Builder
     public static class LogReflectionResponseDto {
         private long logId;
+        private String memo;
 
         public static LogReflectionResponseDto fromEntity(ExerciseDiary exerciseDiary) {
             return LogReflectionResponseDto.builder()
                     .logId(exerciseDiary.getId())
+                    .memo(exerciseDiary.getMemo())
                     .build();
         }
     }
-
 }

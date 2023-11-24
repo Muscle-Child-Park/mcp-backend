@@ -6,6 +6,8 @@ import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.dto.TicketDto;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/tickets")
+@Tag(name = "Ticket Management", description = "Endpoints for managing tickets")
 public class TicketController {
     private final TicketService ticketService;
     private final MemberService memberService;
 
+    @Operation(summary = "Create a ticket", description = "Create a ticket for a member")
     @PostMapping("/ticket/request")
     public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketDto.create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
@@ -33,12 +37,14 @@ public class TicketController {
                 .body(ticketCreateResponse);
     }
 
+    @Operation(summary = "Accept a ticket", description = "Accept a ticket with a specific ID")
     @PostMapping("/ticket/accept")
     public ResponseEntity<Void> acceptTicket(@RequestParam Long ticketId) {
         ticketService.acceptTicket(ticketId);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Get lessons by ticket ID", description = "Retrieve all lessons associated with a ticket")
     @GetMapping("/{ticketId}/lesson")
     public ResponseEntity<List<Lesson>> getLessonsByTicketId(@PathVariable Long ticketId) {
         List<Lesson> lessons = ticketService.findAllLessonsByTicketId(ticketId);

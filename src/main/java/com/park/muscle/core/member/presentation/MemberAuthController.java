@@ -1,13 +1,13 @@
 package com.park.muscle.core.member.presentation;
 
 import com.park.muscle.core.member.application.MemberAuthService;
-import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.dto.request.OnboardingQuestionRequest;
 import com.park.muscle.core.member.dto.request.LoginRequest;
+import com.park.muscle.core.member.dto.request.OnboardingQuestionRequest;
 import com.park.muscle.core.member.dto.response.LoginResponse;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,17 +19,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/members/auth")
+@RequestMapping("/api/member/auth")
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Member Auth Management", description = "Manage only the authentication authorization of the member")
 public class MemberAuthController {
 
     private final MemberAuthService memberAuthService;
 
-    @ApiOperation(value = "회원 등록 또는 로그인", response = Member.class)
+
+    @Operation(summary = "회원 등록 또는 로그인", description = "Register a new Member or Login")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "회원 로그인 또는 가입 및 아이디 발급 성공"),
-            @ApiResponse(code = 400, message = "Bad request")
+            @ApiResponse(responseCode = "201", description = "회원 로그인 또는 가입 및 아이디 발급 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody LoginRequest loginRequest) {
@@ -38,12 +41,11 @@ public class MemberAuthController {
                 .body(loginResponse);
     }
 
-
-    @ApiOperation(value = "온보딩 정보 등록")
+    @Operation(summary = "온보딩 정보 등록", description = "Register on-boarding ")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Member profile updated successfully"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 404, message = "Member not found")
+            @ApiResponse(responseCode = "201", description = "Member profile updated successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Member not found")
     })
     @PostMapping("/{memberId}/add-onboarding")
     public ResponseEntity<Void> addOnboardingQuestion(@PathVariable Long memberId,
@@ -53,12 +55,11 @@ public class MemberAuthController {
         return ResponseEntity.ok().build();
     }
 
-
-    @ApiOperation(value = "멤버 계정 삭제")
+    @Operation(summary = "온보딩 정보 등록", description = "Register on-boarding ")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Member account deleted successfully"),
-            @ApiResponse(code = 401, message = "Unauthorized"),
-            @ApiResponse(code = 404, message = "Member not found")
+            @ApiResponse(responseCode = "204", description = "Member account deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Member not found")
     })
     @DeleteMapping("/{memberId}/delete")
     public ResponseEntity<String> deleteOwnMemberAccount(@PathVariable Long memberId) {

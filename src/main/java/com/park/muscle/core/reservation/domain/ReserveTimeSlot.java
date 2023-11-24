@@ -16,7 +16,7 @@ import lombok.Getter;
 public class ReserveTimeSlot {
 
     @Id
-    @Column(name = "rserve_time_slot_id")
+    @Column(name = "reserve_time_slot_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -24,14 +24,14 @@ public class ReserveTimeSlot {
     private LocalTime time;
 
     @Column
-    private boolean accessible;
+    private boolean accessibleTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
     public void updateAccess() {
-        this.accessible = true;
+        this.accessibleTime = true;
     }
 
     public void setReservation(final Reservation reservation) {

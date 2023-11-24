@@ -26,4 +26,15 @@ public class LogRequestDto {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class LogUpdateDto {
+        @NotNull(message = "Lesson Id required")
+        private long lessonId;
+        @NotNull(message = "Exercise-diary Id required")
+        private long exerciseDiaryId;
+        @NotBlank(message = "Log Data required")
+        private String log;
+    }
 }

@@ -6,10 +6,10 @@ import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/trainers")
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "Trainer Management", description = "Endpoints for managing trainer")
 public class TrainerController {
-
     private final TrainerService trainerService;
 
-    @ApiOperation(value = "트레이너 등록 또는 로그인", notes = "트레이너의 로그인 시도를 수행하고, 기존 회원이 아닌 경우 회원 가입을 완료하며 고유 아이디를 발급합니다.", response = Trainer.class)
+
+    @Operation(summary = "트레이너 등록 또는 로그인", description = "트레이너의 로그인 시도를 수행하고, 기존 회원이 아닌 경우 회원 가입을 완료하며 고유 아이디를 발급합니다.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "트레이너 로그인 또는 가입 및 아이디 발급 성공"),
-            @ApiResponse(code = 400, message = "Bad request")
+            @ApiResponse(responseCode = "200", description = "트레이너 로그인 또는 가입 및 아이디 발급 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/auth/login")
     public ResponseEntity<LoginResponse> loginTrainer(@Valid @RequestBody LoginRequest loginRequest) {
@@ -43,39 +44,57 @@ public class TrainerController {
                 .body(loginResponse);
     }
 
+    @Operation(summary = "등록된 티켓을 가져옵니다.", description = "회원으로부터 요청된 티켓 목록을 가져옵니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "티켓 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
+    })
     @GetMapping("/{trainerId}/tickets")
-    public ResponseEntity<List<TrainerTicketResponse>> getTrainerTickets(
-            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
+    public ResponseEntity<List<TrainerTicketResponse>> getTrainerTickets(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
         List<TrainerTicketResponse> trainerTicketResponse = trainerService.getTrainerTickets(tickets);
         return ResponseEntity.ok(trainerTicketResponse);
     }
 
-    @ApiOperation(value = "트레이너 프로필 업데이트", response = Trainer.class)
+
+    @Operation(summary = "트레이너 프로필 업데이트")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "트레이너 프로필 업데이트 성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "트레이너를 찾을 수 없음")
+            @ApiResponse(responseCode = "200", description = "트레이너 프로필 업데이트 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @PutMapping("/profile/{trainerId}")
-    public ResponseEntity<Trainer> updateTrainerProfile(
-            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId,
-            @ApiParam(value = "업데이트된 트레이너 프로필 정보", required = true) @RequestBody Trainer updatedTrainer) {
+    public ResponseEntity<Trainer> updateTrainerProfile(@PathVariable Long trainerId,
+                                                        @RequestBody Trainer updatedTrainer) {
 
+        /**TODO: 2023-11-23, 목, 23:33  -JEON
+         *  TASK: 작업 해야함
+         */
         return ResponseEntity.ok(updatedTrainer);
     }
 
-    @ApiOperation(value = "트레이너 계정 삭제")
+
+    @Operation(summary = "트레이너 계정 삭제")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "트레이너 계정 삭제 성공"),
-            @ApiResponse(code = 401, message = "인증 실패"),
-            @ApiResponse(code = 404, message = "트레이너를 찾을 수 없음")
+            @ApiResponse(responseCode = "204", description = "트레이너 계정 삭제 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @DeleteMapping("auth/delete/{trainerId}")
-    public ResponseEntity<Void> deleteTrainerAccount(
-            @ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
-        // 삭제가 성공한 경우 204 No Content 반환
+    public ResponseEntity<Void> deleteTrainerAccount(@PathVariable Long trainerId) {
         return ResponseEntity.noContent().build();
     }
+
+    /**TODO: 2023-11-23, 목, 23:33  -JEON
+    *  TASK: 작업 해야함
+    */
+//    @GetMapping("/{trainerId}/members")
+//    public ResponseEntity<> trainerHome(@ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
+//        Trainer trainer = trainerService.getTrainerById(trainerId);
+//        List<Ticket> tickets = trainer.getTickets();
+//        List<Member> pendingMembers = trainerService.findPendingMembers(tickets);
+//        // 개인 운동 일지 내역 추가
+//        List<ReservationInfoResponse> reserveMembers = trainerService.getReserveMembers(tickets);
+//    }
 }

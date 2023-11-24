@@ -11,12 +11,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@Table(name = "unique_tag")
 @NoArgsConstructor
 public class UniqueTag {
     private final static int LIMIT_LENGTH = 99999;
@@ -29,7 +31,7 @@ public class UniqueTag {
     @Column(name = "unique_tag")
     private String uniqueTag;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 

@@ -40,4 +40,8 @@ public class MemberService {
     public List<Trainer> getTrainerInfo(final Long memberId) {
         return ticketService.findAllTrainerByMemberId(memberId);
     }
+
+    public void save(final Member memberById) {
+        memberRepository.save(memberById);
+    }
 }
