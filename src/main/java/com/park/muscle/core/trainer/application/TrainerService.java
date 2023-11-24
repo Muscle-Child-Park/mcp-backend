@@ -9,6 +9,7 @@ import com.park.muscle.core.member.exception.MemberNotFoundException;
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
@@ -90,5 +91,17 @@ public class TrainerService {
                 .filter(ticket -> !ticket.isAccepted())
                 .map(Ticket::getMember)
                 .collect(Collectors.toList());
+    }
+
+    public PendingMemberNameResponse getPendingMembers(final List<Member> pendingMembers) {
+        List<String> pendingNames = pendingMembers.stream()
+                .map(member -> member.getName().getValue())
+                .collect(Collectors.toList());
+        return PendingMemberNameResponse.fromEntity(pendingNames);
+    }
+
+    public void deleteTrainerAccount(final Long trainerId) {
+        Trainer trainer = getTrainerById(trainerId);
+        trainerRepository.delete(trainer);
     }
 }

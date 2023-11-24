@@ -4,6 +4,8 @@ import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 
 public class TicketDto {
@@ -64,6 +66,18 @@ public class TicketDto {
 
         public TicketCreateResponse(TicketResponse ticket) {
             this.ticket = ticket;
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class PendingMemberNameResponse {
+        private List<String> names;
+
+        public static PendingMemberNameResponse fromEntity(List<String> members) {
+            return PendingMemberNameResponse.builder()
+                    .names(members)
+                    .build();
         }
     }
 }

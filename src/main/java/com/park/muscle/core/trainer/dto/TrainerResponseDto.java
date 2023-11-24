@@ -1,8 +1,11 @@
 package com.park.muscle.core.trainer.dto;
 
+import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
+import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -92,6 +95,22 @@ public class TrainerResponseDto {
                     .ticketGenerateInfo(ticketGenerateInfo)
                     .totalQuantity(totalQuantity)
                     .leftQuantity(leftQuantity)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @Schema(name = "Trainer-homeResponse")
+    public static class TrainerHomeResponse {
+        PendingMemberNameResponse pendingMemberNameResponse;
+        List<ReservationInfoResponse> reservationInfoResponses;
+
+        public static TrainerHomeResponse fromEntity(PendingMemberNameResponse pendingMemberNameResponse,
+                                                     List<ReservationInfoResponse> reservationInfoResponses) {
+            return TrainerHomeResponse.builder()
+                    .pendingMemberNameResponse(pendingMemberNameResponse)
+                    .reservationInfoResponses(reservationInfoResponses)
                     .build();
         }
     }

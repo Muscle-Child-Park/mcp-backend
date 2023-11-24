@@ -1,11 +1,15 @@
 package com.park.muscle.core.trainer.presentation;
 
+import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
+import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerHomeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -83,18 +87,28 @@ public class TrainerController {
     })
     @DeleteMapping("auth/delete/{trainerId}")
     public ResponseEntity<Void> deleteTrainerAccount(@PathVariable Long trainerId) {
+        trainerService.deleteTrainerAccount(trainerId);
         return ResponseEntity.noContent().build();
     }
 
-    /**TODO: 2023-11-23, 목, 23:33  -JEON
-    *  TASK: 작업 해야함
-    */
-//    @GetMapping("/{trainerId}/members")
-//    public ResponseEntity<> trainerHome(@ApiParam(value = "트레이너 ID", required = true) @PathVariable Long trainerId) {
-//        Trainer trainer = trainerService.getTrainerById(trainerId);
-//        List<Ticket> tickets = trainer.getTickets();
-//        List<Member> pendingMembers = trainerService.findPendingMembers(tickets);
-//        // 개인 운동 일지 내역 추가
-//        List<ReservationInfoResponse> reserveMembers = trainerService.getReserveMembers(tickets);
-//    }
+    @Operation(summary = "트레이너 홈 화면 정보")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "트레이너 정보 조회 성공"),
+            @ApiResponse(responseCode = "401", description = "인증 실패"),
+            @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음"),
+            @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
+    })
+    @GetMapping("/{trainerId}/members")
+    public ResponseEntity<TrainerHomeResponse> trainerHome(@PathVariable Long trainerId) {
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        List<Ticket> tickets = trainer.getTickets();
+        if (tickets == null) {
+            return ResponseEntity.noContent().build();
+        }
+        List<Member> pendingMembers = trainerService.findPendingMembers(tickets);
+        PendingMemberNameResponse pendingMembersResponse = trainerService.getPendingMembers(pendingMembers);
+        List<ReservationInfoResponse> reserveMembers = trainerService.getReserveMembers(tickets);
+
+        return ResponseEntity.ok().body(TrainerHomeResponse.fromEntity(pendingMembersResponse, reserveMembers));
+    }
 }
