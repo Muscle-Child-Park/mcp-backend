@@ -56,7 +56,7 @@ public class QPersonalExercise extends EntityPathBase<PersonalExercise> {
 
     public QPersonalExercise(Class<? extends PersonalExercise> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
+        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary")) : null;
     }
 
 }

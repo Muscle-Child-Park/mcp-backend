@@ -1,13 +1,13 @@
 package com.park.muscle.core.lesson.presentation;
 
 import static com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
-import static com.park.muscle.core.exercise.dto.LogRequestDto.LogReflectionDto;
+import static com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogReflectionDto;
 import static com.park.muscle.core.lesson.dto.LessonResponseDto.LessonCreateResponse;
 
 import com.park.muscle.core.exercise.application.ExerciseService;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
-import com.park.muscle.core.exercise.dto.LogRequestDto.LogUpdateDto;
+import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.lesson.domain.Lesson;
@@ -104,11 +104,10 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/log")
-    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(@RequestBody LogReflectionDto logReflectionDto) {
-        LogReflectionResponseDto logReflectionResponseDto = lessonService.addExerciseDiary(logReflectionDto);
+    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(@RequestBody LessonLogReflectionDto lessonLogReflectionDto) {
+        LogReflectionResponseDto logReflectionResponseDto = lessonService.addExerciseDiary(lessonLogReflectionDto);
         return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
     }
-
 
     @Operation(summary = "회고 업데이트", description = "수업에 대한 회고 업데이트")
     @ApiResponses(value = {
@@ -116,8 +115,8 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/log")
-    public ResponseEntity<String> updateLogToLesson(@RequestBody LogUpdateDto logUpdateDto) {
-        lessonService.updateExerciseDiary(logUpdateDto);
+    public ResponseEntity<String> updateLogToLesson(@RequestBody LessonLogUpdateDto lessonLogUpdateDto) {
+        lessonService.updateExerciseDiary(lessonLogUpdateDto);
         return ResponseEntity.status(HttpStatus.OK).body("update success");
     }
 }

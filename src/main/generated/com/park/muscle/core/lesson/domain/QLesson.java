@@ -70,7 +70,7 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public QLesson(Class<? extends Lesson> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
+        this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary")) : null;
         this.reservation = inits.isInitialized("reservation") ? new com.park.muscle.core.reservation.domain.QReservation(forProperty("reservation")) : null;
         this.ticket = inits.isInitialized("ticket") ? new com.park.muscle.core.ticket.domain.QTicket(forProperty("ticket"), inits.get("ticket")) : null;
     }

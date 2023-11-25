@@ -2,6 +2,15 @@ package com.park.muscle.core.exercise.application;
 
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.exercise.domain.ExerciseLogRepository;
+import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
+import com.park.muscle.core.exercise.dto.LogRequestDto.PersonalLogReflectionDto;
+import com.park.muscle.core.exercise.dto.LogRequestDto.PersonalLogUpdateDto;
+import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
+import com.park.muscle.core.member.application.MemberService;
+import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
+import com.park.muscle.core.personalexercise.domain.PersonalExercise;
+import com.park.muscle.core.personalexercise.domain.PersonalExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,19 +19,32 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ExerciseLogService {
+    private final MemberService memberService;
+    private final PersonalExerciseService personalExerciseService;
     private final ExerciseLogRepository exerciseLogRepository;
+    private final PersonalExerciseRepository personalExerciseRepository;
 
-    public boolean addExerciseLogReflection(final Long memberId, final Long logId) {
-        return false;
+    public LogReflectionResponseDto addPersonalExerciseDiary(PersonalLogReflectionDto personalLogReflectionDto) {
+        Member member = memberService.findMemberById(personalLogReflectionDto.getMemberId());
+        ExerciseDiary exerciseDiary = personalLogReflectionDto.toEntity(personalLogReflectionDto.getLog());
+        save(exerciseDiary);
+        PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(
+                personalLogReflectionDto.getPersonalId());
+        personalExercise.addExerciseDiary(exerciseDiary);
+        personalExerciseRepository.save(personalExercise);
+        return LogReflectionResponseDto.fromEntity(exerciseDiary);
     }
 
-    public boolean addExerciseLog(final Long memberId, final String log) {
-        return false;
+    public ExerciseDiary updatePersonalExerciseLog(final PersonalLogUpdateDto personalLogUpdateDto) {
+        ExerciseDiary exerciseDiary = getOwnLogById(personalLogUpdateDto.getExerciseDiaryId());
+        exerciseDiary.updateLog(personalLogUpdateDto.getLog());
+        exerciseLogRepository.save(exerciseDiary);
+        return exerciseDiary;
     }
 
-    public ExerciseDiary updateExerciseLog(final Long logId, final String log) {
-        ExerciseDiary exerciseDiary = getOwnLogById(logId);
-        exerciseDiary.updateLog(log);
+    public ExerciseDiary updateLessonExerciseLog(final LessonLogUpdateDto lessonLogUpdateDto) {
+        ExerciseDiary exerciseDiary = getOwnLogById(lessonLogUpdateDto.getExerciseDiaryId());
+        exerciseDiary.updateLog(lessonLogUpdateDto.getLog());
         exerciseLogRepository.save(exerciseDiary);
         return exerciseDiary;
     }

@@ -7,7 +7,9 @@ import static com.park.muscle.core.personalexercise.dto.response.PersonalExercis
 
 import com.park.muscle.core.exercise.application.ExerciseService;
 import com.park.muscle.core.exercise.domain.Exercise;
+import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
+import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
@@ -38,21 +40,30 @@ public class MemberExerciseController {
     private final MemberService memberService;
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<AllPersonalExerciseResponse> getMemberAllExercises(@PathVariable long memberId) {
+    public ResponseEntity<List<AllPersonalExerciseResponse>> getMemberAllExercises(@PathVariable long memberId) {
         Member member = memberService.findMemberById(memberId);
         List<PersonalExercise> personalExercises = member.getPersonalExercises();
-        return ResponseEntity.status(HttpStatus.OK).body(AllPersonalExerciseResponse.fromEntity(personalExercises));
+        return ResponseEntity.status(HttpStatus.OK).body(personalExerciseService.getAllPersonalEx(personalExercises));
     }
 
-    @GetMapping("/own/{exerciseId}")
-    public ResponseEntity<OwnPersonalExerciseResponse> getMemberOwnExercises(@PathVariable long exerciseId) {
-        Exercise exercise = exerciseService.findById(exerciseId);
-        return ResponseEntity.status(HttpStatus.OK).body(OwnPersonalExerciseResponse.fromEntity(exercise));
+    @GetMapping("/own/{personalExerciseId}")
+    public ResponseEntity<OwnPersonalExerciseResponse> getExercisesFromPersonalEx(
+            @PathVariable long personalExerciseId) {
+        PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(personalExerciseId);
+        List<Exercise> exercises = personalExercise.getExercises();
+        ExerciseDiary exerciseDiary = personalExercise.getExerciseDiary();
+
+        LogReflectionResponseDto logReflectionResponseDto = null;
+        if (exerciseDiary != null) {
+            logReflectionResponseDto = LogReflectionResponseDto.fromEntity(exerciseDiary);
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(OwnPersonalExerciseResponse.fromEntity(personalExercise, exercises, logReflectionResponseDto));
     }
 
     @PostMapping("/{memberId}")
-    public ResponseEntity<PersonalExerciseCreateResponse> addMemberExercises(@PathVariable Long memberId,
-                                                                             @RequestBody CreatePersonalExercise createPersonalExercise) {
+    public ResponseEntity<PersonalExerciseCreateResponse> addPersonalExercises(@PathVariable Long memberId,
+                                                                               @RequestBody CreatePersonalExercise createPersonalExercise) {
 
         PersonalExercise personalExercise = createPersonalExercise.getPersonalExerciseRequest().toEntity();
         List<CreateExerciseWithPersonal> exerciseRequestDtos = createPersonalExercise.getExerciseRequestDtos();

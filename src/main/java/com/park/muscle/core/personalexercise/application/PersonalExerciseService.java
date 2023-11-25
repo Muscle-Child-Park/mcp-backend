@@ -3,7 +3,9 @@ package com.park.muscle.core.personalexercise.application;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.personalexercise.domain.PersonalExerciseRepository;
+import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.AllPersonalExerciseResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,5 +29,11 @@ public class PersonalExerciseService {
                 .filter(updated -> existed.getId().equals(updated.getId()))
                 .findFirst()
                 .ifPresent(personalExercise::updateExercise));
+    }
+
+    public List<AllPersonalExerciseResponse> getAllPersonalEx(final List<PersonalExercise> personalExercises) {
+        return personalExercises.stream()
+                .map(AllPersonalExerciseResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 }

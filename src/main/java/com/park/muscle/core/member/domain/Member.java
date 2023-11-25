@@ -61,7 +61,7 @@ public class Member extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "member")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<ExerciseDiary> diaries = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

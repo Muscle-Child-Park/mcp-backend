@@ -2,8 +2,8 @@ package com.park.muscle.core.lesson.application;
 
 import com.park.muscle.core.exercise.application.ExerciseLogService;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
-import com.park.muscle.core.exercise.dto.LogRequestDto.LogReflectionDto;
-import com.park.muscle.core.exercise.dto.LogRequestDto.LogUpdateDto;
+import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogReflectionDto;
+import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.lesson.domain.LessonRepository;
@@ -41,20 +41,19 @@ public class LessonService {
         return lesson.orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 수업을 찾을 수 없습니다: " + lessonId));
     }
 
-    public LogReflectionResponseDto addExerciseDiary(LogReflectionDto logReflectionDto) {
-        Member member = memberService.findMemberById(logReflectionDto.getMemberId());
-        ExerciseDiary exerciseDiary = logReflectionDto.toEntity(member, logReflectionDto.getLog());
+    public LogReflectionResponseDto addExerciseDiary(LessonLogReflectionDto lessonLogReflectionDto) {
+        Member member = memberService.findMemberById(lessonLogReflectionDto.getMemberId());
+        ExerciseDiary exerciseDiary = lessonLogReflectionDto.toEntity(lessonLogReflectionDto.getLog());
         exerciseLogService.save(exerciseDiary);
-        Lesson lesson = getOwnLessonById(logReflectionDto.getLessonId());
+        Lesson lesson = getOwnLessonById(lessonLogReflectionDto.getLessonId());
         lesson.addExerciseDiary(exerciseDiary);
         lessonRepository.save(lesson);
         return LogReflectionResponseDto.fromEntity(exerciseDiary);
     }
 
-    public void updateExerciseDiary(final LogUpdateDto logUpdateDto) {
-        Lesson lesson = getOwnLessonById(logUpdateDto.getLessonId());
-        ExerciseDiary exerciseDiary = exerciseLogService.updateExerciseLog(logUpdateDto.getExerciseDiaryId(),
-                logUpdateDto.getLog());
+    public void updateExerciseDiary(final LessonLogUpdateDto lessonLogUpdateDto) {
+        Lesson lesson = getOwnLessonById(lessonLogUpdateDto.getLessonId());
+        ExerciseDiary exerciseDiary = exerciseLogService.updateLessonExerciseLog(lessonLogUpdateDto);
         lesson.updateExerciseDiary(exerciseDiary);
         lessonRepository.save(lesson);
     }
