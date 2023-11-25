@@ -42,6 +42,15 @@ public class MemberHomeController {
         List<LessonByTicketSimpleResponse> flattenedList = tickets.stream()
                 .flatMap(ticket -> ticketService.findAllSimpleLessonsByTicket(ticket).stream())
                 .collect(Collectors.toList());
+
+        if (hasValidTicketAndLessonContent(trainerReservations, flattenedList)) {
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok().body(HomeResponse.fromEntity(trainerReservations, flattenedList));
+    }
+
+    private static boolean hasValidTicketAndLessonContent(final List<TrainerResponse> trainerReservations,
+                                                          final List<LessonByTicketSimpleResponse> flattenedList) {
+        return trainerReservations.isEmpty() && flattenedList.isEmpty();
     }
 }
