@@ -14,12 +14,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "unique_tag")
-@NoArgsConstructor
 public class UniqueTag {
     private final static int LIMIT_LENGTH = 99999;
 
@@ -40,9 +38,15 @@ public class UniqueTag {
     private Trainer trainer;
 
     @Builder
-    public UniqueTag(Member member, Trainer trainer) {
+    public UniqueTag() {
         this.uniqueTag = generateUniqueTag();
+    }
+
+    public void updateMember(Member member) {
         this.member = member;
+    }
+
+    public void updateTrainer(Trainer trainer) {
         this.trainer = trainer;
     }
 
@@ -62,9 +66,5 @@ public class UniqueTag {
     private String generateUniqueTag() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
-    }
-
-    public String removeHash(String clientTag) {
-        return clientTag.replace("#", "");
     }
 }

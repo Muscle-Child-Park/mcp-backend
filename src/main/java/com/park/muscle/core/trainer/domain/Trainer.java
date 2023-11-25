@@ -8,7 +8,6 @@ import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,7 +41,7 @@ public class Trainer extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_id")
-    private final List<Gym> gym = new LinkedList<>();
+    private final List<Gym> gym = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private SocialType socialType;
@@ -77,7 +76,8 @@ public class Trainer extends BaseEntity {
         this.socialId = socialId;
         this.name = name;
         this.role = role;
-        this.uniqueTag = UniqueTag.builder().trainer(this).build();
+        this.uniqueTag = new UniqueTag();
+        uniqueTag.updateTrainer(this);
     }
 
     public void updateName(String name) {

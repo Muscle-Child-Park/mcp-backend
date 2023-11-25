@@ -7,6 +7,7 @@ import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto;
 import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
+import com.park.muscle.core.ticket.dto.TicketDto.TrainerInfoByTicketResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -29,7 +30,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final MemberService memberService;
 
-    @Operation(summary = "Create a ticket", description = "Create a ticket for a member")
+    @Operation(summary = "Create a ticket", description = "Connected with trainer through unique tags and create ticket")
     @PostMapping("/ticket/request")
     public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketDto.create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
@@ -51,5 +52,13 @@ public class TicketController {
         Ticket ticket = ticketService.findById(ticketId);
         List<LessonByTicketResponse> lessons = ticketService.findAllLessonsByTicket(ticket);
         return ResponseEntity.status(HttpStatus.OK).body(lessons);
+    }
+
+    @Operation(summary = "trainers by ticket info", description = "response trainer information is available and names")
+    @GetMapping("/{memberId}/trainers")
+    public ResponseEntity<List<TrainerInfoByTicketResponse>> getTrainers(@PathVariable long memberId) {
+        List<TrainerInfoByTicketResponse> allTicketByMemberId = ticketService.findAllTicketByMemberId(memberId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(allTicketByMemberId);
     }
 }

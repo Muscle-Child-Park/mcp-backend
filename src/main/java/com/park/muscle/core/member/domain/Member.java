@@ -76,7 +76,8 @@ public class Member extends BaseEntity {
         this.socialId = socialId;
         this.name = name;
         this.role = role;
-        this.uniqueTag = UniqueTag.builder().member(this).build();
+        this.uniqueTag = new UniqueTag();
+        uniqueTag.updateMember(this);
     }
 
     public Long getId() {
@@ -89,14 +90,5 @@ public class Member extends BaseEntity {
 
     public void addPersonalExercises(PersonalExercise personalExercises) {
         this.personalExercises.add(personalExercises);
-    }
-
-    public void updatePersonalExercise(PersonalExercise updatedExercise) {
-        personalExercises.replaceAll(existingExercise -> {
-            if (existingExercise.getId().equals(updatedExercise.getId())) {
-                return updatedExercise;
-            }
-            return existingExercise;
-        });
     }
 }

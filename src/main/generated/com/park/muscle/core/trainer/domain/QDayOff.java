@@ -24,7 +24,7 @@ public class QDayOff extends EntityPathBase<DayOff> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final StringPath cycleStatus = createString("cycleStatus");
+    public final BooleanPath cycleStatus = createBoolean("cycleStatus");
 
     public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
 
@@ -34,8 +34,6 @@ public class QDayOff extends EntityPathBase<DayOff> {
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
-
-    public final StringPath timeSlot = createString("timeSlot");
 
     public QDayOff(String variable) {
         super(DayOff.class, forVariable(variable));

@@ -11,10 +11,13 @@ import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoR
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
+import com.park.muscle.core.trainer.domain.DayOff;
+import com.park.muscle.core.trainer.domain.DayOffRepository;
 import com.park.muscle.core.trainer.domain.Gym;
 import com.park.muscle.core.trainer.domain.GymRepository;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
+import com.park.muscle.core.trainer.dto.TrainerRequestDto.DayOffRequest;
 import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
@@ -36,6 +39,7 @@ public class TrainerService {
     private final ReservationService reservationService;
     private final UniqueTagRepository uniqueTagRepository;
     private final GymRepository gymRepository;
+    private final DayOffRepository dayOffRepository;
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
@@ -111,5 +115,16 @@ public class TrainerService {
     public void saveGym(final Trainer trainer, final Gym gym) {
         gymRepository.save(gym);
         trainerRepository.save(trainer);
+    }
+
+    public void addTrainerOff(final Trainer trainer, final List<DayOffRequest> dayOffRequest) {
+        List<DayOff> dayOffs = dayOffRequest.stream()
+                .map(dayOff -> {
+                    DayOff newDayOff = dayOff.toEntity();
+                    trainer.addDayOffs(newDayOff);
+                    return newDayOff;
+                })
+                .collect(Collectors.toList());
+        dayOffRepository.saveAll(dayOffs);
     }
 }

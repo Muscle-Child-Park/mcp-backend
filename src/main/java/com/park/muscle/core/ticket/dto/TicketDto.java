@@ -16,7 +16,7 @@ public class TicketDto {
     @Getter
     public static class create {
         private Long memberId;
-        private Long trainerId;
+        private String trainerTagId;
         private int totalQuantity;
 
         public Ticket toEntity(Member member, Trainer trainer) {
@@ -52,6 +52,9 @@ public class TicketDto {
         @Schema(description = "trainer 고유 ID")
         private final String trainerId;
 
+        @Schema(description = "trainer name")
+        private final String trainerName;
+
         @Schema(description = "ticket 고유 ID")
         private final String ticketId;
 
@@ -59,6 +62,7 @@ public class TicketDto {
             this.memberId = member.getId().toString();
             this.trainerId = trainer.getId().toString();
             this.ticketId = ticket.getId().toString();
+            this.trainerName = trainer.getName();
         }
     }
 
@@ -80,6 +84,20 @@ public class TicketDto {
         public static PendingMemberNameResponse fromEntity(List<String> members) {
             return PendingMemberNameResponse.builder()
                     .names(members)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class TrainerInfoByTicketResponse {
+        private String trainerName;
+        private boolean isAccept;
+
+        public static TrainerInfoByTicketResponse fromEntity(Ticket ticket) {
+            return TrainerInfoByTicketResponse.builder()
+                    .trainerName(ticket.getTrainer().getName())
+                    .isAccept(ticket.isAccepted())
                     .build();
         }
     }

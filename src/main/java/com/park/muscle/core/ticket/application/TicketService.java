@@ -7,10 +7,11 @@ import com.park.muscle.core.ticket.domain.TicketRepository;
 import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
+import com.park.muscle.core.ticket.dto.TicketDto.TrainerInfoByTicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.create;
-import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
+import com.park.muscle.core.uniquetag.UniqueTagService;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +27,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TicketService {
-    private final TrainerService trainerService;
+    private final UniqueTagService uniqueTageService;
     private final TicketRepository ticketRepository;
 
     public TicketCreateResponse createTicket(final Member member, final create ticketCreateDto) {
-        Trainer trainer = trainerService.getTrainerById(ticketCreateDto.getTrainerId());
+        Trainer trainer = uniqueTageService.getTrainerByTagId(ticketCreateDto.getTrainerTagId());
         Ticket ticket = ticketCreateDto.toEntity(member, trainer);
         ticketRepository.save(ticket);
         TicketResponse ticketResponse = new TicketResponse(member, trainer, ticket);
@@ -97,6 +98,13 @@ public class TicketService {
                             .leftQuantity(ticket.getLeftQuantity())
                             .build();
                 })
+                .collect(Collectors.toList());
+    }
+
+    public List<TrainerInfoByTicketResponse> findAllTicketByMemberId(final long memberId) {
+        List<Ticket> allTicketByMember = ticketRepository.findAllTicketByMemberId(memberId);
+        return allTicketByMember.stream()
+                .map(TrainerInfoByTicketResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 }
