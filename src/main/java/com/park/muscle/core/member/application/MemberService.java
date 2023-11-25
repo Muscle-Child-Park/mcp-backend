@@ -19,7 +19,6 @@ public class MemberService {
     private final TicketService ticketService;
 
     public Member findMemberById(Long id) {
-        log.info("해당 uuid를 가진 멤버를 찾습니다.");
         return memberRepository.findById(id)
                 .orElseThrow(MemberNotFoundException::new);
     }

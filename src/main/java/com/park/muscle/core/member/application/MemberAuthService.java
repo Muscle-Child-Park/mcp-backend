@@ -35,7 +35,6 @@ public class MemberAuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
-
         String userNumber = String.format("%s#%s", SocialType.KAKAO, loginRequest.getSocialId());
         Optional<Member> loginMember = memberService.getMemberBySocialId(userNumber);
 

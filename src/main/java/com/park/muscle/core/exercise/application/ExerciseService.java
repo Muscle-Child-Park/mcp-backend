@@ -2,8 +2,11 @@ package com.park.muscle.core.exercise.application;
 
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseRepository;
+import com.park.muscle.core.exercise.domain.ExerciseType;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
+import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +34,24 @@ public class ExerciseService {
     }
 
     public Exercise findById(final Long exerciseId) {
-        return exerciseRepository.findById(exerciseId).orElseThrow(() -> new IllegalArgumentException("Could NOT Found"));
+        return exerciseRepository.findById(exerciseId)
+                .orElseThrow(() -> new IllegalArgumentException("Could NOT Found"));
+    }
+
+    public List<Exercise> updateExercises(final List<UpdateExerciseWithPersonal> exerciseUpdateRequestDtos) {
+        List<Exercise> exercises = new ArrayList<>();
+        exerciseUpdateRequestDtos.forEach(exerciseUpdateRequestDto -> {
+            Exercise exercise = findById(exerciseUpdateRequestDto.getExerciseId());
+            exercise.updateExercise(
+                    ExerciseType.findType(exerciseUpdateRequestDto.getExerciseType()),
+                    exerciseUpdateRequestDto.getName(),
+                    exerciseUpdateRequestDto.getKind(),
+                    exerciseUpdateRequestDto.getWeight(),
+                    exerciseUpdateRequestDto.getRunTime());
+            exercises.add(exercise);
+            exerciseRepository.save(exercise);
+        });
+        return exercises;
     }
 }
 

@@ -1,5 +1,7 @@
 package com.park.muscle.core.member.presentation;
 
+import static com.park.muscle.core.personalexercise.dto.request.PersonalExerciseWithMemberRequest.CreatePersonalExercise;
+import static com.park.muscle.core.personalexercise.dto.request.PersonalExerciseWithMemberRequest.UpdatePersonalExercise;
 import static com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.AllPersonalExerciseResponse;
 import static com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.PersonalExerciseCreateResponse;
 
@@ -10,7 +12,6 @@ import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
-import com.park.muscle.core.personalexercise.dto.request.PersonalExerciseWithMemberRequest;
 import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.OwnPersonalExerciseResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,16 +52,35 @@ public class MemberExerciseController {
 
     @PostMapping("/{memberId}")
     public ResponseEntity<PersonalExerciseCreateResponse> addMemberExercises(@PathVariable Long memberId,
-                                                                             @RequestBody PersonalExerciseWithMemberRequest personalExerciseWithMemberRequest) {
+                                                                             @RequestBody CreatePersonalExercise createPersonalExercise) {
 
-        PersonalExercise personalExercise = personalExerciseWithMemberRequest.getPersonalExerciseRequest().toEntity();
-        List<CreateExerciseWithPersonal> exerciseRequestDtos = personalExerciseWithMemberRequest.getExerciseRequestDtos();
+        PersonalExercise personalExercise = createPersonalExercise.getPersonalExerciseRequest().toEntity();
+        List<CreateExerciseWithPersonal> exerciseRequestDtos = createPersonalExercise.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithMember(exerciseRequestDtos);
         personalExercise.updateExercise(exercises);
         personalExerciseService.save(personalExercise);
 
         Member memberById = memberService.findMemberById(memberId);
-        memberById.updatePersonalExercises(personalExercise);
+        memberById.addPersonalExercises(personalExercise);
+        memberService.save(memberById);
+        return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
+    }
+
+    @PutMapping("/{personalExerciseId}/{memberId}")
+    public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long personalExerciseId,
+                                                                                @PathVariable Long memberId,
+                                                                                @RequestBody UpdatePersonalExercise updatePersonalExercise) {
+
+        List<Exercise> exercises =
+                exerciseService.updateExercises(updatePersonalExercise.getExerciseUpdateRequestDtos());
+        PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(personalExerciseId);
+
+        personalExercise.updatePersonalExercise(updatePersonalExercise.getPersonalExerciseUpdateRequest());
+        personalExercise.updateExercise(exercises);
+        personalExerciseService.save(personalExercise);
+
+        Member memberById = memberService.findMemberById(memberId);
+//        memberById.updatePersonalExercise(personalExercise);
         memberService.save(memberById);
         return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
     }

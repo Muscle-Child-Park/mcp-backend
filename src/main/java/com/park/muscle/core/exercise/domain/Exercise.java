@@ -52,4 +52,12 @@ public class Exercise {
         this.count = count;
         this.runTime = runTime;
     }
+
+    public void updateExercise(ExerciseType exerciseType, String name, String kind, String weight, int runTime) {
+        this.exerciseType = exerciseType;
+        this.name = name;
+        this.kind = kind;
+        this.weight = weight;
+        this.runTime = runTime;
+    }
 }

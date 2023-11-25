@@ -71,4 +71,27 @@ public class ExerciseRequestDto {
                     .build();
         }
     }
+
+    @Getter
+    public static class UpdateExerciseWithPersonal {
+        @NotNull(message = "Exercise Id IS Required")
+        private long exerciseId;
+
+        @NotBlank(message = "Exercise type is required")
+        private String exerciseType;
+
+        @NotBlank(message = "Exercise name is required")
+        private String name;
+
+        @NotBlank(message = "Exercise kind is required")
+        private String kind;
+
+        @NotBlank(message = "Exercise weight is required")
+        private String weight;
+
+        @NotNull(message = "Exercise count is required")
+        private int count;
+
+        private int runTime;
+    }
 }

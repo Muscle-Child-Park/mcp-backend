@@ -32,4 +32,19 @@ public class PersonalExerciseRequest {
                     .build();
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class Update {
+        @NotNull(message = "Personal-Exercise date is required")
+        private LocalDateTime lessonDate;
+
+        @NotNull(message = "Personal-Exercise time slot is required")
+        private String timeSlot;
+
+        @NotBlank(message = "Class type is required")
+        private String classType;
+
+        private boolean completionToggle;
+    }
 }

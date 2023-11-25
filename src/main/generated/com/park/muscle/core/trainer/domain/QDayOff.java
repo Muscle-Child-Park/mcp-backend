@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,8 +16,6 @@ import com.querydsl.core.types.dsl.PathInits;
 public class QDayOff extends EntityPathBase<DayOff> {
 
     private static final long serialVersionUID = 1175038171L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QDayOff dayOff = new QDayOff("dayOff");
 
@@ -40,27 +37,16 @@ public class QDayOff extends EntityPathBase<DayOff> {
 
     public final StringPath timeSlot = createString("timeSlot");
 
-    public final QTrainer trainer;
-
     public QDayOff(String variable) {
-        this(DayOff.class, forVariable(variable), INITS);
+        super(DayOff.class, forVariable(variable));
     }
 
     public QDayOff(Path<? extends DayOff> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QDayOff(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QDayOff(PathMetadata metadata, PathInits inits) {
-        this(DayOff.class, metadata, inits);
-    }
-
-    public QDayOff(Class<? extends DayOff> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.trainer = inits.isInitialized("trainer") ? new QTrainer(forProperty("trainer"), inits.get("trainer")) : null;
+        super(DayOff.class, metadata);
     }
 
 }

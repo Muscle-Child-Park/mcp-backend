@@ -58,7 +58,7 @@ public class Trainer extends BaseEntity {
     @OneToOne
     private UniqueTag uniqueTag;
 
-    @OneToMany(mappedBy = "trainer")
+    @OneToMany
     private final List<DayOff> dayOffs = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
@@ -95,6 +95,5 @@ public class Trainer extends BaseEntity {
 
     public void addDayOffs(DayOff dayOff) {
         this.dayOffs.add(dayOff);
-        dayOff.setTrainer(this);
     }
 }

@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Tag(name = "Member Auth Management", description = "Manage only the authentication authorization of the member")
 public class MemberAuthController {
-
     private final MemberAuthService memberAuthService;
-
 
     @Operation(summary = "회원 등록 또는 로그인", description = "Register a new Member or Login")
     @ApiResponses(value = {
@@ -55,7 +53,7 @@ public class MemberAuthController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "온보딩 정보 등록", description = "Register on-boarding ")
+    @Operation(summary = "회원 탈퇴", description = "Member account delete")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Member account deleted successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),

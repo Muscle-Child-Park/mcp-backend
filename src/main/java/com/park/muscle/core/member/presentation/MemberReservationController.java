@@ -39,7 +39,6 @@ public class MemberReservationController {
         reservationService.registerReservation(request);
     }
 
-
     @Operation(summary = "Get Trainer List by Member ID", description = "Register a new reservation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the trainer list"),

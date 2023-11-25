@@ -87,7 +87,16 @@ public class Member extends BaseEntity {
         this.name = Name.from(name);
     }
 
-    public void updatePersonalExercises(PersonalExercise personalExercises) {
+    public void addPersonalExercises(PersonalExercise personalExercises) {
         this.personalExercises.add(personalExercises);
     }
+
+//    public void updatePersonalExercise(PersonalExercise updatedExercise) {
+//        personalExercises.replaceAll(existingExercise -> {
+//            if (existingExercise.getId().equals(updatedExercise.getId())) {
+//                return updatedExercise;
+//            }
+//            return existingExercise;
+//        });
+//    }
 }

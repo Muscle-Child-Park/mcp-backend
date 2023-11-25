@@ -3,6 +3,7 @@ package com.park.muscle.core.personalexercise.domain;
 import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.personalexercise.dto.request.PersonalExerciseRequest.Update;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,13 @@ public class PersonalExercise {
         this.exercises = exercises;
         this.completionToggle = false;
         this.classType = classType;
+    }
+
+    public void updatePersonalExercise(Update updateRequest) {
+        this.lessonDate = updateRequest.getLessonDate();
+        this.timeSlot = updateRequest.getTimeSlot();
+        this.completionToggle = updateRequest.isCompletionToggle();
+        this.classType = ClassType.findType(updateRequest.getClassType());
     }
 
     public void addExerciseDiary(ExerciseDiary exerciseDiary) {
