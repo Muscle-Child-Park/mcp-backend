@@ -44,6 +44,22 @@ public class TicketDto {
     }
 
     @Getter
+    @Builder
+    public static class MemberTicketResponse {
+        private String name;
+        private int totalQuantity;
+        private int leftQuantity;
+
+        public static MemberTicketResponse fromEntity(Trainer trainer, int totalQuantity, int leftQuantity) {
+            return MemberTicketResponse.builder()
+                    .name(trainer.getName())
+                    .totalQuantity(totalQuantity)
+                    .leftQuantity(leftQuantity)
+                    .build();
+        }
+    }
+
+    @Getter
     public static class TicketResponse {
 
         @Schema(description = "member의 고유 ID")
@@ -134,6 +150,31 @@ public class TicketDto {
                     .feedback(lesson.getFeedback())
                     .classType(lesson.getClassType())
                     .completionToggle(lesson.isCompletionToggle())
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class LessonByTicketSimpleResponse {
+        @Schema(description = "Lesson id 반환")
+        private Long id;
+
+        @Schema(description = "Lesson title 반환")
+        private String title;
+
+        @Schema(description = "lessonDate 반환")
+        private LocalDateTime lessonDate;
+
+        @Schema(description = "timeSlot 반환")
+        private String timeSlot;
+
+        public static LessonByTicketSimpleResponse fromEntity(Lesson lesson) {
+            return LessonByTicketSimpleResponse.builder()
+                    .id(lesson.getId())
+                    .title(lesson.getTitle())
+                    .lessonDate(lesson.getLessonDate())
+                    .timeSlot(lesson.getTimeSlot())
                     .build();
         }
     }

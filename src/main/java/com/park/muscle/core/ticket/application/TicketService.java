@@ -5,6 +5,7 @@ import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.domain.TicketRepository;
 import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
+import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketSimpleResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerInfoByTicketResponse;
@@ -54,6 +55,13 @@ public class TicketService {
         List<Lesson> lesson = ticket.getLesson();
         return lesson.stream()
                 .map(LessonByTicketResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<LessonByTicketSimpleResponse> findAllSimpleLessonsByTicket(final Ticket ticket) {
+        List<Lesson> lesson = ticket.getLesson();
+        return lesson.stream()
+                .map(LessonByTicketSimpleResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
