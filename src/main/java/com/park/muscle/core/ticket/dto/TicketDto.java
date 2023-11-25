@@ -1,5 +1,6 @@
 package com.park.muscle.core.ticket.dto;
 
+import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
@@ -101,6 +102,8 @@ public class TicketDto {
         @Schema(description = "feedback 반환")
         private String feedback;
 
+        private ClassType classType;
+
         @Schema(description = "completionToggle 반환")
         private boolean completionToggle;
 
@@ -111,6 +114,7 @@ public class TicketDto {
                     .lessonDate(lesson.getLessonDate())
                     .timeSlot(lesson.getTimeSlot())
                     .feedback(lesson.getFeedback())
+                    .classType(lesson.getClassType())
                     .completionToggle(lesson.isCompletionToggle())
                     .build();
         }

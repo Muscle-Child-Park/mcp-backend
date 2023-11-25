@@ -1,5 +1,6 @@
 package com.park.muscle.core.lesson.dto;
 
+import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.lesson.domain.Lesson;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,9 @@ public class LessonRequestDto {
         @NotNull(message = "Lesson time slot is required")
         private String timeSlot;
 
+        @NotNull(message = "Lesson type is required")
+        private String classType;
+
         private String feedback;
 
         public Lesson toEntity() {
@@ -29,6 +33,7 @@ public class LessonRequestDto {
                     .title(title)
                     .lessonDate(lessonDate)
                     .timeSlot(timeSlot)
+                    .classType(ClassType.findType(classType))
                     .feedback(feedback)
                     .build();
         }

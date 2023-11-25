@@ -76,7 +76,7 @@ public class LessonController {
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
 
         Ticket ticket = ticketService.findById(ticketId);
-        lesson.updateExercise(exercises);
+        lesson.addExercise(exercises);
         ticket.setLesson(lesson);
 
         lessonService.save(lesson);

@@ -24,6 +24,8 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public final com.park.muscle.global.entity.QBaseEntity _super = new com.park.muscle.global.entity.QBaseEntity(this);
 
+    public final EnumPath<com.park.muscle.core.exercise.domain.ClassType> classType = createEnum("classType", com.park.muscle.core.exercise.domain.ClassType.class);
+
     public final BooleanPath completionToggle = createBoolean("completionToggle");
 
     //inherited

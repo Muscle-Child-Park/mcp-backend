@@ -1,5 +1,6 @@
 package com.park.muscle.core.lesson.dto;
 
+import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.domain.Lesson;
@@ -49,6 +50,7 @@ public class LessonResponseDto {
         private String feedback;
         private boolean isCompleted;
         private List<Exercise> exercise;
+        private ClassType classType;
         private LogReflectionResponseDto logReflectionResponseDto;
 
         public static LessonRetrieveResponse fromEntity(Lesson lesson,
@@ -61,6 +63,7 @@ public class LessonResponseDto {
                     .feedback(lesson.getFeedback())
                     .isCompleted(lesson.checkLessonCompletion())
                     .exercise(exercise)
+                    .classType(lesson.getClassType())
                     .logReflectionResponseDto(logReflectionResponseDto)
                     .build();
         }

@@ -1,5 +1,6 @@
 package com.park.muscle.core.lesson.domain;
 
+import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.reservation.domain.Reservation;
@@ -51,6 +52,9 @@ public class Lesson extends BaseEntity {
     @Column
     private boolean completionToggle;
 
+    @Column
+    private ClassType classType;
+
     @OneToOne
     private Reservation reservation;
 
@@ -65,13 +69,14 @@ public class Lesson extends BaseEntity {
     private ExerciseDiary exerciseDiary;
 
     @Builder
-    public Lesson(String title, LocalDateTime lessonDate, String timeSlot, String feedback, List<Exercise> exercises) {
+    public Lesson(String title, LocalDateTime lessonDate, String timeSlot, String feedback, List<Exercise> exercises, ClassType classType) {
         this.title = title;
         this.lessonDate = lessonDate;
         this.timeSlot = timeSlot;
         this.feedback = feedback;
         this.exercises = exercises;
         this.completionToggle = false;
+        this.classType = classType;
     }
 
     public void addExerciseDiary(ExerciseDiary exerciseDiary) {
@@ -86,7 +91,7 @@ public class Lesson extends BaseEntity {
         }
     }
 
-    public void updateExercise(final List<Exercise> exercises) {
+    public void addExercise(final List<Exercise> exercises) {
         if (this.exercises == null) {
             this.exercises = new ArrayList<>();
         }

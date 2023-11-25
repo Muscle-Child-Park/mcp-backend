@@ -36,6 +36,8 @@ public class QPersonalExercise extends EntityPathBase<PersonalExercise> {
 
     public final StringPath timeSlot = createString("timeSlot");
 
+    public final StringPath title = createString("title");
+
     public QPersonalExercise(String variable) {
         this(PersonalExercise.class, forVariable(variable), INITS);
     }
