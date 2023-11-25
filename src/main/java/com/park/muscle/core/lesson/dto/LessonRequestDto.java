@@ -12,6 +12,10 @@ public class LessonRequestDto {
     @Getter
     @NoArgsConstructor
     public static class Create {
+
+        @NotNull(message = "Lesson title is required")
+        private String title;
+
         @NotNull(message = "Lesson date is required")
         private LocalDateTime lessonDate;
 
@@ -22,6 +26,7 @@ public class LessonRequestDto {
 
         public Lesson toEntity() {
             return Lesson.builder()
+                    .title(title)
                     .lessonDate(lessonDate)
                     .timeSlot(timeSlot)
                     .feedback(feedback)

@@ -13,12 +13,29 @@ public class LessonResponseDto {
     @Getter
     @Builder
     public static class LessonCreateResponse {
-        private Lesson lesson;
-        private List<Exercise> exercises;
+        private Long ticketId;
 
-        public static LessonCreateResponse fromEntity(Lesson lesson) {
+        private Long lessonId;
+
+        private String title;
+
+        private LocalDateTime lessonDate;
+
+        private String timeSlot;
+
+        private String feedback;
+
+        private boolean completionToggle;
+
+        public static LessonCreateResponse fromEntity(Lesson lesson, long ticketId) {
             return LessonCreateResponse.builder()
-                    .lesson(lesson)
+                    .ticketId(ticketId)
+                    .lessonId(lesson.getId())
+                    .title(lesson.getTitle())
+                    .lessonDate(lesson.getLessonDate())
+                    .timeSlot(lesson.getTimeSlot())
+                    .feedback(lesson.getFeedback())
+                    .completionToggle(lesson.isCompletionToggle())
                     .build();
         }
     }
@@ -26,6 +43,7 @@ public class LessonResponseDto {
     @Getter
     @Builder
     public static class LessonRetrieveResponse {
+        private String title;
         private LocalDateTime lessonDate;
         private String timeSlot;
         private String feedback;
@@ -37,6 +55,7 @@ public class LessonResponseDto {
                                                         List<Exercise> exercise,
                                                         LogReflectionResponseDto logReflectionResponseDto) {
             return LessonRetrieveResponse.builder()
+                    .title(lesson.getTitle())
                     .lessonDate(lesson.getLessonDate())
                     .timeSlot(lesson.getTimeSlot())
                     .feedback(lesson.getFeedback())

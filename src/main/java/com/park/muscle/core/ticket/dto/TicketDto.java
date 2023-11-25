@@ -1,9 +1,11 @@
 package com.park.muscle.core.ticket.dto;
 
+import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -77,6 +79,39 @@ public class TicketDto {
         public static PendingMemberNameResponse fromEntity(List<String> members) {
             return PendingMemberNameResponse.builder()
                     .names(members)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class LessonByTicketResponse {
+        @Schema(description = "Lesson id 반환")
+        private Long id;
+
+        @Schema(description = "Lesson title 반환")
+        private String title;
+
+        @Schema(description = "lessonDate 반환")
+        private LocalDateTime lessonDate;
+
+        @Schema(description = "timeSlot 반환")
+        private String timeSlot;
+
+        @Schema(description = "feedback 반환")
+        private String feedback;
+
+        @Schema(description = "completionToggle 반환")
+        private boolean completionToggle;
+
+        public static LessonByTicketResponse fromEntity(Lesson lesson) {
+            return LessonByTicketResponse.builder()
+                    .id(lesson.getId())
+                    .title(lesson.getTitle())
+                    .lessonDate(lesson.getLessonDate())
+                    .timeSlot(lesson.getTimeSlot())
+                    .feedback(lesson.getFeedback())
+                    .completionToggle(lesson.isCompletionToggle())
                     .build();
         }
     }

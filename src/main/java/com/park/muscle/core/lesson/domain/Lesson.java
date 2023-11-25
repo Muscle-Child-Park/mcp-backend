@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,9 +24,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Getter
 @Entity
 @Table(name = "lesson")
@@ -36,6 +35,9 @@ public class Lesson extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lesson_id")
     private Long id;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private LocalDateTime lessonDate;
@@ -52,8 +54,8 @@ public class Lesson extends BaseEntity {
     @OneToOne
     private Reservation reservation;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Ticket> ticket;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ticket ticket;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Exercise> exercises;
@@ -63,7 +65,8 @@ public class Lesson extends BaseEntity {
     private ExerciseDiary exerciseDiary;
 
     @Builder
-    public Lesson(LocalDateTime lessonDate, String timeSlot, String feedback, List<Exercise> exercises) {
+    public Lesson(String title, LocalDateTime lessonDate, String timeSlot, String feedback, List<Exercise> exercises) {
+        this.title = title;
         this.lessonDate = lessonDate;
         this.timeSlot = timeSlot;
         this.feedback = feedback;

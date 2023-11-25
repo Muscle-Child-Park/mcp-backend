@@ -38,7 +38,7 @@ public class ReservationService {
                     Long memberId = member.getId();
                     String name = member.getName().getValue();
                     List<ReserveTimeSlot> timeSlots = dayMatched(member.getReservations());
-                    boolean hasId = ticket.getLesson().getId() != null;
+                    boolean hasId = ticket.getLesson() != null;
                     return ReservationInfoResponse.fromEntity(memberId, name, timeSlots, hasId);
                 })
                 .collect(Collectors.toList());

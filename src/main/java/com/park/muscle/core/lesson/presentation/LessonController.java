@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequestMapping("/api/lesson")
 @RequiredArgsConstructor
 @RestController
@@ -53,7 +55,10 @@ public class LessonController {
         List<Exercise> exercises = lesson.getExercises();
         ExerciseDiary exerciseDiary = lesson.getExerciseDiary();
 
-        LogReflectionResponseDto logReflectionResponseDto = LogReflectionResponseDto.fromEntity(exerciseDiary);
+        LogReflectionResponseDto logReflectionResponseDto = null;
+        if (exerciseDiary != null) {
+            logReflectionResponseDto = LogReflectionResponseDto.fromEntity(exerciseDiary);
+        }
         LessonRetrieveResponse lessonRetrieveResponse = LessonRetrieveResponse.fromEntity(lesson, exercises, logReflectionResponseDto);
         return ResponseEntity.status(HttpStatus.OK).body(lessonRetrieveResponse);
     }
@@ -66,19 +71,18 @@ public class LessonController {
     @PostMapping("/create/{ticketId}")
     public ResponseEntity<LessonCreateResponse> createLesson(@PathVariable Long ticketId,
             @Valid @RequestBody LessonWithExerciseRequestDto lessonWithExerciseRequestDto) {
-
-        Lesson lessons = lessonWithExerciseRequestDto.getLessonRequestDto().toEntity();
+        Lesson lesson = lessonWithExerciseRequestDto.getLessonRequestDto().toEntity();
         List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequestDto.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
+
         Ticket ticket = ticketService.findById(ticketId);
+        lesson.updateExercise(exercises);
+        ticket.setLesson(lesson);
 
-        lessons.updateExercise(exercises);
-        ticket.setLesson(lessons);
+        lessonService.save(lesson);
         ticketService.saveTicket(ticket);
-
-        lessonService.save(lessons);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(LessonCreateResponse.fromEntity(lessons));
+                .body(LessonCreateResponse.fromEntity(lesson, ticketId));
     }
 
     @Operation(summary = "피드백 추가", description = "수업에 대한 피드백을 추가합니다.")

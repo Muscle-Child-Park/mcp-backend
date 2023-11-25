@@ -1,10 +1,11 @@
 package com.park.muscle.core.ticket.presentation;
 
-import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.application.TicketService;
+import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto;
+import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,8 +47,9 @@ public class TicketController {
 
     @Operation(summary = "Get lessons by ticket ID", description = "Retrieve all lessons associated with a ticket")
     @GetMapping("/{ticketId}/lesson")
-    public ResponseEntity<List<Lesson>> getLessonsByTicketId(@PathVariable Long ticketId) {
-        List<Lesson> lessons = ticketService.findAllLessonsByTicketId(ticketId);
+    public ResponseEntity<List<LessonByTicketResponse>> getLessonsByTicketId(@PathVariable Long ticketId) {
+        Ticket ticket = ticketService.findById(ticketId);
+        List<LessonByTicketResponse> lessons = ticketService.findAllLessonsByTicket(ticket);
         return ResponseEntity.status(HttpStatus.OK).body(lessons);
     }
 }

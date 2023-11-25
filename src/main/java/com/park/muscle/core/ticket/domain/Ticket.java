@@ -4,6 +4,8 @@ import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.entity.BaseEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,9 +41,9 @@ public class Ticket extends BaseEntity {
     @Column(nullable = false)
     private boolean accepted;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "lesson_id")
-    private Lesson lesson;
+    private List<Lesson> lesson = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
@@ -60,7 +63,7 @@ public class Ticket extends BaseEntity {
     }
 
     public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
+        this.lesson.add(lesson);
     }
 
     public void changeTrainer(Trainer trainer) {

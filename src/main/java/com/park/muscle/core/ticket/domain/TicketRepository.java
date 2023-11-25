@@ -11,9 +11,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("SELECT t.lesson FROM Ticket t WHERE t.id = :ticketId")
     Lesson findLessonByTicketId(@Param("ticketId") Long ticketId);
 
-    @Query("SELECT l FROM Ticket t JOIN Lesson l ON t.lesson = l WHERE t.id = :ticketId")
-    List<Lesson> findAllLessonsByTicketId(@Param("ticketId") Long ticketId);
-
     List<Ticket> findAllTicketByMemberId(Long memberId);
 
     List<Ticket> findAllTicketByTrainerId(Long trainerId);

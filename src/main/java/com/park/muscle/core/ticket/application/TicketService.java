@@ -4,6 +4,7 @@ import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.domain.TicketRepository;
+import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.create;
@@ -38,7 +39,7 @@ public class TicketService {
 
     public void acceptTicket(final Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
-              .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
         ticket.assignToMemberAndTrainer(ticket.getMember(), ticket.getTrainer());
         ticketRepository.save(ticket);
     }
@@ -48,8 +49,11 @@ public class TicketService {
         return ticket.orElse(null);
     }
 
-    public List<Lesson> findAllLessonsByTicketId(final Long ticketId) {
-        return ticketRepository.findAllLessonsByTicketId(ticketId);
+    public List<LessonByTicketResponse> findAllLessonsByTicket(final Ticket ticket) {
+        List<Lesson> lesson = ticket.getLesson();
+        return lesson.stream()
+                .map(LessonByTicketResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 
     public void saveTicket(final Ticket ticket) {

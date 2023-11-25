@@ -44,9 +44,11 @@ public class QLesson extends EntityPathBase<Lesson> {
 
     public final com.park.muscle.core.reservation.domain.QReservation reservation;
 
-    public final ListPath<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket> ticket = this.<com.park.muscle.core.ticket.domain.Ticket, com.park.muscle.core.ticket.domain.QTicket>createList("ticket", com.park.muscle.core.ticket.domain.Ticket.class, com.park.muscle.core.ticket.domain.QTicket.class, PathInits.DIRECT2);
+    public final com.park.muscle.core.ticket.domain.QTicket ticket;
 
     public final StringPath timeSlot = createString("timeSlot");
+
+    public final StringPath title = createString("title");
 
     public QLesson(String variable) {
         this(Lesson.class, forVariable(variable), INITS);
@@ -68,6 +70,7 @@ public class QLesson extends EntityPathBase<Lesson> {
         super(type, metadata, inits);
         this.exerciseDiary = inits.isInitialized("exerciseDiary") ? new com.park.muscle.core.exercise.domain.QExerciseDiary(forProperty("exerciseDiary"), inits.get("exerciseDiary")) : null;
         this.reservation = inits.isInitialized("reservation") ? new com.park.muscle.core.reservation.domain.QReservation(forProperty("reservation")) : null;
+        this.ticket = inits.isInitialized("ticket") ? new com.park.muscle.core.ticket.domain.QTicket(forProperty("ticket"), inits.get("ticket")) : null;
     }
 
 }
