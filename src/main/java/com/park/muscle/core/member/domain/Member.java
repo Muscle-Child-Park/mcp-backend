@@ -91,12 +91,12 @@ public class Member extends BaseEntity {
         this.personalExercises.add(personalExercises);
     }
 
-//    public void updatePersonalExercise(PersonalExercise updatedExercise) {
-//        personalExercises.replaceAll(existingExercise -> {
-//            if (existingExercise.getId().equals(updatedExercise.getId())) {
-//                return updatedExercise;
-//            }
-//            return existingExercise;
-//        });
-//    }
+    public void updatePersonalExercise(PersonalExercise updatedExercise) {
+        personalExercises.replaceAll(existingExercise -> {
+            if (existingExercise.getId().equals(updatedExercise.getId())) {
+                return updatedExercise;
+            }
+            return existingExercise;
+        });
+    }
 }

@@ -57,7 +57,7 @@ public class MemberExerciseController {
         PersonalExercise personalExercise = createPersonalExercise.getPersonalExerciseRequest().toEntity();
         List<CreateExerciseWithPersonal> exerciseRequestDtos = createPersonalExercise.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithMember(exerciseRequestDtos);
-        personalExercise.updateExercise(exercises);
+        personalExercise.addExercise(exercises);
         personalExerciseService.save(personalExercise);
 
         Member memberById = memberService.findMemberById(memberId);
@@ -70,18 +70,15 @@ public class MemberExerciseController {
     public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long personalExerciseId,
                                                                                 @PathVariable Long memberId,
                                                                                 @RequestBody UpdatePersonalExercise updatePersonalExercise) {
-
         List<Exercise> exercises =
                 exerciseService.updateExercises(updatePersonalExercise.getExerciseUpdateRequestDtos());
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(personalExerciseId);
 
         personalExercise.updatePersonalExercise(updatePersonalExercise.getPersonalExerciseUpdateRequest());
-        personalExercise.updateExercise(exercises);
+        Member member = memberService.findMemberById(memberId);
+        personalExerciseService.updateExercises(exercises, personalExercise);
         personalExerciseService.save(personalExercise);
-
-        Member memberById = memberService.findMemberById(memberId);
-//        memberById.updatePersonalExercise(personalExercise);
-        memberService.save(memberById);
+        memberService.save(member);
         return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
     }
 }

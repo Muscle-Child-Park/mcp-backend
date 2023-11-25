@@ -15,6 +15,10 @@ public class PersonalExerciseRequest {
     @Getter
     @NoArgsConstructor
     public static class Create {
+
+        @NotNull(message = "Personal-Exercise title is required")
+        private String title;
+
         @NotNull(message = "Personal-Exercise date is required")
         private LocalDateTime lessonDate;
 
@@ -26,6 +30,7 @@ public class PersonalExerciseRequest {
 
         public PersonalExercise toEntity() {
             return PersonalExercise.builder()
+                    .title(title)
                     .lessonDate(lessonDate)
                     .timeSlot(timeSlot)
                     .classType(ClassType.findType(classType))
@@ -36,6 +41,9 @@ public class PersonalExerciseRequest {
     @Getter
     @NoArgsConstructor
     public static class Update {
+        @NotNull(message = "Personal-Exercise title is required")
+        private String title;
+
         @NotNull(message = "Personal-Exercise date is required")
         private LocalDateTime lessonDate;
 

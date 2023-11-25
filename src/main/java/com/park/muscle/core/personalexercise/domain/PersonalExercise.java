@@ -35,6 +35,9 @@ public class PersonalExercise {
     private Long id;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private LocalDateTime lessonDate;
 
     @Column(nullable = false)
@@ -54,7 +57,8 @@ public class PersonalExercise {
     private ExerciseDiary exerciseDiary;
 
     @Builder
-    public PersonalExercise(LocalDateTime lessonDate, String timeSlot, List<Exercise> exercises, ClassType classType) {
+    public PersonalExercise(String title, LocalDateTime lessonDate, String timeSlot, List<Exercise> exercises, ClassType classType) {
+        this.title = title;
         this.lessonDate = lessonDate;
         this.timeSlot = timeSlot;
         this.exercises = exercises;
@@ -63,6 +67,7 @@ public class PersonalExercise {
     }
 
     public void updatePersonalExercise(Update updateRequest) {
+        this.title = updateRequest.getTitle();
         this.lessonDate = updateRequest.getLessonDate();
         this.timeSlot = updateRequest.getTimeSlot();
         this.completionToggle = updateRequest.isCompletionToggle();
@@ -73,7 +78,7 @@ public class PersonalExercise {
         this.exerciseDiary = exerciseDiary;
     }
 
-    public void updateExercise(final List<Exercise> exercises) {
+    public void addExercise(final List<Exercise> exercises) {
         if (this.exercises == null) {
             this.exercises = new ArrayList<>();
         }
@@ -82,5 +87,14 @@ public class PersonalExercise {
 
     public void updateExerciseDiary(final ExerciseDiary exerciseDiary) {
         this.exerciseDiary = exerciseDiary;
+    }
+
+    public void updateExercise(final Exercise updatedExercise) {
+        exercises.replaceAll(existingExercise -> {
+            if (existingExercise.getId().equals(updatedExercise.getId())) {
+                return updatedExercise;
+            }
+            return existingExercise;
+        });
     }
 }
