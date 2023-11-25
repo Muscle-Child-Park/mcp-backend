@@ -6,7 +6,9 @@ import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
 import com.park.muscle.core.trainer.application.TrainerService;
+import com.park.muscle.core.trainer.domain.Gym;
 import com.park.muscle.core.trainer.domain.Trainer;
+import com.park.muscle.core.trainer.dto.TrainerRequestDto.GymRequest;
 import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
 import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerHomeResponse;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,23 +62,21 @@ public class TrainerController {
         return ResponseEntity.ok(trainerTicketResponse);
     }
 
-
-    @Operation(summary = "트레이너 프로필 업데이트")
+    @Operation(summary = "트레이너 프로필 GYM 업데이트")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "트레이너 프로필 업데이트 성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
-    @PutMapping("/profile/{trainerId}")
-    public ResponseEntity<Trainer> updateTrainerProfile(@PathVariable Long trainerId,
-                                                        @RequestBody Trainer updatedTrainer) {
-
-        /**TODO: 2023-11-23, 목, 23:33  -JEON
-         *  TASK: 작업 해야함
-         */
-        return ResponseEntity.ok(updatedTrainer);
+    @PostMapping("/profile/{trainerId}")
+    public ResponseEntity<Void> addTrainerGym(@PathVariable Long trainerId,
+                                                    @RequestBody GymRequest gymRequest) {
+        Trainer trainer = trainerService.getTrainerById(trainerId);
+        Gym gym = gymRequest.toEntity(gymRequest.getName());
+        trainer.addGym(gym);
+        trainerService.saveGym(trainer, gym);
+        return ResponseEntity.ok().build();
     }
-
 
     @Operation(summary = "트레이너 계정 삭제")
     @ApiResponses(value = {

@@ -8,7 +8,9 @@ import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -19,7 +21,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -39,9 +40,9 @@ public class Trainer extends BaseEntity {
     @Column(name = "trainer_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "gym_id")
-    private Gym gym;
+    private final List<Gym> gym = new LinkedList<>();
 
     @Enumerated(value = EnumType.STRING)
     private SocialType socialType;
@@ -71,10 +72,9 @@ public class Trainer extends BaseEntity {
     private final List<ReserveTimeSlot> reserveTimeSlots = new ArrayList<>();
 
     @Builder
-    public Trainer(Gym gym, SocialType socialType, String socialId, Name name, Role role) {
+    public Trainer(SocialType socialType, String socialId, Name name, Role role) {
         this.socialType = socialType;
         this.socialId = socialId;
-        this.gym = gym;
         this.name = name;
         this.role = role;
         this.uniqueTag = UniqueTag.builder().trainer(this).build();
@@ -88,9 +88,8 @@ public class Trainer extends BaseEntity {
         return name.getName();
     }
 
-    public void changeGym(Gym gym) {
-        this.gym = gym;
-        gym.getTrainers().add(this);
+    public void addGym(Gym gym) {
+        this.gym.add(gym);
     }
 
     public void addDayOffs(DayOff dayOff) {

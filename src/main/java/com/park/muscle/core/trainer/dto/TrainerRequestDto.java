@@ -1,6 +1,7 @@
 package com.park.muscle.core.trainer.dto;
 
 import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.trainer.domain.Gym;
 import com.park.muscle.core.trainer.domain.Name;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.enumerate.SocialType;
@@ -33,6 +34,19 @@ public class TrainerRequestDto {
                     .socialType(SocialType.findType(this.socialType))
                     .name(Name.from(this.name))
                     .role(Role.ROLE_TRAINER)
+                    .build();
+        }
+    }
+
+    @Getter
+    public static class GymRequest {
+
+        @NotBlank(message = "name은 반드시 존재해야 합니다.")
+        private String name;
+
+        public Gym toEntity(String name) {
+            return Gym.builder()
+                    .name(name)
                     .build();
         }
     }

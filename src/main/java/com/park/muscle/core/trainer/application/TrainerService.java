@@ -11,6 +11,8 @@ import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoR
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
 import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
+import com.park.muscle.core.trainer.domain.Gym;
+import com.park.muscle.core.trainer.domain.GymRepository;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
 import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
@@ -33,6 +35,7 @@ public class TrainerService {
     private final TrainerRepository trainerRepository;
     private final ReservationService reservationService;
     private final UniqueTagRepository uniqueTagRepository;
+    private final GymRepository gymRepository;
 
     @Transactional
     public LoginResponse login(LoginRequest loginRequest) {
@@ -103,5 +106,10 @@ public class TrainerService {
     public void deleteTrainerAccount(final Long trainerId) {
         Trainer trainer = getTrainerById(trainerId);
         trainerRepository.delete(trainer);
+    }
+
+    public void saveGym(final Trainer trainer, final Gym gym) {
+        gymRepository.save(gym);
+        trainerRepository.save(trainer);
     }
 }

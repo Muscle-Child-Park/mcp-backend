@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -31,8 +30,6 @@ public class QGym extends EntityPathBase<Gym> {
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath name = createString("name");
-
-    public final ListPath<Trainer, QTrainer> trainers = this.<Trainer, QTrainer>createList("trainers", Trainer.class, QTrainer.class, PathInits.DIRECT2);
 
     public QGym(String variable) {
         super(Gym.class, forVariable(variable));

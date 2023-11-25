@@ -29,7 +29,7 @@ public class QTrainer extends EntityPathBase<Trainer> {
 
     public final ListPath<DayOff, QDayOff> dayOffs = this.<DayOff, QDayOff>createList("dayOffs", DayOff.class, QDayOff.class, PathInits.DIRECT2);
 
-    public final QGym gym;
+    public final ListPath<Gym, QGym> gym = this.<Gym, QGym>createList("gym", Gym.class, QGym.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -70,7 +70,6 @@ public class QTrainer extends EntityPathBase<Trainer> {
 
     public QTrainer(Class<? extends Trainer> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.gym = inits.isInitialized("gym") ? new QGym(forProperty("gym")) : null;
         this.name = inits.isInitialized("name") ? new QName(forProperty("name")) : null;
         this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag"), inits.get("uniqueTag")) : null;
     }
