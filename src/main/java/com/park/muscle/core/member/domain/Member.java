@@ -41,15 +41,17 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "social_type")
     private SocialType socialType;
 
-    @Column(nullable = false)
+    @Column(name = "social_id", nullable = false)
     private String socialId;
 
     @Embedded
     private Name name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

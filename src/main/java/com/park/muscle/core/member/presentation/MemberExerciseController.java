@@ -15,6 +15,9 @@ import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.OwnPersonalExerciseResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -39,6 +42,12 @@ public class MemberExerciseController {
     private final ExerciseService exerciseService;
     private final MemberService memberService;
 
+    @Operation(summary = "회원 개인 운동 목록 조회", description = "멤버 아이디를 통해 해당 멤버의 전체 개인 운동 목록을 조회할 수 있습니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "개인 운동 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/{memberId}")
     public ResponseEntity<List<AllPersonalExerciseResponse>> getMemberAllExercises(@PathVariable long memberId) {
         Member member = memberService.findMemberById(memberId);
@@ -46,6 +55,12 @@ public class MemberExerciseController {
         return ResponseEntity.status(HttpStatus.OK).body(personalExerciseService.getAllPersonalEx(personalExercises));
     }
 
+    @Operation(summary = "회원 개인 운동 조회", description = "개인 운동 아이디를 통해 해당 멤버의 개인 운동을 조회할 수 있습니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "개인 운동 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @GetMapping("/own/{personalExerciseId}")
     public ResponseEntity<OwnPersonalExerciseResponse> getExercisesFromPersonalEx(
             @PathVariable long personalExerciseId) {
@@ -61,6 +76,12 @@ public class MemberExerciseController {
                 .body(OwnPersonalExerciseResponse.fromEntity(personalExercise, exercises, logReflectionResponseDto));
     }
 
+    @Operation(summary = "회원 개인 운동 생성", description = "새로운 개인 운동을 생성합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "개인 운동 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @PostMapping("/{memberId}")
     public ResponseEntity<PersonalExerciseCreateResponse> addPersonalExercises(@PathVariable Long memberId,
                                                                                @RequestBody CreatePersonalExercise createPersonalExercise) {
@@ -77,6 +98,12 @@ public class MemberExerciseController {
         return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
     }
 
+    @Operation(summary = "회원 개인 운동 수정", description = "개인 운동을 수정합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "운동 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Server error")
+    })
     @PutMapping("/{personalExerciseId}/{memberId}")
     public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long personalExerciseId,
                                                                                 @PathVariable Long memberId,

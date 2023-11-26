@@ -22,7 +22,7 @@ public class ExerciseDiary extends BaseEntity {
     @Column(name = "exercise_diary_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "memo", nullable = false)
     private String memo;
 
     @Builder

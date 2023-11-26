@@ -32,13 +32,13 @@ public class Ticket extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "total_quantity", nullable = false)
     private int totalQuantity;
 
-    @Column(nullable = false)
+    @Column(name = "left_quantity", nullable = false)
     private int leftQuantity;
 
-    @Column(nullable = false)
+    @Column(name = "accepted", nullable = false)
     private boolean accepted;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

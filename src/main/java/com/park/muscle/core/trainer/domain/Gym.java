@@ -23,7 +23,7 @@ public class Gym extends BaseEntity {
     @Column(name = "gym_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Builder

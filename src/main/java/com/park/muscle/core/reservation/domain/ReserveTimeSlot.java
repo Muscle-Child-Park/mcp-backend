@@ -20,10 +20,10 @@ public class ReserveTimeSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "time")
     private LocalTime time;
 
-    @Column
+    @Column(name = "accessible_time")
     private boolean accessibleTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

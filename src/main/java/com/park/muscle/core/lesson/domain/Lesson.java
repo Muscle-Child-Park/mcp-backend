@@ -37,22 +37,22 @@ public class Lesson extends BaseEntity {
     @Column(name = "lesson_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "lesson_date", nullable = false)
     private LocalDateTime lessonDate;
 
-    @Column(nullable = false)
+    @Column(name = "time_slot", nullable = false)
     private String timeSlot;
 
-    @Column
+    @Column(name = "feedback")
     private String feedback;
 
-    @Column
+    @Column(name = "completion_toggle")
     private boolean completionToggle;
 
-    @Column
+    @Column(name = "class_type")
     private ClassType classType;
 
     @OneToOne

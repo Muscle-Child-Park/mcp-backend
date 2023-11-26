@@ -39,24 +39,26 @@ public class Trainer extends BaseEntity {
     @Column(name = "trainer_id")
     private Long id;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "gym_id")
-    private final List<Gym> gym = new ArrayList<>();
-
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "social_type")
     private SocialType socialType;
 
-    @Column(nullable = false)
+    @Column(name = "social_id", nullable = false)
     private String socialId;
 
     @Embedded
     private Name name;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @OneToOne
     private UniqueTag uniqueTag;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "gym_id")
+    private final List<Gym> gym = new ArrayList<>();
 
     @OneToMany
     private final List<DayOff> dayOffs = new ArrayList<>();

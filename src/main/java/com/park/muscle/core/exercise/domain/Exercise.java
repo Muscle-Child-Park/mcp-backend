@@ -24,23 +24,23 @@ public class Exercise {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "exercise_type", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private ExerciseType exerciseType;
 
-    @Column(nullable = false)
+    @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "kind",nullable = false)
     private String kind;
 
-    @Column(nullable = false)
+    @Column(name = "weight",nullable = false)
     private String weight;
 
-    @Column(nullable = false)
+    @Column(name = "count", nullable = false)
     private int count;
 
-    @Column(nullable = false)
+    @Column(name = "run_time", nullable = false)
     private int runTime;
 
     @Builder

@@ -24,13 +24,13 @@ public class DayOff extends BaseEntity {
     @Column(name = "day_off_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
+    @Column(name = "cycle_status",nullable = false)
     private boolean cycleStatus;
 
     @Builder

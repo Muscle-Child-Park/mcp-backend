@@ -32,13 +32,13 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(name = "reservation_date_time", nullable = false)
     private LocalDateTime reservationDateTime;
 
-    @Column
+    @Column(name = "reservation_modified_time")
     private LocalDateTime reservationModifiedTime;
 
-    @Column
+    @Column(name = "reservation_cancelled_time")
     private LocalDateTime reservationCancelledTime;
 
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)

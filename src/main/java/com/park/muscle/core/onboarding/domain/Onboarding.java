@@ -27,18 +27,25 @@ public class Onboarding extends BaseEntity {
     @Column(name = "onboarding_id")
     private Long id;
 
+    @Column(name = "first_purpose")
     private String firstPurpose;
 
+    @Column(name = "second_purpose")
     private String secondPurpose;
 
+    @Column(name = "balance")
     private String balance;
 
+    @Column(name = "interest")
     private String interest;
 
+    @Column(name = "life_style")
     private String lifeStyle;
 
+    @Column(name = "eating_habit")
     private String eatingHabit;
 
+    @Column(name = "name")
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY)
