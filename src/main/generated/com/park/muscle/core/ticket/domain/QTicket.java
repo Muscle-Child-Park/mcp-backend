@@ -40,6 +40,8 @@ public class QTicket extends EntityPathBase<Ticket> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
+    public final ListPath<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation> reservations = this.<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation>createList("reservations", com.park.muscle.core.reservation.domain.Reservation.class, com.park.muscle.core.reservation.domain.QReservation.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> totalQuantity = createNumber("totalQuantity", Integer.class);
 
     public final com.park.muscle.core.trainer.domain.QTrainer trainer;

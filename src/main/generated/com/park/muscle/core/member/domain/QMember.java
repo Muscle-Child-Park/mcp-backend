@@ -40,8 +40,6 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise> personalExercises = this.<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise>createList("personalExercises", com.park.muscle.core.personalexercise.domain.PersonalExercise.class, com.park.muscle.core.personalexercise.domain.QPersonalExercise.class, PathInits.DIRECT2);
 
-    public final ListPath<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation> reservations = this.<com.park.muscle.core.reservation.domain.Reservation, com.park.muscle.core.reservation.domain.QReservation>createList("reservations", com.park.muscle.core.reservation.domain.Reservation.class, com.park.muscle.core.reservation.domain.QReservation.class, PathInits.DIRECT2);
-
     public final EnumPath<Role> role = createEnum("role", Role.class);
 
     public final StringPath socialId = createString("socialId");

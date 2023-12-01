@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RequestMapping("/api/trainers")
 @RequiredArgsConstructor
 @RestController
@@ -38,9 +40,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TrainerController {
     private final TrainerService trainerService;
 
-    /**TODO: 2023-11-28, 화, 23:22  -JEON
-    *  TASK: time slots 정보 누락 발생 -> 개선 해야 함
-    */
     @Operation(summary = "트레이너 홈 화면 정보")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "트레이너 정보 조회 성공"),
@@ -58,7 +57,6 @@ public class TrainerController {
         List<Member> pendingMembers = trainerService.findPendingMembers(tickets);
         PendingMemberNameResponse pendingMembersResponse = trainerService.getPendingMembers(pendingMembers);
         List<ReservationInfoResponse> reserveMembers = trainerService.getReserveMembers(tickets);
-
         return ResponseEntity.ok().body(TrainerHomeResponse.fromEntity(pendingMembersResponse, reserveMembers));
     }
 

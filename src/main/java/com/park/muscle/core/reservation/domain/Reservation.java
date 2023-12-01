@@ -1,7 +1,9 @@
 package com.park.muscle.core.reservation.domain;
 
+import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.global.entity.BaseEntity;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -10,9 +12,11 @@ import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -44,6 +48,9 @@ public class Reservation extends BaseEntity {
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private List<ReserveTimeSlot> reserveTimeSlots = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Ticket ticket;
+
     @Builder
     public Reservation(LocalDateTime reservationDate, List<ReserveTimeSlot> reserveTimeSlots) {
         this.reserveTimeSlots = reserveTimeSlots;
@@ -60,6 +67,10 @@ public class Reservation extends BaseEntity {
 
     public int getReserveDay() {
         return reservationDateTime.getDayOfMonth();
+    }
+
+    public boolean isReserveCurrentTimes() {
+        return reservationDateTime.toLocalDate().isEqual(LocalDate.now());
     }
 
     public String getReserveDayOfWeek() {

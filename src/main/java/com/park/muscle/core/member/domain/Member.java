@@ -3,7 +3,6 @@ package com.park.muscle.core.member.domain;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
-import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
@@ -61,9 +60,6 @@ public class Member extends BaseEntity {
     private final List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Reservation> reservations = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private final List<ExerciseDiary> diaries = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -82,8 +78,8 @@ public class Member extends BaseEntity {
         uniqueTag.updateMember(this);
     }
 
-    public Long getId() {
-        return id;
+    public String getMemberName() {
+        return name.getValue();
     }
 
     public void updateName(String name) {

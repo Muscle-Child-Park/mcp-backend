@@ -39,9 +39,6 @@ public class MemberReservationController {
         reservationService.registerReservation(request);
     }
 
-    /**TODO: 2023-11-28, 화, 23:22  -JEON
-    *  TASK: 트레이너 중복 시 오류 발생 -> 개선 해야함
-    */
     @Operation(summary = "Get Trainer List by Member ID", description = "Register a new reservation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the trainer list"),

@@ -48,7 +48,7 @@ public class QReserveTimeSlot extends EntityPathBase<ReserveTimeSlot> {
 
     public QReserveTimeSlot(Class<? extends ReserveTimeSlot> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.reservation = inits.isInitialized("reservation") ? new QReservation(forProperty("reservation")) : null;
+        this.reservation = inits.isInitialized("reservation") ? new QReservation(forProperty("reservation"), inits.get("reservation")) : null;
     }
 
 }

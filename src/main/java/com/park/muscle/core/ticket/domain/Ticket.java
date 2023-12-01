@@ -2,6 +2,7 @@ package com.park.muscle.core.ticket.domain;
 
 import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.reservation.domain.Reservation;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.entity.BaseEntity;
 import java.util.ArrayList;
@@ -45,6 +46,10 @@ public class Ticket extends BaseEntity {
     @JoinColumn(name = "lesson_id")
     private List<Lesson> lesson = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "reservation_id")
+    private List<Reservation> reservations = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trainer_id")
     private Trainer trainer;
@@ -81,6 +86,10 @@ public class Ticket extends BaseEntity {
 
     public int currentLeftQuantity() {
         return leftQuantity;
+    }
+
+    public boolean hasLessonToTicket() {
+        return lesson.isEmpty();
     }
 
     public void assignToMemberAndTrainer(Member member, Trainer trainer) {

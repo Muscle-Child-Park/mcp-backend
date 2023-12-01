@@ -15,11 +15,11 @@ public class ReservationResponse {
     public static class ReservationInfoResponse {
         @Schema(description = "Member's identifier ID")
         private Long memberId;
-        @Schema(description = "Trainer name")
+        @Schema(description = "Trainer name", deprecated = true)
         private String trainerName;
         @Schema(description = "Member name")
         private String memberName;
-        @Schema(description = "Reservation time slot list", example = "")
+        @Schema(description = "Reservation time slot list", example = "08:00:00, 09:00:00")
         private ReserveTimeSlotResponse reserveTimeSlotResponse;
 
         private boolean hasLessonSchedule;
