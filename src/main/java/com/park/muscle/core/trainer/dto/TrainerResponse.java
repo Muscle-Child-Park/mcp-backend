@@ -1,7 +1,7 @@
 package com.park.muscle.core.trainer.dto;
 
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.PendingMemberNameResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-public class TrainerResponseDto {
+public class TrainerResponse {
 
     @Getter
     @Builder
@@ -34,41 +34,31 @@ public class TrainerResponseDto {
     }
 
     @Getter
-    @Schema(name = "Trainer-SignUpRequestDTO")
-    public static class SignUpRequest {
-        @Schema(description = "trainer 고유 ID")
-        private final String trainerId;
-
-        public SignUpRequest(Trainer trainer) {
-            this.trainerId = trainer.getId().toString();
-        }
-    }
-
-    @Getter
-    @Schema(name = "Trainer-SingUpResponseDTO")
+    @Schema(name = "Trainer-SingUp Response DTO")
     public static class SignUpResponse {
+        @Schema(description = "trainer 고유 아이디")
+        private final long trainerId;
         @Schema(description = "trainer 고유 태그")
-        private final String trainerId;
         private final String trainerTag;
 
         public SignUpResponse(Trainer trainer) {
-            this.trainerId = trainer.getId().toString();
+            this.trainerId = trainer.getId();
             this.trainerTag = trainer.getUniqueTag().formattedId();
         }
     }
 
     @Getter
     @Builder
-    @Schema(name = "Trainer-findResponseDTO")
-    public static class TrainerResponse {
+    @Schema(name = "Trainer-ticket info Response DTO")
+    public static class TrainerTicketInfoResponse {
         private Long trainerId;
         private String name;
         private LocalDateTime ticketGenerateInfo;
         private int totalQuantity;
         private int leftQuantity;
 
-        public static TrainerResponse fromEntity(Long trainerId, String name, LocalDateTime ticketGenerateInfo, int totalQuantity, int leftQuantity) {
-            return TrainerResponse.builder()
+        public static TrainerTicketInfoResponse fromEntity(Long trainerId, String name, LocalDateTime ticketGenerateInfo, int totalQuantity, int leftQuantity) {
+            return TrainerTicketInfoResponse.builder()
                     .trainerId(trainerId)
                     .name(name)
                     .ticketGenerateInfo(ticketGenerateInfo)
@@ -80,16 +70,21 @@ public class TrainerResponseDto {
 
     @Getter
     @Builder
-    @Schema(name = "Trainer-findResponseDTO")
+    @Schema(name = "Trainer-Member To Trainer Response DTO")
     public static class MemberToTrainerResponse {
+        @Schema(description = "Trainer's unique identifier")
         private Long trainerId;
+        @Schema(description = "Trainer's name")
         private String name;
+        @Schema(description = "Trainer's ticket info")
         private LocalDateTime ticketGenerateInfo;
+        @Schema(description = "total ticket quantity")
         private int totalQuantity;
+        @Schema(description = "left ticket quantity")
         private int leftQuantity;
 
-        public static TrainerResponse fromEntity(Long trainerId, String name, LocalDateTime ticketGenerateInfo, int totalQuantity, int leftQuantity) {
-            return TrainerResponse.builder()
+        public static TrainerTicketInfoResponse fromEntity(Long trainerId, String name, LocalDateTime ticketGenerateInfo, int totalQuantity, int leftQuantity) {
+            return TrainerTicketInfoResponse.builder()
                     .trainerId(trainerId)
                     .name(name)
                     .ticketGenerateInfo(ticketGenerateInfo)
@@ -101,9 +96,12 @@ public class TrainerResponseDto {
 
     @Getter
     @Builder
-    @Schema(name = "Trainer-homeResponse")
+    @Schema(name = "Trainer-Trainer Home Response DTO")
     public static class TrainerHomeResponse {
+
+        @Schema(description = "List of pending member name responses")
         PendingMemberNameResponse pendingMemberNameResponse;
+        @Schema(description = "List of reservation information responses")
         List<ReservationInfoResponse> reservationInfoResponses;
 
         public static TrainerHomeResponse fromEntity(PendingMemberNameResponse pendingMemberNameResponse,

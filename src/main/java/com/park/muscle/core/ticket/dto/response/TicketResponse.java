@@ -1,4 +1,4 @@
-package com.park.muscle.core.ticket.dto;
+package com.park.muscle.core.ticket.dto.response;
 
 import com.park.muscle.core.exercise.domain.ClassType;
 import com.park.muscle.core.lesson.domain.Lesson;
@@ -11,31 +11,16 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-public class TicketDto {
+public class TicketResponse {
 
     @Getter
-    public static class create {
-        private Long memberId;
-        private String trainerTagId;
-        private int totalQuantity;
-
-        public Ticket toEntity(Member member, Trainer trainer) {
-            return Ticket.builder()
-                    .trainer(trainer)
-                    .member(member)
-                    .totalQuantity(this.totalQuantity)
-                    .build();
-        }
-    }
-
-    @Getter
-    public static class TrainerTicketResponse {
+    public static class TicketTrainerResponse {
         private final String trainer;
         private final String member;
         private final int totalQuantity;
         private final boolean accepted;
 
-        public TrainerTicketResponse(Trainer trainer, Member member, int totalQuantity, boolean accepted) {
+        public TicketTrainerResponse(Trainer trainer, Member member, int totalQuantity, boolean accepted) {
             this.trainer = trainer.getUniqueTag().formattedId();
             this.member = member.getUniqueTag().formattedId();
             this.totalQuantity = totalQuantity;
@@ -45,13 +30,13 @@ public class TicketDto {
 
     @Getter
     @Builder
-    public static class MemberTicketResponse {
+    public static class TicketMemberResponse {
         private String name;
         private int totalQuantity;
         private int leftQuantity;
 
-        public static MemberTicketResponse fromEntity(Trainer trainer, int totalQuantity, int leftQuantity) {
-            return MemberTicketResponse.builder()
+        public static TicketMemberResponse fromEntity(Trainer trainer, int totalQuantity, int leftQuantity) {
+            return TicketMemberResponse.builder()
                     .name(trainer.getName())
                     .totalQuantity(totalQuantity)
                     .leftQuantity(leftQuantity)
@@ -60,41 +45,34 @@ public class TicketDto {
     }
 
     @Getter
-    public static class TicketResponse {
-
+    @Builder
+    public static class TicketBasicResponse {
         @Schema(description = "member의 고유 ID")
-        private final String memberId;
+        private final long memberId;
 
         @Schema(description = "trainer 고유 ID")
-        private final String trainerId;
+        private final long trainerId;
+
+        @Schema(description = "ticket 고유 ID")
+        private final long ticketId;
 
         @Schema(description = "trainer name")
         private final String trainerName;
 
-        @Schema(description = "ticket 고유 ID")
-        private final String ticketId;
-
-        public TicketResponse(Member member, Trainer trainer, Ticket ticket) {
-            this.memberId = member.getId().toString();
-            this.trainerId = trainer.getId().toString();
-            this.ticketId = ticket.getId().toString();
-            this.trainerName = trainer.getName();
-        }
-    }
-
-    @Getter
-    public static class TicketCreateResponse {
-        @Schema(description = "멤버, 트레이너, 티켓 id가 반환되는 dto")
-        private final TicketResponse ticket;
-
-        public TicketCreateResponse(TicketResponse ticket) {
-            this.ticket = ticket;
+        public static TicketBasicResponse fromEntity(Member member, Trainer trainer, Ticket ticket) {
+            return TicketBasicResponse.builder()
+                    .memberId(member.getId())
+                    .trainerId(trainer.getId())
+                    .ticketId(ticket.getId())
+                    .trainerName(trainer.getName())
+                    .build();
         }
     }
 
     @Getter
     @Builder
     public static class PendingMemberNameResponse {
+        @Schema(description = "ticket acceptance waiting list")
         private List<String> names;
 
         public static PendingMemberNameResponse fromEntity(List<String> members) {
@@ -107,7 +85,9 @@ public class TicketDto {
     @Getter
     @Builder
     public static class TrainerInfoByTicketResponse {
+        @Schema(description = "trainer name 반환")
         private String trainerName;
+        @Schema(description = "ticket accept 여부 반환")
         private boolean isAccept;
 
         public static TrainerInfoByTicketResponse fromEntity(Ticket ticket) {

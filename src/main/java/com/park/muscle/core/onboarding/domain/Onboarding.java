@@ -1,7 +1,8 @@
 package com.park.muscle.core.onboarding.domain;
 
+import static com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateRequest;
+
 import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.onboarding.dto.request.UpdateOnboardingRequest;
 import com.park.muscle.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -64,7 +65,7 @@ public class Onboarding extends BaseEntity {
         this.member = member;
     }
 
-    public void updateOnboarding(final UpdateOnboardingRequest request) {
+    public void updateOnboarding(final UpdateRequest request) {
         this.firstPurpose = request.getFirstPurpose();
         this.secondPurpose = request.getSecondPurpose();
         this.balance = request.getBalance();

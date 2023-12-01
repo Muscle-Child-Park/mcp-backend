@@ -28,7 +28,7 @@ public class LogRequestDto {
     @Getter
     @NoArgsConstructor
     public static class PersonalLogReflectionDto {
-        @NotNull(message = "Lesson Id required")
+        @NotNull(message = "personal-ex Id required")
         private long personalId;
         @NotNull(message = "Member Id required")
         private long memberId;

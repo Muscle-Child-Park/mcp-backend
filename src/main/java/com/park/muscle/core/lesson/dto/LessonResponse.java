@@ -9,23 +9,17 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
-public class LessonResponseDto {
+public class LessonResponse {
 
     @Getter
     @Builder
     public static class LessonCreateResponse {
         private Long ticketId;
-
         private Long lessonId;
-
         private String title;
-
         private LocalDateTime lessonDate;
-
         private String timeSlot;
-
         private String feedback;
-
         private boolean completionToggle;
 
         public static LessonCreateResponse fromEntity(Lesson lesson, long ticketId) {
@@ -68,5 +62,4 @@ public class LessonResponseDto {
                     .build();
         }
     }
-
 }

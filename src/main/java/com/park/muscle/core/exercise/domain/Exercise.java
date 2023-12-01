@@ -1,5 +1,6 @@
 package com.park.muscle.core.exercise.domain;
 
+import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -31,33 +32,34 @@ public class Exercise {
     @Column(name = "name",nullable = false)
     private String name;
 
-    @Column(name = "kind",nullable = false)
-    private String kind;
-
     @Column(name = "weight",nullable = false)
     private String weight;
 
-    @Column(name = "count", nullable = false)
-    private int count;
+    @Column(name = "reps", nullable = false)
+    private int reps;
+
+    @Column(name = "sets",nullable = false)
+    private String sets;
 
     @Column(name = "run_time", nullable = false)
     private int runTime;
 
     @Builder
-    public Exercise(ExerciseType exerciseType, String name, String kind, String weight, int count, int runTime) {
+    public Exercise(ExerciseType exerciseType, String name, String sets, String weight, int reps, int runTime) {
         this.exerciseType = exerciseType;
         this.name = name;
-        this.kind = kind;
         this.weight = weight;
-        this.count = count;
+        this.reps = reps;
+        this.sets = sets;
         this.runTime = runTime;
     }
 
-    public void updateExercise(ExerciseType exerciseType, String name, String kind, String weight, int runTime) {
-        this.exerciseType = exerciseType;
-        this.name = name;
-        this.kind = kind;
-        this.weight = weight;
-        this.runTime = runTime;
+    public void updateExercise(UpdateExerciseWithPersonal exerciseUpdateRequestDto) {
+        this.exerciseType = ExerciseType.findType(exerciseUpdateRequestDto.getExerciseType());
+        this.name = exerciseUpdateRequestDto.getName();
+        this.weight = exerciseUpdateRequestDto.getWeight();
+        this.reps = exerciseUpdateRequestDto.getReps();
+        this.sets = exerciseUpdateRequestDto.getSets();
+        this.runTime = exerciseUpdateRequestDto.getRunTime();
     }
 }

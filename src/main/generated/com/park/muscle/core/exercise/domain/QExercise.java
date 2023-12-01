@@ -19,17 +19,17 @@ public class QExercise extends EntityPathBase<Exercise> {
 
     public static final QExercise exercise = new QExercise("exercise");
 
-    public final NumberPath<Integer> count = createNumber("count", Integer.class);
-
     public final EnumPath<ExerciseType> exerciseType = createEnum("exerciseType", ExerciseType.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath kind = createString("kind");
-
     public final StringPath name = createString("name");
 
+    public final NumberPath<Integer> reps = createNumber("reps", Integer.class);
+
     public final NumberPath<Integer> runTime = createNumber("runTime", Integer.class);
+
+    public final StringPath sets = createString("sets");
 
     public final StringPath weight = createString("weight");
 

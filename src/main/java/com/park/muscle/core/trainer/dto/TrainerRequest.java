@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
-public class TrainerRequestDto {
+public class TrainerRequest {
 
     @Getter
     public static class LoginRequest {

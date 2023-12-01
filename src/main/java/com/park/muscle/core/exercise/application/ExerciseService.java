@@ -2,7 +2,6 @@ package com.park.muscle.core.exercise.application;
 
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseRepository;
-import com.park.muscle.core.exercise.domain.ExerciseType;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
@@ -42,12 +41,7 @@ public class ExerciseService {
         List<Exercise> exercises = new ArrayList<>();
         exerciseUpdateRequestDtos.forEach(exerciseUpdateRequestDto -> {
             Exercise exercise = findById(exerciseUpdateRequestDto.getExerciseId());
-            exercise.updateExercise(
-                    ExerciseType.findType(exerciseUpdateRequestDto.getExerciseType()),
-                    exerciseUpdateRequestDto.getName(),
-                    exerciseUpdateRequestDto.getKind(),
-                    exerciseUpdateRequestDto.getWeight(),
-                    exerciseUpdateRequestDto.getRunTime());
+            exercise.updateExercise(exerciseUpdateRequestDto);
             exercises.add(exercise);
             exerciseRepository.save(exercise);
         });

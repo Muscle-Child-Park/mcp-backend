@@ -1,19 +1,19 @@
 package com.park.muscle.core.trainer.presentation;
 
-import static com.park.muscle.core.trainer.dto.TrainerRequestDto.DayOffRequest;
+import static com.park.muscle.core.trainer.dto.TrainerRequest.DayOffRequest;
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.PendingMemberNameResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketTrainerResponse;
 import com.park.muscle.core.trainer.application.TrainerService;
 import com.park.muscle.core.trainer.domain.Gym;
 import com.park.muscle.core.trainer.domain.Trainer;
-import com.park.muscle.core.trainer.dto.TrainerRequestDto.GymRequest;
-import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
-import com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
-import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerHomeResponse;
+import com.park.muscle.core.trainer.dto.TrainerRequest.GymRequest;
+import com.park.muscle.core.trainer.dto.TrainerRequest.LoginRequest;
+import com.park.muscle.core.trainer.dto.TrainerResponse.LoginResponse;
+import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerHomeResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,6 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TrainerController {
     private final TrainerService trainerService;
 
+    /**TODO: 2023-11-28, 화, 23:22  -JEON
+    *  TASK: time slots 정보 누락 발생 -> 개선 해야 함
+    */
     @Operation(summary = "트레이너 홈 화면 정보")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "트레이너 정보 조회 성공"),
@@ -77,11 +80,11 @@ public class TrainerController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping("/{trainerId}/tickets")
-    public ResponseEntity<List<TrainerTicketResponse>> getTrainerTickets(@PathVariable Long trainerId) {
+    public ResponseEntity<List<TicketTrainerResponse>> getTrainerTickets(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
-        List<TrainerTicketResponse> trainerTicketResponse = trainerService.getTrainerTickets(tickets);
-        return ResponseEntity.ok(trainerTicketResponse);
+        List<TicketTrainerResponse> ticketTrainerResponse = trainerService.getTrainerTickets(tickets);
+        return ResponseEntity.ok(ticketTrainerResponse);
     }
 
     @Operation(summary = "트레이너 프로필 GYM 업데이트")

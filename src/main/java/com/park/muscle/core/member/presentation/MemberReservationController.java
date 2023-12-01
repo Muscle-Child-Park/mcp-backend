@@ -1,7 +1,7 @@
 package com.park.muscle.core.member.presentation;
 
 
-import static com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
 
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationRequest;
@@ -39,6 +39,9 @@ public class MemberReservationController {
         reservationService.registerReservation(request);
     }
 
+    /**TODO: 2023-11-28, 화, 23:22  -JEON
+    *  TASK: 트레이너 중복 시 오류 발생 -> 개선 해야함
+    */
     @Operation(summary = "Get Trainer List by Member ID", description = "Register a new reservation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the trainer list"),
@@ -46,8 +49,8 @@ public class MemberReservationController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<TrainerResponse>> getTrainerList(@PathVariable Long memberId) {
-        List<TrainerResponse> trainerResponse = ticketService.getTrainerReservations(memberId);
-        return ResponseEntity.ok().body(trainerResponse);
+    public ResponseEntity<List<TrainerTicketInfoResponse>> getTrainerList(@PathVariable Long memberId) {
+        List<TrainerTicketInfoResponse> trainerTicketInfoResponse = ticketService.getTrainerReservations(memberId);
+        return ResponseEntity.ok().body(trainerTicketInfoResponse);
     }
 }

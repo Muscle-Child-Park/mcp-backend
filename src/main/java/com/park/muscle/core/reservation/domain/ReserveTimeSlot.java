@@ -9,10 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class ReserveTimeSlot {
 
     @Id
@@ -36,5 +39,11 @@ public class ReserveTimeSlot {
 
     public void setReservation(final Reservation reservation) {
         this.reservation = reservation;
+    }
+
+    @Builder
+    public ReserveTimeSlot(LocalTime time, boolean accessibleTime) {
+        this.time = time;
+        this.accessibleTime = accessibleTime;
     }
 }

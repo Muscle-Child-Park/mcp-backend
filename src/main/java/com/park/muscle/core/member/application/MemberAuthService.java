@@ -4,10 +4,10 @@ import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.MemberRepository;
-import com.park.muscle.core.member.dto.request.LoginRequest;
-import com.park.muscle.core.member.dto.request.OnboardingQuestionRequest;
-import com.park.muscle.core.member.dto.response.LoginResponse;
-import com.park.muscle.core.member.dto.response.SignUpResponse;
+import com.park.muscle.core.member.dto.request.MemberRequest.LoginRequest;
+import com.park.muscle.core.member.dto.request.MemberRequest.OnboardingQuestionRequest;
+import com.park.muscle.core.member.dto.response.MemberResponse;
+import com.park.muscle.core.member.dto.response.MemberResponse.LoginResponse;
 import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
@@ -58,7 +58,7 @@ public class MemberAuthService {
         String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
 
         jwtTokenProvider.saveMemberTokenInRedis(member, refreshToken);
-        return new LoginResponse(accessToken, refreshToken, new SignUpResponse(member));
+        return MemberResponse.LoginResponse.fromEntity(accessToken, refreshToken, new MemberResponse.SignUpResponse(member));
     }
 
     private void updateMemberInfo(final LoginRequest loginRequest, final Member member) {

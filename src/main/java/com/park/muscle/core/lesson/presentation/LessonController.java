@@ -2,7 +2,7 @@ package com.park.muscle.core.lesson.presentation;
 
 import static com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import static com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogReflectionDto;
-import static com.park.muscle.core.lesson.dto.LessonResponseDto.LessonCreateResponse;
+import static com.park.muscle.core.lesson.dto.LessonResponse.LessonCreateResponse;
 
 import com.park.muscle.core.exercise.application.ExerciseService;
 import com.park.muscle.core.exercise.domain.Exercise;
@@ -11,8 +11,8 @@ import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.lesson.domain.Lesson;
-import com.park.muscle.core.lesson.dto.LessonResponseDto.LessonRetrieveResponse;
-import com.park.muscle.core.lesson.dto.LessonWithExerciseRequestDto;
+import com.park.muscle.core.lesson.dto.LessonResponse.LessonRetrieveResponse;
+import com.park.muscle.core.lesson.dto.LessonWithExerciseRequest;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
 import io.swagger.v3.oas.annotations.Operation;
@@ -70,9 +70,9 @@ public class LessonController {
     })
     @PostMapping("/create/{ticketId}")
     public ResponseEntity<LessonCreateResponse> createLesson(@PathVariable Long ticketId,
-            @Valid @RequestBody LessonWithExerciseRequestDto lessonWithExerciseRequestDto) {
-        Lesson lesson = lessonWithExerciseRequestDto.getLessonRequestDto().toEntity();
-        List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequestDto.getExerciseRequestDtos();
+            @Valid @RequestBody LessonWithExerciseRequest lessonWithExerciseRequest) {
+        Lesson lesson = lessonWithExerciseRequest.getLessonRequestDto().toEntity();
+        List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequest.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
 
         Ticket ticket = ticketService.findById(ticketId);

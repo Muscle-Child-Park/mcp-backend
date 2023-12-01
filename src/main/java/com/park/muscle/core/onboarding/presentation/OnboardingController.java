@@ -2,9 +2,9 @@ package com.park.muscle.core.onboarding.presentation;
 
 import com.park.muscle.core.onboarding.application.OnboardingService;
 import com.park.muscle.core.onboarding.domain.Onboarding;
-import com.park.muscle.core.onboarding.dto.request.OnboardingRequest;
-import com.park.muscle.core.onboarding.dto.request.UpdateOnboardingRequest;
-import com.park.muscle.core.onboarding.dto.response.UpdateOnboardingResponse;
+import com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateRequest;
+import com.park.muscle.core.onboarding.dto.OnboardingResponse.FindResponse;
+import com.park.muscle.core.onboarding.dto.OnboardingResponse.UpdateOnboarding;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,10 +31,10 @@ public class OnboardingController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping("/{memberId}/my-page")
-    public ResponseEntity<OnboardingRequest> getMemberPage(@PathVariable Long memberId) {
+    public ResponseEntity<FindResponse> getMemberPage(@PathVariable Long memberId) {
         Onboarding onboarding = onboardingService.findOwn(memberId);
-        OnboardingRequest onboardingRequest = new OnboardingRequest(onboarding);
-        return ResponseEntity.ok(onboardingRequest);
+        FindResponse onboardingResponse = FindResponse.fromEntity(onboarding);
+        return ResponseEntity.ok(onboardingResponse);
     }
 
     @Operation(summary = "회원 페이지 정보 업데이트", description = "특정 회원의 페이지 정보를 업데이트합니다.")
@@ -43,9 +43,9 @@ public class OnboardingController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/{memberId}/my-page")
-    public ResponseEntity<UpdateOnboardingResponse> updateOnboarding(@PathVariable Long memberId,
-                                                                     @RequestBody UpdateOnboardingRequest request) {
-        UpdateOnboardingResponse updateOnboardingResponse = onboardingService.update(memberId, request);
-        return ResponseEntity.ok(updateOnboardingResponse);
+    public ResponseEntity<UpdateOnboarding> updateOnboarding(@PathVariable Long memberId,
+                                                             @RequestBody UpdateRequest request) {
+        UpdateOnboarding updateOnboarding = onboardingService.update(memberId, request);
+        return ResponseEntity.ok(updateOnboarding);
     }
 }

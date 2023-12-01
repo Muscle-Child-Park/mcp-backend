@@ -4,14 +4,13 @@ import com.park.muscle.core.lesson.domain.Lesson;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.domain.TicketRepository;
-import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketSimpleResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TicketResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TrainerInfoByTicketResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.create;
+import com.park.muscle.core.ticket.dto.request.TicketRequest.Create;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketSimpleResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketBasicResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTicketResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
-import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
+import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
 import com.park.muscle.core.uniquetag.UniqueTagService;
 import java.util.LinkedList;
 import java.util.List;
@@ -31,12 +30,11 @@ public class TicketService {
     private final UniqueTagService uniqueTageService;
     private final TicketRepository ticketRepository;
 
-    public TicketCreateResponse createTicket(final Member member, final create ticketCreateDto) {
+    public TicketBasicResponse createTicket(final Member member, final Create ticketCreateDto) {
         Trainer trainer = uniqueTageService.getTrainerByTagId(ticketCreateDto.getTrainerTagId());
         Ticket ticket = ticketCreateDto.toEntity(member, trainer);
         ticketRepository.save(ticket);
-        TicketResponse ticketResponse = new TicketResponse(member, trainer, ticket);
-        return new TicketCreateResponse(ticketResponse);
+        return TicketBasicResponse.fromEntity(member, trainer, ticket);
     }
 
     public void acceptTicket(final Long ticketId) {
@@ -87,7 +85,7 @@ public class TicketService {
         return members;
     }
 
-    public List<TrainerResponse> getTrainerReservations(final Long memberId) {
+    public List<TrainerTicketInfoResponse> getTrainerReservations(final Long memberId) {
         List<Trainer> trainers = findAllTrainerByMemberId(memberId);
         List<Ticket> tickets = ticketRepository.findAllTicketByMemberId(memberId);
 
@@ -98,7 +96,7 @@ public class TicketService {
                 .filter(ticket -> trainerMap.containsKey(ticket.getTrainer().getId()))
                 .map(ticket -> {
                     Trainer trainer = trainerMap.get(ticket.getTrainer().getId());
-                    return TrainerResponse.builder()
+                    return TrainerTicketInfoResponse.builder()
                             .trainerId(trainer.getId())
                             .name(trainer.getName())
                             .ticketGenerateInfo(ticket.getCreatedDate())

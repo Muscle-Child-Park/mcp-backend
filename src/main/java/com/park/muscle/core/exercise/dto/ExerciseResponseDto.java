@@ -13,15 +13,17 @@ public class ExerciseResponseDto {
         private final String name;
         private final String type;
         private final String weight;
-        private final int count;
+        private final String set;
+        private final int reps;
 
         public static CreateResponse fromEntity(Exercise exercise) {
             return CreateResponse.builder()
-                    .count(exercise.getCount())
-                    .name(exercise.getName())
                     .exerciseId(exercise.getId())
-                    .type(exercise.getKind())
+                    .type(exercise.getExerciseType().name())
+                    .name(exercise.getName())
                     .weight(exercise.getWeight())
+                    .reps(exercise.getReps())
+                    .set(exercise.getSets())
                     .build();
         }
     }

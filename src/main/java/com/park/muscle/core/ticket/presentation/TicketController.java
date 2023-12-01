@@ -4,10 +4,10 @@ import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.ticket.dto.TicketDto;
-import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TicketCreateResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TrainerInfoByTicketResponse;
+import com.park.muscle.core.ticket.dto.request.TicketRequest;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketBasicResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTicketResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -30,13 +30,12 @@ public class TicketController {
     private final TicketService ticketService;
     private final MemberService memberService;
 
-    @Operation(summary = "Create a ticket", description = "Connected with trainer through unique tags and create ticket")
+    @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through unique tags and Create ticket")
     @PostMapping("/ticket/request")
-    public ResponseEntity<TicketCreateResponse> createTicket(@RequestBody TicketDto.create ticketCreateDto) {
+    public ResponseEntity<TicketBasicResponse> createTicket(@RequestBody TicketRequest.Create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
-        TicketCreateResponse ticketCreateResponse = ticketService.createTicket(member, ticketCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketCreateResponse);
+                .body(ticketService.createTicket(member, ticketCreateDto));
     }
 
     @Operation(summary = "Accept a ticket", description = "Accept a ticket with a specific ID")

@@ -1,7 +1,7 @@
 package com.park.muscle.core.trainer.application;
 
-import static com.park.muscle.core.trainer.dto.TrainerResponseDto.LoginResponse;
-import static com.park.muscle.core.trainer.dto.TrainerResponseDto.SignUpResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponse.LoginResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponse.SignUpResponse;
 
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
@@ -9,16 +9,16 @@ import com.park.muscle.core.member.exception.MemberNotFoundException;
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.ticket.dto.TicketDto.PendingMemberNameResponse;
-import com.park.muscle.core.ticket.dto.TicketDto.TrainerTicketResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.PendingMemberNameResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketTrainerResponse;
 import com.park.muscle.core.trainer.domain.DayOff;
 import com.park.muscle.core.trainer.domain.DayOffRepository;
 import com.park.muscle.core.trainer.domain.Gym;
 import com.park.muscle.core.trainer.domain.GymRepository;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
-import com.park.muscle.core.trainer.dto.TrainerRequestDto.DayOffRequest;
-import com.park.muscle.core.trainer.dto.TrainerRequestDto.LoginRequest;
+import com.park.muscle.core.trainer.dto.TrainerRequest.DayOffRequest;
+import com.park.muscle.core.trainer.dto.TrainerRequest.LoginRequest;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.List;
@@ -79,9 +79,9 @@ public class TrainerService {
                 .orElseThrow(MemberNotFoundException::new);
     }
 
-    public List<TrainerTicketResponse> getTrainerTickets(final List<Ticket> tickets) {
+    public List<TicketTrainerResponse> getTrainerTickets(final List<Ticket> tickets) {
         return tickets.stream()
-                .map(ticket -> new TrainerTicketResponse(
+                .map(ticket -> new TicketTrainerResponse(
                         ticket.getTrainer(),
                         ticket.getMember(),
                         ticket.getTotalQuantity(),

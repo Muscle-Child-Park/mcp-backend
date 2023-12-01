@@ -15,7 +15,6 @@ public class PersonalExerciseRequest {
     @Getter
     @NoArgsConstructor
     public static class Create {
-
         @NotNull(message = "Personal-Exercise title is required")
         private String title;
 

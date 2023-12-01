@@ -2,11 +2,11 @@ package com.park.muscle.core.member.presentation;
 
 import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.dto.response.HomeResponse;
+import com.park.muscle.core.member.dto.response.MemberResponse.HomeResponse;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
-import com.park.muscle.core.ticket.dto.TicketDto.LessonByTicketSimpleResponse;
-import com.park.muscle.core.trainer.dto.TrainerResponseDto.TrainerResponse;
+import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketSimpleResponse;
+import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +38,7 @@ public class MemberHomeController {
     public ResponseEntity<HomeResponse> getMemberHome(@PathVariable final long memberId) {
         Member member = memberService.findMemberById(memberId);
         List<Ticket> tickets = member.getTickets();
-        List<TrainerResponse> trainerReservations = ticketService.getTrainerReservations(memberId);
+        List<TrainerTicketInfoResponse> trainerReservations = ticketService.getTrainerReservations(memberId);
         List<LessonByTicketSimpleResponse> flattenedList = tickets.stream()
                 .flatMap(ticket -> ticketService.findAllSimpleLessonsByTicket(ticket).stream())
                 .collect(Collectors.toList());
@@ -49,7 +49,7 @@ public class MemberHomeController {
         return ResponseEntity.ok().body(HomeResponse.fromEntity(trainerReservations, flattenedList));
     }
 
-    private static boolean hasValidTicketAndLessonContent(final List<TrainerResponse> trainerReservations,
+    private static boolean hasValidTicketAndLessonContent(final List<TrainerTicketInfoResponse> trainerReservations,
                                                           final List<LessonByTicketSimpleResponse> flattenedList) {
         return trainerReservations.isEmpty() && flattenedList.isEmpty();
     }
