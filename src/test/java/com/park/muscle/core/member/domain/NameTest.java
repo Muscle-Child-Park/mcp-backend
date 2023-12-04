@@ -1,9 +1,8 @@
-package com.park.muscle.core.member.domain.member;
+package com.park.muscle.core.member.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.exception.InvalidNameLengthException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

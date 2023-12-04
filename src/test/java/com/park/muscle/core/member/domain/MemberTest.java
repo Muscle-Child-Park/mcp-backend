@@ -1,10 +1,7 @@
-package com.park.muscle.core.member.domain.member;
+package com.park.muscle.core.member.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.domain.Name;
-import com.park.muscle.core.member.domain.Role;
 import com.park.muscle.global.enumerate.SocialType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
