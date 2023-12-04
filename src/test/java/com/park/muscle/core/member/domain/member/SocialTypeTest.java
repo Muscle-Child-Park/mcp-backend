@@ -1,4 +1,4 @@
-package com.park.muscle.core.member.domain;
+package com.park.muscle.core.member.domain.member;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
