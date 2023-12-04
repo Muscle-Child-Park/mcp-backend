@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public class ExerciseRequestDto {
 
@@ -85,7 +84,6 @@ public class ExerciseRequestDto {
     }
 
     @Getter
-    @NoArgsConstructor
     public static class UpdateExerciseWithPersonal {
         @NotNull(message = "Exercise Id IS Required")
         private long exerciseId;

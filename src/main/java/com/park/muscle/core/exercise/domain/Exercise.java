@@ -1,6 +1,5 @@
 package com.park.muscle.core.exercise.domain;
 
-import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -54,12 +53,13 @@ public class Exercise {
         this.runTime = runTime;
     }
 
-    public void updateExercise(UpdateExerciseWithPersonal exerciseUpdateRequestDto) {
-        this.exerciseType = ExerciseType.findType(exerciseUpdateRequestDto.getExerciseType());
-        this.name = exerciseUpdateRequestDto.getName();
-        this.weight = exerciseUpdateRequestDto.getWeight();
-        this.reps = exerciseUpdateRequestDto.getReps();
-        this.sets = exerciseUpdateRequestDto.getSets();
-        this.runTime = exerciseUpdateRequestDto.getRunTime();
+    public void updateExercise(ExerciseType exerciseType, String name, String weight, int reps, String sets,
+                               int runTime) {
+        this.exerciseType = exerciseType;
+        this.name = name;
+        this.weight = weight;
+        this.reps = reps;
+        this.sets = sets;
+        this.runTime = runTime;
     }
 }

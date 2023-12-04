@@ -2,6 +2,7 @@ package com.park.muscle.core.exercise.application;
 
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseRepository;
+import com.park.muscle.core.exercise.domain.ExerciseType;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
@@ -42,15 +43,18 @@ public class ExerciseService {
                 .orElseThrow(ExerciseNotFoundException::new);
     }
 
+    @Transactional
     public List<Exercise> updateExercises(final List<UpdateExerciseWithPersonal> exerciseUpdateRequestDtos) {
         List<Exercise> exercises = new ArrayList<>();
-        exerciseUpdateRequestDtos.forEach(exerciseUpdateRequestDto -> {
-            Exercise exercise = findById(exerciseUpdateRequestDto.getExerciseId());
-            exercise.updateExercise(exerciseUpdateRequestDto);
+        exerciseUpdateRequestDtos.forEach(update -> {
+            Exercise exercise = findById(update.getExerciseId());
+            exercise.updateExercise(
+                    ExerciseType.findType(update.getExerciseType()), update.getName(),
+                    update.getWeight(), update.getReps(), update.getSets(), update.getRunTime()
+            );
             exercises.add(exercise);
             exerciseRepository.save(exercise);
         });
         return exercises;
     }
 }
-
