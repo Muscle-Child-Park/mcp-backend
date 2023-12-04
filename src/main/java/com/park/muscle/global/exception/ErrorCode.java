@@ -19,6 +19,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M001", "해당 id를 가진 멤버를 찾을 수 없습니다."),
     INVALID_NAME_LENGTH(HttpStatus.BAD_REQUEST, "M002", "이름의 길이는 10자를 넘길 수 없습니다."),
     SOCIAL_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "M003", "올바른 소셜 타입을 찾을 수 없습니다."),
+    ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "M004", "올바른 ROLE을 찾을 수 없습니다."),
 
     // Trainer
     TRAINER_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "해당 트레이너를 찾을 수 없습니다."),

@@ -15,13 +15,8 @@ class SocialTypeTest {
     @DisplayName("소셜 타입을 찾을 수 있다.")
     @Test
     void findType() {
-        // given
         String typeValue = "kakao";
-
-        // when
         SocialType findType = SocialType.findType(typeValue);
-
-        // then
         assertThat(findType).isEqualTo(SocialType.KAKAO);
     }
 
@@ -29,8 +24,6 @@ class SocialTypeTest {
     @ParameterizedTest
     @ValueSource(strings = {"kkao", "gogle", "aple"})
     void findType_fail_invalidParam(String invalidTypeValue) {
-
-        // when & then
         assertThatThrownBy(() -> SocialType.findType(invalidTypeValue))
                 .isInstanceOf(SocialTypeNotFoundException.class)
                 .hasMessageContaining("올바른 소셜 타입을 찾을 수 없습니다.");
