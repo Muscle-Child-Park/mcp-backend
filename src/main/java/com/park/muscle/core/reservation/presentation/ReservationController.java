@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/reverse/member")
-@Tag(name = "member reservation controller")
+@Tag(name = "reservation controller")
 public class ReservationController {
     private final ReservationService reservationService;
     private final TicketService ticketService;
