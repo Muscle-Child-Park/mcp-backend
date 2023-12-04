@@ -38,7 +38,7 @@ public class MemberAuthService {
 
         if (loginMember.isPresent()) {
             Member member = loginMember.get();
-            updateMemberInfo(loginRequest, member);
+            updateMemberName(loginRequest, member);
             return createSingUpResult(member);
         }
 
@@ -60,14 +60,14 @@ public class MemberAuthService {
         return MemberResponse.LoginResponse.fromEntity(accessToken, refreshToken, new MemberResponse.SignUpResponse(member));
     }
 
-    private void updateMemberInfo(final LoginRequest loginRequest, final Member member) {
+    private void updateMemberName(final LoginRequest loginRequest, final Member member) {
         member.updateName(loginRequest.getName());
     }
 
     @Transactional
     public void addOnboardingQuestion(Long memberId,
                                       OnboardingQuestionRequest onboardingQuestionRequest) {
-        Member member = memberService.findMemberObject(memberId);
+        Member member = memberService.findMemberById(memberId);
         onboardingRepository.save(onboardingQuestionRequest.toEntity(member));
     }
 

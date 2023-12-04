@@ -11,6 +11,7 @@ import com.park.muscle.core.lesson.exception.LessonNotFoundException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,7 @@ public class LessonService {
         return lesson.orElseThrow(LessonNotFoundException::new);
     }
 
+    @Transactional
     public LogReflectionResponseDto addExerciseDiary(LessonLogReflectionDto lessonLogReflectionDto) {
         ExerciseDiary exerciseDiary = lessonLogReflectionDto.toEntity(lessonLogReflectionDto.getLog());
         exerciseLogService.save(exerciseDiary);
@@ -43,6 +45,7 @@ public class LessonService {
         return LogReflectionResponseDto.fromEntity(exerciseDiary);
     }
 
+    @Transactional
     public void updateExerciseDiary(final LessonLogUpdateDto lessonLogUpdateDto) {
         Lesson lesson = getOwnLessonById(lessonLogUpdateDto.getLessonId());
         ExerciseDiary exerciseDiary = exerciseLogService.updateLessonExerciseLog(lessonLogUpdateDto);

@@ -36,6 +36,7 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    @Transactional
     public List<ReservationInfoResponse> findReservationsInfo(final List<Ticket> tickets) {
         return tickets.stream()
                 .map(ticket -> {

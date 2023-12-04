@@ -80,11 +80,13 @@ public class TrainerService {
 
     public List<TicketTrainerResponse> getTrainerTickets(final List<Ticket> tickets) {
         return tickets.stream()
-                .map(ticket -> new TicketTrainerResponse(
-                        ticket.getTrainer(),
-                        ticket.getMember(),
-                        ticket.getTotalQuantity(),
-                        ticket.isAccepted()))
+                .map(ticket -> {
+                    String trainer = ticket.getTrainer().getUniqueTag().formattedId();
+                    String member = ticket.getMember().getUniqueTag().formattedId();
+                    int totalQuantity = ticket.getTotalQuantity();
+                    boolean accepted = ticket.isAccepted();
+                    return TicketTrainerResponse.fromEntity(trainer, member, totalQuantity, accepted);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -106,16 +108,19 @@ public class TrainerService {
         return PendingMemberNameResponse.fromEntity(pendingNames);
     }
 
+    @Transactional
     public void deleteTrainerAccount(final Long trainerId) {
         Trainer trainer = getTrainerById(trainerId);
         trainerRepository.delete(trainer);
     }
 
+    @Transactional
     public void saveGym(final Trainer trainer, final Gym gym) {
         gymRepository.save(gym);
         trainerRepository.save(trainer);
     }
 
+    @Transactional
     public void addTrainerOff(final Trainer trainer, final List<DayOffRequest> dayOffRequest) {
         List<DayOff> dayOffs = dayOffRequest.stream()
                 .map(dayOff -> {

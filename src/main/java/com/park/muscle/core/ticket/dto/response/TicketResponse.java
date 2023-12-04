@@ -14,17 +14,20 @@ import lombok.Getter;
 public class TicketResponse {
 
     @Getter
+    @Builder
     public static class TicketTrainerResponse {
         private final String trainer;
         private final String member;
         private final int totalQuantity;
         private final boolean accepted;
 
-        public TicketTrainerResponse(Trainer trainer, Member member, int totalQuantity, boolean accepted) {
-            this.trainer = trainer.getUniqueTag().formattedId();
-            this.member = member.getUniqueTag().formattedId();
-            this.totalQuantity = totalQuantity;
-            this.accepted = accepted;
+        public static TicketTrainerResponse fromEntity(String trainer, String member, int totalQuantity, boolean accepted) {
+            return TicketTrainerResponse.builder()
+                    .trainer(trainer)
+                    .member(member)
+                    .totalQuantity(totalQuantity)
+                    .accepted(accepted)
+                    .build();
         }
     }
 

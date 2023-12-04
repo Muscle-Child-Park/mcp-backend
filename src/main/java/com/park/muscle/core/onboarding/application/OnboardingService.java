@@ -16,15 +16,14 @@ public class OnboardingService {
 
     private final OnboardingRepository onboardingRepository;
 
-    public Onboarding findOwn(Long memberId) {
+    public Onboarding findOwnOnboard(Long memberId) {
         return onboardingRepository.findByMemberId(memberId)
                 .orElseThrow(MemberNotFoundException::new);
     }
 
     @Transactional
-    public UpdateOnboarding update(final Long memberId, final UpdateRequest request) {
-        Onboarding existOnboarding = onboardingRepository.findByMemberId(memberId)
-                .orElseThrow(MemberNotFoundException::new);
+    public UpdateOnboarding updateOnboard(final Long memberId, final UpdateRequest request) {
+        Onboarding existOnboarding = findOwnOnboard(memberId);
         existOnboarding.updateOnboarding(request);
         onboardingRepository.save(existOnboarding);
         return UpdateOnboarding.fromEntity(existOnboarding.getId());

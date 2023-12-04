@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -30,6 +31,7 @@ public class TicketService {
     private final UniqueTagService uniqueTageService;
     private final TicketRepository ticketRepository;
 
+    @Transactional
     public TicketBasicResponse createTicket(final Member member, final Create ticketCreateDto) {
         Trainer trainer = uniqueTageService.getTrainerByTagId(ticketCreateDto.getTrainerTagId());
         Ticket ticket = ticketCreateDto.toEntity(member, trainer);
@@ -37,13 +39,14 @@ public class TicketService {
         return TicketBasicResponse.fromEntity(member, trainer, ticket);
     }
 
+    @Transactional
     public void acceptTicket(final Long ticketId) {
-        Ticket ticket = findById(ticketId);
+        Ticket ticket = findTicketById(ticketId);
         ticket.assignToMemberAndTrainer(ticket.getMember(), ticket.getTrainer());
         ticketRepository.save(ticket);
     }
 
-    public Ticket findById(final Long ticketId) {
+    public Ticket findTicketById(final Long ticketId) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
         return ticket.orElseThrow(TicketNotFoundException::new);
     }
@@ -66,6 +69,7 @@ public class TicketService {
         ticketRepository.save(ticket);
     }
 
+    @Transactional
     public List<Trainer> findAllTrainerByMemberId(final Long memberId) {
         List<Ticket> allTicketByMemberId = ticketRepository.findAllTicketByMemberId(memberId);
         List<Trainer> trainers = new LinkedList<>();
@@ -75,6 +79,7 @@ public class TicketService {
         return trainers;
     }
 
+    @Transactional
     public List<Member> findAllMemberByTrainerId(final Long trainerId) {
         List<Ticket> allTicketByTrainerId = ticketRepository.findAllTicketByTrainerId(trainerId);
         List<Member> members = new LinkedList<>();
@@ -84,6 +89,7 @@ public class TicketService {
         return members;
     }
 
+    @Transactional
     public List<TrainerTicketInfoResponse> getTrainerReservations(final Long memberId) {
         List<Trainer> trainers = findAllTrainerByMemberId(memberId);
         List<Ticket> tickets = ticketRepository.findAllTicketByMemberId(memberId);

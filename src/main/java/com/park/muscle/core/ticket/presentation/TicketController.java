@@ -48,7 +48,7 @@ public class TicketController {
     @Operation(summary = "Get lessons by ticket ID", description = "Retrieve all lessons associated with a ticket")
     @GetMapping("/{ticketId}/lesson")
     public ResponseEntity<List<LessonByTicketResponse>> getLessonsByTicketId(@PathVariable Long ticketId) {
-        Ticket ticket = ticketService.findById(ticketId);
+        Ticket ticket = ticketService.findTicketById(ticketId);
         List<LessonByTicketResponse> lessons = ticketService.findAllLessonsByTicket(ticket);
         return ResponseEntity.status(HttpStatus.OK).body(lessons);
     }

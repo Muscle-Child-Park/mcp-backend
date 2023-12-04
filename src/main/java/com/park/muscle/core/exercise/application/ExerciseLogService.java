@@ -13,6 +13,7 @@ import com.park.muscle.core.personalexercise.domain.PersonalExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -22,6 +23,7 @@ public class ExerciseLogService {
     private final ExerciseLogRepository exerciseLogRepository;
     private final PersonalExerciseRepository personalExerciseRepository;
 
+    @Transactional
     public LogReflectionResponseDto addPersonalExerciseDiary(PersonalLogReflectionDto personalLogReflectionDto) {
         ExerciseDiary exerciseDiary = personalLogReflectionDto.toEntity(personalLogReflectionDto.getLog());
         save(exerciseDiary);

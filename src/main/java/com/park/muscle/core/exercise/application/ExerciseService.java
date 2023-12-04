@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
@@ -25,6 +27,7 @@ public class ExerciseService {
         return exercises;
     }
 
+
     public List<Exercise> saveExerciseWithMember(final List<CreateExerciseWithPersonal> exerciseRequestDto) {
         List<Exercise> exercises = exerciseRequestDto.stream()
                 .map(CreateExerciseWithPersonal::toEntity)
@@ -33,6 +36,7 @@ public class ExerciseService {
         return exercises;
     }
 
+    @Transactional(readOnly = true)
     public Exercise findById(final Long exerciseId) {
         return exerciseRepository.findById(exerciseId)
                 .orElseThrow(ExerciseNotFoundException::new);

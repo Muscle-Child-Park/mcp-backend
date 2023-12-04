@@ -27,11 +27,6 @@ public class MemberService {
         return memberRepository.findByUsername(username);
     }
 
-    public Member findMemberObject(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-    }
-
     public Member saveSocialInfo(Member member) {
         return memberRepository.save(member);
     }

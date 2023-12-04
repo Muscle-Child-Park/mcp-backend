@@ -32,7 +32,7 @@ public class OnboardingController {
     })
     @GetMapping("/{memberId}/my-page")
     public ResponseEntity<FindResponse> getMemberPage(@PathVariable Long memberId) {
-        Onboarding onboarding = onboardingService.findOwn(memberId);
+        Onboarding onboarding = onboardingService.findOwnOnboard(memberId);
         FindResponse onboardingResponse = FindResponse.fromEntity(onboarding);
         return ResponseEntity.ok(onboardingResponse);
     }
@@ -45,7 +45,7 @@ public class OnboardingController {
     @PutMapping("/{memberId}/my-page")
     public ResponseEntity<UpdateOnboarding> updateOnboarding(@PathVariable Long memberId,
                                                              @RequestBody UpdateRequest request) {
-        UpdateOnboarding updateOnboarding = onboardingService.update(memberId, request);
+        UpdateOnboarding updateOnboarding = onboardingService.updateOnboard(memberId, request);
         return ResponseEntity.ok(updateOnboarding);
     }
 }

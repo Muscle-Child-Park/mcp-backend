@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class PersonalExerciseService {
                 .orElseThrow(PersonalExerciseNotFoundException::new);
     }
 
+    @Transactional
     public void updateExercises(final List<Exercise> exercises, PersonalExercise personalExercise) {
         List<Exercise> existedExercises = personalExercise.getExercises();
         existedExercises.forEach(existed ->
