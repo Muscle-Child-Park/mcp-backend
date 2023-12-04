@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/reverse/member")
+@RequestMapping("/api/reserve")
 @Tag(name = "reservation controller")
 public class ReservationController {
     private final ReservationService reservationService;
@@ -34,7 +34,7 @@ public class ReservationController {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    @PostMapping
+    @PostMapping("/member")
     public void registerReservation(@RequestBody ReservationRequest.Create request) {
         reservationService.registerReservation(request);
     }
@@ -45,7 +45,7 @@ public class ReservationController {
             @ApiResponse(responseCode = "404", description = "Trainer list not found"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    @GetMapping("/{memberId}")
+    @GetMapping("/member/{memberId}")
     public ResponseEntity<List<TrainerTicketInfoResponse>> getTrainerList(@PathVariable Long memberId) {
         List<TrainerTicketInfoResponse> trainerTicketInfoResponse = ticketService.getTrainerReservations(memberId);
         return ResponseEntity.ok().body(trainerTicketInfoResponse);
