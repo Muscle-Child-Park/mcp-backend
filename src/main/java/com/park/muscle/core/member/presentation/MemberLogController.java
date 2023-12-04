@@ -44,7 +44,7 @@ public class MemberLogController {
             @ApiResponse(responseCode = "200", description = "회고가 성공적으로 업데이트 되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PutMapping("/log")
+    @PutMapping
     public ResponseEntity<String> updateLogToLesson(@RequestBody PersonalLogUpdateDto personalLogUpdateDto) {
         ExerciseDiary exerciseDiary = exerciseLogService.updatePersonalExerciseLog(personalLogUpdateDto);
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(
