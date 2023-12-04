@@ -3,7 +3,7 @@ package com.park.muscle.core.exercise.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.park.muscle.core.exercise.exception.ExerciseTypeNotFoundException;
+import com.park.muscle.core.exercise.exception.ClassTypeNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +24,7 @@ class ClassTypeTest {
     @ValueSource(strings = {"p","t","co-pt"})
     void 수업_타입_불일치(String invalidType) {
         assertThatThrownBy(() -> ClassType.findType(invalidType))
-                .isInstanceOf(ExerciseTypeNotFoundException.class)
-                .hasMessageContaining("올바른 운동 타입을 찾을 수 없습니다.");
+                .isInstanceOf(ClassTypeNotFoundException.class)
+                .hasMessageContaining("올바른 수업 타입을 찾을 수 없습니다.");
     }
 }

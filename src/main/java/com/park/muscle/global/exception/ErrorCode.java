@@ -30,6 +30,7 @@ public enum ErrorCode {
     // Exercise
     EXERCISE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "올바른 운동 타입을 찾을 수 없습니다."),
     EXERCISE_NOT_FOUND(HttpStatus.NOT_FOUND, "E002", "해당 운동을 찾을 수 없습니다."),
+    CLASS_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "E003", "올바른 수업 타입을 찾을 수 없습니다."),
 
     // Exercise-Diary
     EXERCISE_DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "D001", "해당 운동 로그를 찾을 수 없습니다."),

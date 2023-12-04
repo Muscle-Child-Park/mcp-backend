@@ -1,6 +1,6 @@
 package com.park.muscle.core.exercise.domain;
 
-import com.park.muscle.core.exercise.exception.ExerciseTypeNotFoundException;
+import com.park.muscle.core.exercise.exception.ClassTypeNotFoundException;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -14,6 +14,6 @@ public enum ClassType {
         return Arrays.stream(values())
                 .filter(value -> value.name().equalsIgnoreCase(classType))
                 .findAny()
-                .orElseThrow(ExerciseTypeNotFoundException::new);
+                .orElseThrow(ClassTypeNotFoundException::new);
     }
 }
