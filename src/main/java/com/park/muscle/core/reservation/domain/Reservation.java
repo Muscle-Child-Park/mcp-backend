@@ -89,4 +89,8 @@ public class Reservation extends BaseEntity {
         this.reservationCancelledTime = LocalDateTime.now();
         return reservationCancelledTime;
     }
+
+    public void updateTicket(final Ticket ticket) {
+        this.ticket = ticket;
+    }
 }

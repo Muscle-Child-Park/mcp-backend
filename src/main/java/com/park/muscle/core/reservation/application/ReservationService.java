@@ -8,6 +8,7 @@ import com.park.muscle.core.reservation.domain.ReserveTimeSlot;
 import com.park.muscle.core.reservation.dto.ReservationRequest.Create;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReserveTimeSlotResponse;
+import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,17 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
+    private final TicketService ticketService;
     private final ReservationRepository reservationRepository;
     private final ReservationTimeSlotRepository reservationTimeSlotRepository;
 
     @Transactional
     public void registerReservation(final Create request) {
+        Ticket ticketById = ticketService.findTicketById(request.getTicketId());
         Reservation reservation = request.toEntity();
         List<ReserveTimeSlot> reserveTimeSlots = reservation.getReserveTimeSlots();
         for (ReserveTimeSlot timeSlot : reserveTimeSlots){
             timeSlot.setReservation(reservation);
             timeSlot.updateAccess();
         }
+        reservation.updateTicket(ticketById);
         reservationTimeSlotRepository.saveAll(reserveTimeSlots);
         reservationRepository.save(reservation);
     }

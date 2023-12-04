@@ -1,4 +1,4 @@
-package com.park.muscle.core.member.presentation;
+package com.park.muscle.core.reservation.presentation;
 
 
 import static com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/member/reverse")
-@Tag(name = "member-reservation")
-public class MemberReservationController {
+@RequestMapping("/api/reverse/member")
+@Tag(name = "member reservation controller")
+public class ReservationController {
     private final ReservationService reservationService;
     private final TicketService ticketService;
 
