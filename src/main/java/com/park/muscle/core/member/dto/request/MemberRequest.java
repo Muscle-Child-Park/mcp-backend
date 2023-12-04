@@ -3,11 +3,11 @@ package com.park.muscle.core.member.dto.request;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.Name;
 import com.park.muscle.core.member.domain.Role;
+import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.global.enumerate.SocialType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.constraints.NotBlank;
-import lombok.Builder;
 import lombok.Getter;
 
 public class MemberRequest {
@@ -75,19 +75,17 @@ public class MemberRequest {
         @Schema(deprecated = true)
         private String eatingHabit;
 
-        private OnboardingQuestionRequest() {
-        }
-
-        @Builder
-        private OnboardingQuestionRequest(String firstPurpose, String secondPurpose, String balance, String interest,
-                                          String lifeStyle, String eatingHabit, String name) {
-            this.firstPurpose = firstPurpose;
-            this.secondPurpose = secondPurpose;
-            this.balance = balance;
-            this.interest = interest;
-            this.lifeStyle = lifeStyle;
-            this.eatingHabit = eatingHabit;
-            this.name = name;
+        public Onboarding toEntity(Member member) {
+            return Onboarding.builder()
+                    .firstPurpose(firstPurpose)
+                    .secondPurpose(secondPurpose)
+                    .balance(balance)
+                    .interest(interest)
+                    .lifeStyle(lifeStyle)
+                    .eatingHabit(eatingHabit)
+                    .name(name)
+                    .member(member)
+                    .build();
         }
     }
 }

@@ -20,11 +20,27 @@ public enum ErrorCode {
     INVALID_NAME_LENGTH(HttpStatus.BAD_REQUEST, "M002", "이름의 길이는 10자를 넘길 수 없습니다."),
     SOCIAL_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "M003", "올바른 소셜 타입을 찾을 수 없습니다."),
 
+    // Trainer
+    TRAINER_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "해당 트레이너를 찾을 수 없습니다."),
+
     // JWT
     REFRESH_JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "J003", "만료된 리프레시 토큰입니다."),
 
     // Exercise
-    EXERCISE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "올바른 운동 타입을 찾을 수 없습니다.");
+    EXERCISE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "E001", "올바른 운동 타입을 찾을 수 없습니다."),
+    EXERCISE_NOT_FOUND(HttpStatus.NOT_FOUND, "E002", "해당 운동을 찾을 수 없습니다."),
+
+    // Exercise-Diary
+    EXERCISE_DIARY_NOT_FOUND(HttpStatus.NOT_FOUND, "D001", "해당 운동 로그를 찾을 수 없습니다."),
+
+    // Lesson
+    LESSON_NOT_FOUND(HttpStatus.NOT_FOUND, "L001", "해당 수업을 찾을 수 없습니다."),
+
+    // Personal-Exercise
+    PERSONAL_EXERCISE_NOT_FOUND(HttpStatus.NOT_FOUND, "P001", "해당 개인 운동을 찾을 수 없습니다."),
+
+    // Ticket
+    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "해당 티켓을 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

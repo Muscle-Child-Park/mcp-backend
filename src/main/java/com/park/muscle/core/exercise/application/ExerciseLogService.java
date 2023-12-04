@@ -6,8 +6,7 @@ import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogRequestDto.PersonalLogReflectionDto;
 import com.park.muscle.core.exercise.dto.LogRequestDto.PersonalLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
-import com.park.muscle.core.member.application.MemberService;
-import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.core.exercise.exception.ExerciseDiaryNotFoundException;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.personalexercise.domain.PersonalExerciseRepository;
@@ -19,13 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ExerciseLogService {
-    private final MemberService memberService;
     private final PersonalExerciseService personalExerciseService;
     private final ExerciseLogRepository exerciseLogRepository;
     private final PersonalExerciseRepository personalExerciseRepository;
 
     public LogReflectionResponseDto addPersonalExerciseDiary(PersonalLogReflectionDto personalLogReflectionDto) {
-        Member member = memberService.findMemberById(personalLogReflectionDto.getMemberId());
         ExerciseDiary exerciseDiary = personalLogReflectionDto.toEntity(personalLogReflectionDto.getLog());
         save(exerciseDiary);
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(
@@ -54,6 +51,7 @@ public class ExerciseLogService {
     }
 
     public ExerciseDiary getOwnLogById(final long exerciseDiaryId) {
-        return exerciseLogRepository.findById(exerciseDiaryId).orElseThrow(IllegalArgumentException::new);
+        return exerciseLogRepository.findById(exerciseDiaryId)
+                .orElseThrow(ExerciseDiaryNotFoundException::new);
     }
 }

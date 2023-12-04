@@ -4,6 +4,7 @@ import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.personalexercise.domain.PersonalExerciseRepository;
 import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.AllPersonalExerciseResponse;
+import com.park.muscle.core.personalexercise.exception.PersonalExerciseNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ public class PersonalExerciseService {
     }
 
     public PersonalExercise findPersonalExerciseById(final long personalExerciseId) {
-        return personalExerciseRepository.findById(personalExerciseId).orElseThrow();
+        return personalExerciseRepository.findById(personalExerciseId)
+                .orElseThrow(PersonalExerciseNotFoundException::new);
     }
 
     public void updateExercises(final List<Exercise> exercises, PersonalExercise personalExercise) {

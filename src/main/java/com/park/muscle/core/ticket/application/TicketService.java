@@ -9,6 +9,7 @@ import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketRes
 import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketSimpleResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketBasicResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTicketResponse;
+import com.park.muscle.core.ticket.exception.TicketNotFoundException;
 import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
 import com.park.muscle.core.uniquetag.UniqueTagService;
@@ -18,7 +19,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import javax.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,15 +38,14 @@ public class TicketService {
     }
 
     public void acceptTicket(final Long ticketId) {
-        Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+        Ticket ticket = findById(ticketId);
         ticket.assignToMemberAndTrainer(ticket.getMember(), ticket.getTrainer());
         ticketRepository.save(ticket);
     }
 
     public Ticket findById(final Long ticketId) {
         Optional<Ticket> ticket = ticketRepository.findById(ticketId);
-        return ticket.orElse(null);
+        return ticket.orElseThrow(TicketNotFoundException::new);
     }
 
     public List<LessonByTicketResponse> findAllLessonsByTicket(final Ticket ticket) {

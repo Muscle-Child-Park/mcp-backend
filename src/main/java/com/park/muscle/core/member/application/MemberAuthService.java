@@ -8,7 +8,6 @@ import com.park.muscle.core.member.dto.request.MemberRequest.LoginRequest;
 import com.park.muscle.core.member.dto.request.MemberRequest.OnboardingQuestionRequest;
 import com.park.muscle.core.member.dto.response.MemberResponse;
 import com.park.muscle.core.member.dto.response.MemberResponse.LoginResponse;
-import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
@@ -69,18 +68,7 @@ public class MemberAuthService {
     public void addOnboardingQuestion(Long memberId,
                                       OnboardingQuestionRequest onboardingQuestionRequest) {
         Member member = memberService.findMemberObject(memberId);
-        Onboarding onboarding = Onboarding.builder()
-                .firstPurpose(onboardingQuestionRequest.getFirstPurpose())
-                .secondPurpose(onboardingQuestionRequest.getSecondPurpose())
-                .balance(onboardingQuestionRequest.getBalance())
-                .interest(onboardingQuestionRequest.getInterest())
-                .lifeStyle(onboardingQuestionRequest.getLifeStyle())
-                .eatingHabit(onboardingQuestionRequest.getEatingHabit())
-                .name(onboardingQuestionRequest.getName())
-                .member(member)
-                .build();
-
-        onboardingRepository.save(onboarding);
+        onboardingRepository.save(onboardingQuestionRequest.toEntity(member));
     }
 
     @Transactional

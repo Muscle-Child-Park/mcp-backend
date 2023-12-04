@@ -5,6 +5,7 @@ import com.park.muscle.core.exercise.domain.ExerciseRepository;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
+import com.park.muscle.core.exercise.exception.ExerciseNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class ExerciseService {
 
     public Exercise findById(final Long exerciseId) {
         return exerciseRepository.findById(exerciseId)
-                .orElseThrow(() -> new IllegalArgumentException("Could NOT Found"));
+                .orElseThrow(ExerciseNotFoundException::new);
     }
 
     public List<Exercise> updateExercises(final List<UpdateExerciseWithPersonal> exerciseUpdateRequestDtos) {

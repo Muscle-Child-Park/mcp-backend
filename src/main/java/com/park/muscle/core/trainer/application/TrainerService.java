@@ -5,7 +5,6 @@ import static com.park.muscle.core.trainer.dto.TrainerResponse.SignUpResponse;
 
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
 import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.exception.MemberNotFoundException;
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
 import com.park.muscle.core.ticket.domain.Ticket;
@@ -19,6 +18,7 @@ import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
 import com.park.muscle.core.trainer.dto.TrainerRequest.DayOffRequest;
 import com.park.muscle.core.trainer.dto.TrainerRequest.LoginRequest;
+import com.park.muscle.core.trainer.exception.TrainerNotFoundException;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.List;
@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class TrainerService {
-
     private final JwtTokenProvider jwtTokenProvider;
     private final TrainerRepository trainerRepository;
     private final ReservationService reservationService;
@@ -76,7 +75,7 @@ public class TrainerService {
 
     public Trainer getTrainerById(final Long trainerId) {
         return trainerRepository.findById(trainerId)
-                .orElseThrow(MemberNotFoundException::new);
+                .orElseThrow(TrainerNotFoundException::new);
     }
 
     public List<TicketTrainerResponse> getTrainerTickets(final List<Ticket> tickets) {
