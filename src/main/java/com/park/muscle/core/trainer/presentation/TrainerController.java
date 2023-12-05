@@ -122,8 +122,8 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @DeleteMapping("auth/delete/{trainerId}")
-    public ResponseEntity<Void> deleteTrainerAccount(@PathVariable Long trainerId) {
+    public ResponseEntity<String> deleteTrainerAccount(@PathVariable Long trainerId) {
         trainerService.deleteTrainerAccount(trainerId);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>("Trainer deleted successfully", HttpStatus.NO_CONTENT);
     }
 }
