@@ -44,7 +44,7 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @PostMapping("/{memberId}/add-onboarding")
+    @PostMapping("/add-onboarding/{memberId}")
     public ResponseEntity<Void> addOnboardingQuestion(@PathVariable Long memberId,
                                                       @Valid
                                                       @RequestBody MemberRequest.OnboardingQuestionRequest onboardingQuestionRequest) {
@@ -58,7 +58,7 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
-    @DeleteMapping("/{memberId}/delete")
+    @DeleteMapping("/delete/{memberId}")
     public ResponseEntity<String> deleteOwnMemberAccount(@PathVariable Long memberId) {
 
         memberAuthService.deleteMember(memberId);

@@ -9,11 +9,13 @@ import com.park.muscle.core.exercise.application.ExerciseService;
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
 import com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithPersonal;
+import com.park.muscle.core.exercise.dto.ExerciseRequestDto.UpdateExerciseWithPersonal;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.member.application.MemberService;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
+import com.park.muscle.core.personalexercise.dto.request.PersonalExerciseRequest.Update;
 import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.OwnPersonalExerciseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,7 +51,7 @@ public class MemberExerciseController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<AllPersonalExerciseResponse>> getMemberAllExercises(@PathVariable long memberId) {
+    public ResponseEntity<List<AllPersonalExerciseResponse>> getMemberAllExercises(@PathVariable Long memberId) {
         Member member = memberService.findMemberById(memberId);
         List<PersonalExercise> personalExercises = member.getPersonalExercises();
         return ResponseEntity.status(HttpStatus.OK).body(personalExerciseService.getAllPersonalEx(personalExercises));
@@ -104,19 +106,22 @@ public class MemberExerciseController {
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    @PutMapping("/{personalExerciseId}/{memberId}")
-    public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long personalExerciseId,
-                                                                                @PathVariable Long memberId,
+    @PutMapping("/{memberId}")
+    public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long memberId,
                                                                                 @RequestBody UpdatePersonalExercise updatePersonalExercise) {
-        List<Exercise> exercises =
-                exerciseService.updateExercises(updatePersonalExercise.getExerciseUpdateRequestDtos());
-        PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(personalExerciseId);
+        List<UpdateExerciseWithPersonal> exerciseUpdate = updatePersonalExercise.getExerciseUpdateRequestDtos();
+        Update personalUpdate = updatePersonalExercise.getPersonalExerciseUpdateRequest();
 
-        personalExercise.updatePersonalExercise(updatePersonalExercise.getPersonalExerciseUpdateRequest());
+        List<Exercise> exercises = exerciseService.updateExercises(exerciseUpdate);
+        PersonalExercise personalEx = personalExerciseService.findPersonalExerciseById(
+                personalUpdate.getPersonalExerciseId());
+
+        personalEx.updatePersonalExercise(personalUpdate);
         Member member = memberService.findMemberById(memberId);
-        personalExerciseService.updateExercises(exercises, personalExercise);
-        personalExerciseService.save(personalExercise);
+        personalExerciseService.updateExercises(exercises, personalEx);
+
+        personalExerciseService.save(personalEx);
         memberService.save(member);
-        return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
+        return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalEx));
     }
 }

@@ -40,6 +40,10 @@ public class PersonalExerciseRequest {
     @Getter
     @NoArgsConstructor
     public static class Update {
+
+        @NotNull
+        private Long personalExerciseId;
+
         @NotNull(message = "Personal-Exercise title is required")
         private String title;
 
