@@ -4,10 +4,8 @@ import static com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateReques
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +48,7 @@ public class Onboarding extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
     private Member member;
 
     @Builder

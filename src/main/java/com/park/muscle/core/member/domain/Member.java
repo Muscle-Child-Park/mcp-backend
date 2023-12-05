@@ -2,6 +2,7 @@ package com.park.muscle.core.member.domain;
 
 import com.park.muscle.core.exercise.domain.Exercise;
 import com.park.muscle.core.exercise.domain.ExerciseDiary;
+import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
@@ -52,6 +53,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Onboarding onboarding;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Exercise> exercises = new ArrayList<>();
