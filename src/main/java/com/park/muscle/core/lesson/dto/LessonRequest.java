@@ -14,6 +14,11 @@ public class LessonRequest {
     @Getter
     @NoArgsConstructor
     public static class LessonCreate {
+
+        @NotNull(message = "Ticket ID is required")
+        @Schema(description = "need a ticket ID to create a class")
+        private Long ticketId;
+
         @NotNull(message = "Lesson title is required")
         @Schema(description = "Purpose of CO-PT")
         private String title;

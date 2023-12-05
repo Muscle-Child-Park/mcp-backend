@@ -11,6 +11,7 @@ import com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.lesson.application.LessonService;
 import com.park.muscle.core.lesson.domain.Lesson;
+import com.park.muscle.core.lesson.dto.LessonRequest.LessonCreate;
 import com.park.muscle.core.lesson.dto.LessonResponse.LessonRetrieveResponse;
 import com.park.muscle.core.lesson.dto.LessonWithExerciseRequest;
 import com.park.muscle.core.ticket.application.TicketService;
@@ -35,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@RequestMapping("/api/lesson")
+@RequestMapping("/api/lessons")
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "Lesson Management", description = "APIs related to managing lessons")
@@ -50,7 +51,7 @@ public class LessonController {
             @ApiResponse(responseCode = "401", description = "잘못된 요청")
     })
     @GetMapping("/{lessonId}")
-    public ResponseEntity<LessonRetrieveResponse> getOwnLessonById(@PathVariable Long lessonId) {
+    public ResponseEntity<LessonRetrieveResponse> getLessonById(@PathVariable Long lessonId) {
         Lesson lesson = lessonService.getOwnLessonById(lessonId);
         List<Exercise> exercises = lesson.getExercises();
         ExerciseDiary exerciseDiary = lesson.getExerciseDiary();
@@ -59,7 +60,8 @@ public class LessonController {
         if (exerciseDiary != null) {
             logReflectionResponseDto = LogReflectionResponseDto.fromEntity(exerciseDiary);
         }
-        LessonRetrieveResponse lessonRetrieveResponse = LessonRetrieveResponse.fromEntity(lesson, exercises, logReflectionResponseDto);
+        LessonRetrieveResponse lessonRetrieveResponse = LessonRetrieveResponse.fromEntity(lesson, exercises,
+                logReflectionResponseDto);
         return ResponseEntity.status(HttpStatus.OK).body(lessonRetrieveResponse);
     }
 
@@ -68,21 +70,24 @@ public class LessonController {
             @ApiResponse(responseCode = "201", description = "수업 등록 성공"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PostMapping("/create/{ticketId}")
-    public ResponseEntity<LessonCreateResponse> createLesson(@PathVariable Long ticketId,
+    @PostMapping
+    public ResponseEntity<LessonCreateResponse> createLesson(
             @Valid @RequestBody LessonWithExerciseRequest lessonWithExerciseRequest) {
-        Lesson lesson = lessonWithExerciseRequest.getLessonRequestDto().toEntity();
+
+        LessonCreate lessonRequestDto = lessonWithExerciseRequest.getLessonRequestDto();
+        Lesson lesson = lessonRequestDto.toEntity();
+
         List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequest.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
 
-        Ticket ticket = ticketService.findTicketById(ticketId);
+        Ticket ticket = ticketService.findTicketById(lessonRequestDto.getTicketId());
         lesson.addExercise(exercises);
         ticket.setLesson(lesson);
 
         lessonService.save(lesson);
         ticketService.saveTicket(ticket);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(LessonCreateResponse.fromEntity(lesson, ticketId));
+                .body(LessonCreateResponse.fromEntity(lesson, ticket.getId()));
     }
 
     @Operation(summary = "피드백 추가", description = "수업에 대한 피드백을 추가합니다.")
@@ -90,7 +95,7 @@ public class LessonController {
             @ApiResponse(responseCode = "201", description = "피드백이 성공적으로 추가되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PostMapping("/{lessonId}/feedback")
+    @PostMapping("/feedback/{lessonId}")
     public ResponseEntity<String> addFeedbackToLesson(@RequestBody Map<String, String> feedback,
                                                       @PathVariable final long lessonId) {
         lessonService.addFeedback(lessonId, feedback.get("feedback"));
