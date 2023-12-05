@@ -47,7 +47,7 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     })
-    @GetMapping("/{trainerId}/members")
+    @GetMapping("/{trainerId}")
     public ResponseEntity<TrainerHomeResponse> trainerHome(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
@@ -77,7 +77,7 @@ public class TrainerController {
             @ApiResponse(responseCode = "200", description = "티켓 조회 성공"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @GetMapping("/{trainerId}/tickets")
+    @GetMapping("/tickets/{trainerId}")
     public ResponseEntity<List<TicketTrainerResponse>> getTrainerTickets(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
