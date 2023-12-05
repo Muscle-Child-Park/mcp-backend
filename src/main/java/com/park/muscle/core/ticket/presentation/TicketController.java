@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
@@ -31,7 +30,7 @@ public class TicketController {
     private final MemberService memberService;
 
     @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through unique tags and Create ticket")
-    @PostMapping("/ticket/request")
+    @PostMapping("/request")
     public ResponseEntity<TicketBasicResponse> createTicket(@RequestBody TicketRequest.Create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -39,14 +38,14 @@ public class TicketController {
     }
 
     @Operation(summary = "Accept a ticket", description = "Accept a ticket with a specific ID")
-    @PostMapping("/ticket/accept")
-    public ResponseEntity<Void> acceptTicket(@RequestParam Long ticketId) {
+    @PostMapping("/accept/{ticketId}")
+    public ResponseEntity<Void> acceptTicket(@PathVariable Long ticketId) {
         ticketService.acceptTicket(ticketId);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Get lessons by ticket ID", description = "Retrieve all lessons associated with a ticket")
-    @GetMapping("/{ticketId}/lesson")
+    @GetMapping("/lesson/{ticketId}")
     public ResponseEntity<List<LessonByTicketResponse>> getLessonsByTicketId(@PathVariable Long ticketId) {
         Ticket ticket = ticketService.findTicketById(ticketId);
         List<LessonByTicketResponse> lessons = ticketService.findAllLessonsByTicket(ticket);
@@ -54,7 +53,7 @@ public class TicketController {
     }
 
     @Operation(summary = "trainers by ticket info", description = "response trainer information is available and names")
-    @GetMapping("/{memberId}/trainers")
+    @GetMapping("/trainers/{memberId}")
     public ResponseEntity<List<TrainerInfoByTicketResponse>> getTrainers(@PathVariable long memberId) {
         List<TrainerInfoByTicketResponse> allTicketByMemberId = ticketService.findAllTicketByMemberId(memberId);
         return ResponseEntity.status(HttpStatus.CREATED)
