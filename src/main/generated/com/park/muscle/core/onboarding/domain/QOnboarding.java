@@ -26,12 +26,14 @@ public class QOnboarding extends EntityPathBase<Onboarding> {
 
     public final StringPath balance = createString("balance");
 
+    public final StringPath bodyPurpose = createString("bodyPurpose");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final StringPath eatingHabit = createString("eatingHabit");
 
-    public final StringPath firstPurpose = createString("firstPurpose");
+    public final StringPath exercisePurpose = createString("exercisePurpose");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -45,8 +47,6 @@ public class QOnboarding extends EntityPathBase<Onboarding> {
     public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
 
     public final StringPath name = createString("name");
-
-    public final StringPath secondPurpose = createString("secondPurpose");
 
     public QOnboarding(String variable) {
         this(Onboarding.class, forVariable(variable), INITS);

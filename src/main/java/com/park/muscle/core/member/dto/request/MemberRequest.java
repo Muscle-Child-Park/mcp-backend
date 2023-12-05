@@ -51,11 +51,11 @@ public class MemberRequest {
 
         @NotBlank(message = "첫 번째 운동 목적은 반드시 입력해야 합니다.")
         @Schema(description = "신체 목표")
-        private String firstPurpose;
+        private String bodyPurpose;
 
         @NotBlank(message = "두 번째 운동 목적은 반드시 입력해야 합니다.")
         @Schema(description = "운동 목적")
-        private String secondPurpose;
+        private String exercisePurpose;
 
         @NotBlank(message = "식단과 운동 방식 입력은 반드시 입력해야 합니다.")
         @Schema(description = "식단, 운동 밸런스")
@@ -70,6 +70,7 @@ public class MemberRequest {
         private String lifeStyle;
 
         @NotBlank(message = "이름은 반드시 입력해야 합니다.")
+        @Schema(description = "회원 이름")
         private String name;
 
         @Schema(deprecated = true)
@@ -77,8 +78,8 @@ public class MemberRequest {
 
         public Onboarding toEntity(Member member) {
             return Onboarding.builder()
-                    .firstPurpose(firstPurpose)
-                    .secondPurpose(secondPurpose)
+                    .bodyPurpose(bodyPurpose)
+                    .exercisePurpose(exercisePurpose)
                     .balance(balance)
                     .interest(interest)
                     .lifeStyle(lifeStyle)

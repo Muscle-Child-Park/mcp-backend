@@ -4,6 +4,7 @@ import static com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateReques
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,11 +29,11 @@ public class Onboarding extends BaseEntity {
     @Column(name = "onboarding_id")
     private Long id;
 
-    @Column(name = "first_purpose")
-    private String firstPurpose;
+    @Column(name = "body_purpose")
+    private String bodyPurpose;
 
-    @Column(name = "second_purpose")
-    private String secondPurpose;
+    @Column(name = "exercise_purpose")
+    private String exercisePurpose;
 
     @Column(name = "balance")
     private String balance;
@@ -49,14 +50,14 @@ public class Onboarding extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Member member;
 
     @Builder
-    private Onboarding(String firstPurpose, String secondPurpose, String balance, String interest, String lifeStyle,
+    private Onboarding(String bodyPurpose, String exercisePurpose, String balance, String interest, String lifeStyle,
                        String eatingHabit, String name, Member member) {
-        this.firstPurpose = firstPurpose;
-        this.secondPurpose = secondPurpose;
+        this.bodyPurpose = bodyPurpose;
+        this.exercisePurpose = exercisePurpose;
         this.balance = balance;
         this.interest = interest;
         this.lifeStyle = lifeStyle;
@@ -66,8 +67,8 @@ public class Onboarding extends BaseEntity {
     }
 
     public void updateOnboarding(final UpdateRequest request) {
-        this.firstPurpose = request.getFirstPurpose();
-        this.secondPurpose = request.getSecondPurpose();
+        this.bodyPurpose = request.getBodyPurpose();
+        this.exercisePurpose = request.getExercisePurpose();
         this.balance = request.getBalance();
         this.interest = request.getInterest();
         this.lifeStyle = request.getLifeStyle();
