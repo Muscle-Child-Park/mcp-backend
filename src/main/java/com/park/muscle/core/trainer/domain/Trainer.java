@@ -53,14 +53,14 @@ public class Trainer extends BaseEntity {
     @Column(name = "role")
     private Role role;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private UniqueTag uniqueTag;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "gym_id")
     private final List<Gym> gym = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<DayOff> dayOffs = new ArrayList<>();
 
     @OneToMany(mappedBy = "trainer")
@@ -78,8 +78,9 @@ public class Trainer extends BaseEntity {
         this.socialId = socialId;
         this.name = name;
         this.role = role;
-        this.uniqueTag = new UniqueTag();
+        UniqueTag uniqueTag = UniqueTag.builder().build();
         uniqueTag.updateTrainer(this);
+        this.uniqueTag = uniqueTag;
     }
 
     public void updateName(String name) {

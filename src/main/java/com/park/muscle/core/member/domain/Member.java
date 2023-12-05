@@ -53,19 +53,19 @@ public class Member extends BaseEntity {
     @Column(name = "role")
     private Role role;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Exercise> exercises = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "member")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "member", orphanRemoval = true)
     private final List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<ExerciseDiary> diaries = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<PersonalExercise> personalExercises = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private UniqueTag uniqueTag;
 
     @Builder
@@ -74,8 +74,9 @@ public class Member extends BaseEntity {
         this.socialId = socialId;
         this.name = name;
         this.role = role;
-        this.uniqueTag = new UniqueTag();
+        UniqueTag uniqueTag = UniqueTag.builder().build();
         uniqueTag.updateMember(this);
+        this.uniqueTag = uniqueTag;
     }
 
     public String getMemberName() {
