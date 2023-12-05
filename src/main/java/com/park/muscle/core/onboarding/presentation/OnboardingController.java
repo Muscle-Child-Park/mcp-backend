@@ -30,7 +30,7 @@ public class OnboardingController {
             @ApiResponse(responseCode = "200", description = "회원 정보가 조회 되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @GetMapping("/{memberId}/my-page")
+    @GetMapping("/my-page/{memberId}")
     public ResponseEntity<FindResponse> getMemberPage(@PathVariable Long memberId) {
         Onboarding onboarding = onboardingService.findOwnOnboard(memberId);
         FindResponse onboardingResponse = FindResponse.fromEntity(onboarding);
@@ -42,7 +42,7 @@ public class OnboardingController {
             @ApiResponse(responseCode = "200", description = "회원 정보가 성공적으로 업데이트 되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    @PutMapping("/{memberId}/my-page")
+    @PutMapping("/my-page/{memberId}")
     public ResponseEntity<UpdateOnboarding> updateOnboarding(@PathVariable Long memberId,
                                                              @RequestBody UpdateRequest request) {
         UpdateOnboarding updateOnboarding = onboardingService.updateOnboard(memberId, request);
