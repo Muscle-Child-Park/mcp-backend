@@ -3,6 +3,8 @@ package com.park.muscle.global.infra.swagger;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,16 +71,17 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public OpenAPI springShopOpenAPI() {
+    public OpenAPI mcParkOpenAPI() {
         String title = "TEAM MC-PARK API DOCS";
         String description = "Mave API end-point Description";
+        String version  = "1.0.2";
 
-        Info info = new Info().title(title)
-                .description(description)
-                .version("1.0.0");
-
-        return new OpenAPI()
+        return new OpenAPI().addServersItem(new Server().url("/"))
                 .components(new Components())
-                .info(info);
+                .info(new Info()
+                        .title(title)
+                        .description(description)
+                        .version(version)
+                        .license(new License().name("Apache 2.0").url("<http://springdoc.org>")));
     }
 }
