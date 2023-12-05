@@ -2,14 +2,12 @@ package com.park.muscle.core.onboarding.domain;
 
 import static com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateRequest;
 
-import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.global.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,12 +46,9 @@ public class Onboarding extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
-    private Member member;
-
     @Builder
     private Onboarding(String bodyPurpose, String exercisePurpose, String balance, String interest, String lifeStyle,
-                       String eatingHabit, String name, Member member) {
+                       String eatingHabit, String name) {
         this.bodyPurpose = bodyPurpose;
         this.exercisePurpose = exercisePurpose;
         this.balance = balance;
@@ -61,7 +56,6 @@ public class Onboarding extends BaseEntity {
         this.lifeStyle = lifeStyle;
         this.eatingHabit = eatingHabit;
         this.name = name;
-        this.member = member;
     }
 
     public void updateOnboarding(final UpdateRequest request) {

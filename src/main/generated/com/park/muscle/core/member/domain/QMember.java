@@ -38,6 +38,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final QName name;
 
+    public final com.park.muscle.core.onboarding.domain.QOnboarding onboarding;
+
     public final ListPath<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise> personalExercises = this.<com.park.muscle.core.personalexercise.domain.PersonalExercise, com.park.muscle.core.personalexercise.domain.QPersonalExercise>createList("personalExercises", com.park.muscle.core.personalexercise.domain.PersonalExercise.class, com.park.muscle.core.personalexercise.domain.QPersonalExercise.class, PathInits.DIRECT2);
 
     public final EnumPath<Role> role = createEnum("role", Role.class);
@@ -69,6 +71,7 @@ public class QMember extends EntityPathBase<Member> {
     public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.name = inits.isInitialized("name") ? new QName(forProperty("name")) : null;
+        this.onboarding = inits.isInitialized("onboarding") ? new com.park.muscle.core.onboarding.domain.QOnboarding(forProperty("onboarding")) : null;
         this.uniqueTag = inits.isInitialized("uniqueTag") ? new com.park.muscle.core.uniquetag.domain.QUniqueTag(forProperty("uniqueTag"), inits.get("uniqueTag")) : null;
     }
 

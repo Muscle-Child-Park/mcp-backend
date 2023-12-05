@@ -76,7 +76,7 @@ public class MemberRequest {
         @Schema(deprecated = true)
         private String eatingHabit;
 
-        public Onboarding toEntity(Member member) {
+        public Onboarding toEntity() {
             return Onboarding.builder()
                     .bodyPurpose(bodyPurpose)
                     .exercisePurpose(exercisePurpose)
@@ -85,7 +85,6 @@ public class MemberRequest {
                     .lifeStyle(lifeStyle)
                     .eatingHabit(eatingHabit)
                     .name(name)
-                    .member(member)
                     .build();
         }
     }

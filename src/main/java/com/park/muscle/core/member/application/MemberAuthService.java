@@ -68,7 +68,9 @@ public class MemberAuthService {
     public void addOnboardingQuestion(Long memberId,
                                       OnboardingQuestionRequest onboardingQuestionRequest) {
         Member member = memberService.findMemberById(memberId);
-        onboardingRepository.save(onboardingQuestionRequest.toEntity(member));
+        member.updateOnboarding(onboardingQuestionRequest.toEntity());
+        onboardingRepository.save(member.getOnboarding());
+        memberService.save(member);
     }
 
     @Transactional

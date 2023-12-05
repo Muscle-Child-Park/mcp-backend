@@ -83,6 +83,10 @@ public class Member extends BaseEntity {
         this.uniqueTag = uniqueTag;
     }
 
+    public void updateOnboarding(Onboarding onboarding) {
+        this.onboarding = onboarding;
+    }
+
     public String getMemberName() {
         return name.getValue();
     }
