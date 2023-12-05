@@ -34,19 +34,19 @@ public class PersonalExercise {
     @Column(name = "personal_exercise_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "lesson_date", nullable = false)
     private LocalDateTime lessonDate;
 
-    @Column(nullable = false)
+    @Column(name = "time_slot", nullable = false)
     private String timeSlot;
 
-    @Column
+    @Column(name = "completion_toggle")
     private boolean completionToggle;
 
-    @Column
+    @Column(name = "class_type")
     private ClassType classType;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
