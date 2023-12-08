@@ -11,12 +11,12 @@ class ExerciseTest {
 
     @BeforeEach
     void setup() {
-        String name = "벤치 프레스";
-        int runTime = 50;
         ExerciseType exerciseType = ExerciseType.ANAEROBIC;
+        String name = "벤치 프레스";
         String weight = "70";
-        int reps = 5;
         String sets = "4";
+        int runTime = 50;
+        int reps = 5;
 
         exercise = Exercise.builder()
                 .name(name)
