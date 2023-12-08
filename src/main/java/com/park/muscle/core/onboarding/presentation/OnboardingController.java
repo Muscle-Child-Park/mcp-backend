@@ -5,12 +5,14 @@ import com.park.muscle.core.onboarding.domain.Onboarding;
 import com.park.muscle.core.onboarding.dto.OnboardingRequest.UpdateRequest;
 import com.park.muscle.core.onboarding.dto.OnboardingResponse.FindResponse;
 import com.park.muscle.core.onboarding.dto.OnboardingResponse.UpdateOnboarding;
+import com.park.muscle.global.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,10 +34,11 @@ public class OnboardingController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping("/my-page/{memberId}")
-    public ResponseEntity<FindResponse> getMemberPage(@PathVariable Long memberId) {
+    public ResponseEntity<DataResponse<FindResponse>> getMemberPage(@PathVariable Long memberId) {
         Onboarding onboarding = onboardingService.findOwnOnboard(memberId);
         FindResponse onboardingResponse = FindResponse.fromEntity(onboarding);
-        return ResponseEntity.ok(onboardingResponse);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "특정 회원 페이지 조회 성공", onboardingResponse),
+                HttpStatus.OK);
     }
 
     @Operation(summary = "회원 페이지 정보 업데이트", description = "특정 회원의 페이지 정보를 업데이트합니다.")
@@ -44,9 +47,9 @@ public class OnboardingController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/my-page/{memberId}")
-    public ResponseEntity<UpdateOnboarding> updateOnboarding(@PathVariable Long memberId,
+    public ResponseEntity<DataResponse<UpdateOnboarding>> updateOnboarding(@PathVariable Long memberId,
                                                              @Valid @RequestBody UpdateRequest request) {
         UpdateOnboarding updateOnboarding = onboardingService.updateOnboard(memberId, request);
-        return ResponseEntity.ok(updateOnboarding);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "회원 페이지 업데이트 성공", updateOnboarding), HttpStatus.OK);
     }
 }

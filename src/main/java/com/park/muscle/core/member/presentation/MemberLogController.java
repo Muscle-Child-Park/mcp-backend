@@ -7,6 +7,8 @@ import com.park.muscle.core.exercise.dto.LogRequestDto.PersonalLogUpdateDto;
 import com.park.muscle.core.exercise.dto.LogResponseDto.LogReflectionResponseDto;
 import com.park.muscle.core.personalexercise.application.PersonalExerciseService;
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
+import com.park.muscle.global.response.DataResponse;
+import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -35,13 +37,14 @@ public class MemberLogController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(
+    public ResponseEntity<DataResponse<LogReflectionResponseDto>> addLogToLesson(
             @Valid @RequestBody PersonalLogReflectionDto personalLogReflectionDto) {
 
         LogReflectionResponseDto logReflectionResponseDto =
                 exerciseLogService.addPersonalExerciseDiary(personalLogReflectionDto);
 
-        return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "개인 운동 회고 추가 성공", logReflectionResponseDto),
+                HttpStatus.CREATED);
     }
 
     @Operation(summary = "개인 운동 회고 업데이트", description = "개인 운동에 대한 회고 업데이트")
@@ -50,14 +53,14 @@ public class MemberLogController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping
-    public ResponseEntity<String> updateLogToLesson(@Valid @RequestBody PersonalLogUpdateDto personalLogUpdateDto) {
+    public ResponseEntity<MessageResponse> updateLogToLesson(@Valid @RequestBody PersonalLogUpdateDto personalLogUpdateDto) {
 
         ExerciseDiary exerciseDiary = exerciseLogService.updatePersonalExerciseLog(personalLogUpdateDto);
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(
                 personalLogUpdateDto.getPersonalId());
         personalExercise.updateExerciseDiary(exerciseDiary);
 
-        return ResponseEntity.status(HttpStatus.OK).body("update success");
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "개인 운동 회고 업데이트 성공"), HttpStatus.OK);
     }
 }
 

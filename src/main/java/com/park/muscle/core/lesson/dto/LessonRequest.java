@@ -48,4 +48,12 @@ public class LessonRequest {
                     .build();
         }
     }
+
+    @Getter
+    public static class FeedbackCreate {
+        @NotNull(message = "Feedback is required")
+        @Schema(description = "feedback on the class")
+        String feedback;
+
+    }
 }

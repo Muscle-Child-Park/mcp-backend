@@ -7,6 +7,7 @@ import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketSimpleResponse;
 import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerTicketInfoResponse;
+import com.park.muscle.global.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,7 @@ public class MemberHomeController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/{memberId}")
-    public ResponseEntity<HomeResponse> getMemberHome(@PathVariable final long memberId) {
+    public ResponseEntity<DataResponse<HomeResponse>> getMemberHome(@PathVariable final long memberId) {
         Member member = memberService.findMemberById(memberId);
         List<Ticket> tickets = member.getTickets();
         List<TrainerTicketInfoResponse> trainerReservations = ticketService.getTrainerReservations(memberId);
@@ -46,7 +48,8 @@ public class MemberHomeController {
         if (hasValidTicketAndLessonContent(trainerReservations, flattenedList)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok().body(HomeResponse.fromEntity(trainerReservations, flattenedList));
+        HomeResponse homeResponse = HomeResponse.fromEntity(trainerReservations, flattenedList);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "멤버 홈 페이지 접근 성공", homeResponse), HttpStatus.OK);
     }
 
     private static boolean hasValidTicketAndLessonContent(final List<TrainerTicketInfoResponse> trainerReservations,

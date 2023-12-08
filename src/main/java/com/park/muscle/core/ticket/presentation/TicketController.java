@@ -8,6 +8,8 @@ import com.park.muscle.core.ticket.dto.request.TicketRequest;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketBasicResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTicketResponse;
+import com.park.muscle.global.response.DataResponse;
+import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -32,32 +34,33 @@ public class TicketController {
 
     @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through unique tags and Create ticket")
     @PostMapping("/request")
-    public ResponseEntity<TicketBasicResponse> createTicket(@Valid @RequestBody TicketRequest.Create ticketCreateDto) {
+    public ResponseEntity<DataResponse<TicketBasicResponse>> createTicket(@Valid @RequestBody TicketRequest.Create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketService.createTicket(member, ticketCreateDto));
+        TicketBasicResponse ticket = ticketService.createTicket(member, ticketCreateDto);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "유니크 태그를 통해 티켓 생성에 성공했습니다.", ticket),
+                HttpStatus.CREATED);
     }
 
     @Operation(summary = "Accept a ticket", description = "Accept a ticket with a specific ID")
     @PostMapping("/accept/{ticketId}")
-    public ResponseEntity<Void> acceptTicket(@PathVariable Long ticketId) {
+    public ResponseEntity<MessageResponse> acceptTicket(@PathVariable Long ticketId) {
         ticketService.acceptTicket(ticketId);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "트레이너로부터 티켓이 수락 되었습니다."), HttpStatus.OK);
     }
 
     @Operation(summary = "Get lessons by ticket ID", description = "Retrieve all lessons associated with a ticket")
     @GetMapping("/lesson/{ticketId}")
-    public ResponseEntity<List<LessonByTicketResponse>> getLessonsByTicketId(@PathVariable Long ticketId) {
+    public ResponseEntity<DataResponse<List<LessonByTicketResponse>>> getLessonsByTicketId(@PathVariable Long ticketId) {
         Ticket ticket = ticketService.findTicketById(ticketId);
         List<LessonByTicketResponse> lessons = ticketService.findAllLessonsByTicket(ticket);
-        return ResponseEntity.status(HttpStatus.OK).body(lessons);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "수업 조회에 성공했습니다.", lessons), HttpStatus.OK);
     }
 
     @Operation(summary = "trainers by ticket info", description = "response trainer information is available and names")
     @GetMapping("/trainers/{memberId}")
-    public ResponseEntity<List<TrainerInfoByTicketResponse>> getTrainers(@PathVariable long memberId) {
+    public ResponseEntity<DataResponse<List<TrainerInfoByTicketResponse>>> getTrainers(@PathVariable long memberId) {
         List<TrainerInfoByTicketResponse> allTicketByMemberId = ticketService.findAllTicketByMemberId(memberId);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(allTicketByMemberId);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "트레이너 정보 조회에 성공했습니다.", allTicketByMemberId),
+                HttpStatus.OK);
     }
 }

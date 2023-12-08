@@ -5,6 +5,8 @@ import static com.park.muscle.core.member.dto.request.MemberRequest.OnboardingQu
 
 import com.park.muscle.core.member.application.MemberAuthService;
 import com.park.muscle.core.member.dto.response.MemberResponse.LoginResponse;
+import com.park.muscle.global.response.DataResponse;
+import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,10 +36,9 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<DataResponse<LoginResponse>> loginMember(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(loginResponse);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "로그인 성공", loginResponse), HttpStatus.CREATED);
     }
 
     @Operation(summary = "온보딩 정보 등록", description = "Register on-boarding ")
@@ -47,11 +48,11 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
     @PostMapping("/add-onboarding/{memberId}")
-    public ResponseEntity<Void> addOnboardingQuestion(@PathVariable Long memberId,
-                                                      @Valid
+    public ResponseEntity<MessageResponse> addOnboardingQuestion(@PathVariable Long memberId,
+                                                                 @Valid
                                                       @RequestBody OnboardingQuestionRequest onboardingQuestionRequest) {
         memberAuthService.addOnboardingQuestion(memberId, onboardingQuestionRequest);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.CREATED, "온보딩 정보가 생성되었습니다."), HttpStatus.CREATED);
     }
 
     @Operation(summary = "회원 탈퇴", description = "Member account delete")
@@ -61,9 +62,10 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "404", description = "Member not found")
     })
     @DeleteMapping("/delete/{memberId}")
-    public ResponseEntity<String> deleteOwnMemberAccount(@PathVariable Long memberId) {
+    public ResponseEntity<MessageResponse> deleteOwnMemberAccount(@PathVariable Long memberId) {
 
         memberAuthService.deleteMember(memberId);
-        return new ResponseEntity<>("Member deleted successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.NO_CONTENT, "Member deleted successfully"),
+                HttpStatus.OK);
     }
 }

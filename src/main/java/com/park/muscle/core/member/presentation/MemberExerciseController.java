@@ -17,6 +17,7 @@ import com.park.muscle.core.personalexercise.application.PersonalExerciseService
 import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.personalexercise.dto.request.PersonalExerciseRequest.Update;
 import com.park.muscle.core.personalexercise.dto.response.PersonalExerciseResponse.OwnPersonalExerciseResponse;
+import com.park.muscle.global.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -52,10 +53,14 @@ public class MemberExerciseController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<AllPersonalExerciseResponse>> getMemberAllExercises(@PathVariable Long memberId) {
+    public ResponseEntity<DataResponse<List<AllPersonalExerciseResponse>>> getMemberAllExercises(
+            @PathVariable Long memberId) {
         Member member = memberService.findMemberById(memberId);
         List<PersonalExercise> personalExercises = member.getPersonalExercises();
-        return ResponseEntity.status(HttpStatus.OK).body(personalExerciseService.getAllPersonalEx(personalExercises));
+        List<AllPersonalExerciseResponse> allPersonalEx = personalExerciseService.getAllPersonalEx(personalExercises);
+
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "개인 운동 목록이 성공적으로 조회되었습니다.",
+                allPersonalEx), HttpStatus.OK);
     }
 
     @Operation(summary = "회원 개인 운동 조회", description = "개인 운동 아이디를 통해 해당 멤버의 개인 운동을 조회할 수 있습니다.")
@@ -65,8 +70,9 @@ public class MemberExerciseController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @GetMapping("/own/{personalExerciseId}")
-    public ResponseEntity<OwnPersonalExerciseResponse> getExercisesFromPersonalEx(
+    public ResponseEntity<DataResponse<OwnPersonalExerciseResponse>> getExercisesFromPersonalEx(
             @PathVariable long personalExerciseId) {
+
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(personalExerciseId);
         List<Exercise> exercises = personalExercise.getExercises();
         ExerciseDiary exerciseDiary = personalExercise.getExerciseDiary();
@@ -75,8 +81,11 @@ public class MemberExerciseController {
         if (exerciseDiary != null) {
             logReflectionResponseDto = LogReflectionResponseDto.fromEntity(exerciseDiary);
         }
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(OwnPersonalExerciseResponse.fromEntity(personalExercise, exercises, logReflectionResponseDto));
+        OwnPersonalExerciseResponse ownPersonalExerciseResponse =
+                OwnPersonalExerciseResponse.fromEntity(personalExercise, exercises, logReflectionResponseDto);
+
+        return new ResponseEntity<>(
+                DataResponse.of(HttpStatus.OK, "개인 운동이 성공적으로 조회되었습니다.", ownPersonalExerciseResponse), HttpStatus.OK);
     }
 
     @Operation(summary = "회원 개인 운동 생성", description = "새로운 개인 운동을 생성합니다.")
@@ -86,7 +95,7 @@ public class MemberExerciseController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/{memberId}")
-    public ResponseEntity<PersonalExerciseCreateResponse> addPersonalExercises(@PathVariable Long memberId,
+    public ResponseEntity<DataResponse<PersonalExerciseCreateResponse>> addPersonalExercises(@PathVariable Long memberId,
                                                                                @Valid @RequestBody CreatePersonalExercise createPersonalExercise) {
 
         PersonalExercise personalExercise = createPersonalExercise.getPersonalExerciseRequest().toEntity();
@@ -98,17 +107,22 @@ public class MemberExerciseController {
         Member memberById = memberService.findMemberById(memberId);
         memberById.addPersonalExercises(personalExercise);
         memberService.save(memberById);
-        return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalExercise));
+
+        PersonalExerciseCreateResponse CreateResponse = PersonalExerciseCreateResponse.fromEntity(
+                personalExercise);
+
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "개인 운동이 생성되었습니다.", CreateResponse),
+                HttpStatus.CREATED);
     }
 
     @Operation(summary = "회원 개인 운동 수정", description = "개인 운동을 수정합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "운동 수정 성공"),
+            @ApiResponse(responseCode = "200", description = "운동 수정 성공"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PutMapping("/{memberId}")
-    public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long memberId,
+    public ResponseEntity<DataResponse<PersonalExerciseCreateResponse>> updateMemberExercises(@PathVariable Long memberId,
                                                                                 @Valid @RequestBody UpdatePersonalExercise updatePersonalExercise) {
         List<UpdateExerciseWithPersonal> exerciseUpdate = updatePersonalExercise.getExerciseUpdateRequestDtos();
         Update personalUpdate = updatePersonalExercise.getPersonalExerciseUpdateRequest();
@@ -123,6 +137,9 @@ public class MemberExerciseController {
 
         personalExerciseService.save(personalEx);
         memberService.save(member);
-        return ResponseEntity.status(HttpStatus.OK).body(PersonalExerciseCreateResponse.fromEntity(personalEx));
+
+        PersonalExerciseCreateResponse createResponse = PersonalExerciseCreateResponse.fromEntity(
+                personalEx);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "개인 운동이 수정되었습니다.", createResponse), HttpStatus.OK);
     }
 }

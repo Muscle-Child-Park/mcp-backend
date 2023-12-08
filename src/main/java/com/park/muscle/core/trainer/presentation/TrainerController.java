@@ -14,6 +14,8 @@ import com.park.muscle.core.trainer.dto.TrainerRequest.GymRequest;
 import com.park.muscle.core.trainer.dto.TrainerRequest.LoginRequest;
 import com.park.muscle.core.trainer.dto.TrainerResponse.LoginResponse;
 import com.park.muscle.core.trainer.dto.TrainerResponse.TrainerHomeResponse;
+import com.park.muscle.global.response.DataResponse;
+import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -42,13 +44,13 @@ public class TrainerController {
 
     @Operation(summary = "트레이너 홈 화면 정보")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "트레이너 정보 조회 성공"),
+            @ApiResponse(responseCode = "200", description = "트레이너 홈 조회 성공"),
             @ApiResponse(responseCode = "401", description = "인증 실패"),
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음"),
             @ApiResponse(responseCode = "500", description = "내부 서버 오류 발생")
     })
     @GetMapping("/{trainerId}")
-    public ResponseEntity<TrainerHomeResponse> trainerHome(@PathVariable Long trainerId) {
+    public ResponseEntity<DataResponse<TrainerHomeResponse>> trainerHome(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
         if (tickets == null) {
@@ -57,19 +59,20 @@ public class TrainerController {
         List<Member> pendingMembers = trainerService.findPendingMembers(tickets);
         PendingMemberNameResponse pendingMembersResponse = trainerService.getPendingMembers(pendingMembers);
         List<ReservationInfoResponse> reserveMembers = trainerService.getReserveMembers(tickets);
-        return ResponseEntity.ok().body(TrainerHomeResponse.fromEntity(pendingMembersResponse, reserveMembers));
+        TrainerHomeResponse trainerHomeResponse = TrainerHomeResponse.fromEntity(pendingMembersResponse,
+                reserveMembers);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "트레이너 홈 조회 성공", trainerHomeResponse), HttpStatus.OK);
     }
 
     @Operation(summary = "트레이너 등록 또는 로그인", description = "트레이너의 로그인 시도를 수행하고, 기존 회원이 아닌 경우 회원 가입을 완료하며 고유 아이디를 발급합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "트레이너 로그인 또는 가입 및 아이디 발급 성공"),
+            @ApiResponse(responseCode = "201", description = "트레이너 로그인 또는 가입 및 아이디 발급 성공"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/auth/login")
-    public ResponseEntity<LoginResponse> loginTrainer(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<DataResponse<LoginResponse>> loginTrainer(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = trainerService.login(loginRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(loginResponse);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "트레이너 로그인 성공", loginResponse), HttpStatus.CREATED);
     }
 
     @Operation(summary = "등록된 티켓을 가져옵니다.", description = "회원으로부터 요청된 티켓 목록을 가져옵니다.")
@@ -78,11 +81,11 @@ public class TrainerController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping("/tickets/{trainerId}")
-    public ResponseEntity<List<TicketTrainerResponse>> getTrainerTickets(@PathVariable Long trainerId) {
+    public ResponseEntity<DataResponse<List<TicketTrainerResponse>>> getTrainerTickets(@PathVariable Long trainerId) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
         List<TicketTrainerResponse> ticketTrainerResponse = trainerService.getTrainerTickets(tickets);
-        return ResponseEntity.ok(ticketTrainerResponse);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "티켓 조회 성공", ticketTrainerResponse), HttpStatus.OK);
     }
 
     @Operation(summary = "트레이너 프로필 GYM 업데이트")
@@ -92,13 +95,13 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @PostMapping("/profile/{trainerId}")
-    public ResponseEntity<Void> addTrainerGym(@PathVariable Long trainerId,
-                                              @Valid @RequestBody GymRequest gymRequest) {
+    public ResponseEntity<MessageResponse> addTrainerGym(@PathVariable Long trainerId,
+                                                         @Valid @RequestBody GymRequest gymRequest) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         Gym gym = gymRequest.toEntity(gymRequest.getName());
         trainer.addGym(gym);
         trainerService.saveGym(trainer, gym);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "트레이너 프로필 업데이트 성공"), HttpStatus.OK);
     }
 
     @Operation(summary = "트레이너 휴무일 생성")
@@ -108,11 +111,11 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @PostMapping("/dayoff/{trainerId}")
-    public ResponseEntity<Void> addTrainerOff(@PathVariable Long trainerId,
+    public ResponseEntity<MessageResponse> addTrainerOff(@PathVariable Long trainerId,
                                               @Valid @RequestBody List<DayOffRequest> dayOffRequest) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         trainerService.addTrainerOff(trainer, dayOffRequest);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.CREATED, "트레이너 휴무일 생성 성공"), HttpStatus.CREATED);
     }
 
     @Operation(summary = "트레이너 계정 삭제")
@@ -122,8 +125,8 @@ public class TrainerController {
             @ApiResponse(responseCode = "404", description = "트레이너를 찾을 수 없음")
     })
     @DeleteMapping("auth/delete/{trainerId}")
-    public ResponseEntity<String> deleteTrainerAccount(@PathVariable Long trainerId) {
+    public ResponseEntity<MessageResponse> deleteTrainerAccount(@PathVariable Long trainerId) {
         trainerService.deleteTrainerAccount(trainerId);
-        return new ResponseEntity<>("Trainer deleted successfully", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "트레이너 계정 삭제 성공"), HttpStatus.OK);
     }
 }

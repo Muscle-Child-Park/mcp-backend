@@ -2,6 +2,7 @@ package com.park.muscle.core.lesson.presentation;
 
 import static com.park.muscle.core.exercise.dto.ExerciseRequestDto.CreateExerciseWithLesson;
 import static com.park.muscle.core.exercise.dto.LogRequestDto.LessonLogReflectionDto;
+import static com.park.muscle.core.lesson.dto.LessonRequest.FeedbackCreate;
 import static com.park.muscle.core.lesson.dto.LessonResponse.LessonCreateResponse;
 
 import com.park.muscle.core.exercise.application.ExerciseService;
@@ -17,6 +18,8 @@ import com.park.muscle.core.lesson.dto.LessonWithExerciseRequest;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.global.exception.ErrorResponse;
+import com.park.muscle.global.response.DataResponse;
+import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +27,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +63,7 @@ public class LessonController {
             })
     })
     @GetMapping("/{lessonId}")
-    public ResponseEntity<LessonRetrieveResponse> getLessonById(@PathVariable Long lessonId) {
+    public ResponseEntity<DataResponse<LessonRetrieveResponse>> getLessonById(@PathVariable Long lessonId) {
         Lesson lesson = lessonService.getOwnLessonById(lessonId);
         List<Exercise> exercises = lesson.getExercises();
         ExerciseDiary exerciseDiary = lesson.getExerciseDiary();
@@ -72,7 +74,7 @@ public class LessonController {
         }
         LessonRetrieveResponse lessonRetrieveResponse = LessonRetrieveResponse.fromEntity(lesson, exercises,
                 logReflectionResponseDto);
-        return ResponseEntity.status(HttpStatus.OK).body(lessonRetrieveResponse);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "수업 조회 성공", lessonRetrieveResponse), HttpStatus.OK);
     }
 
     @Operation(summary = "수업 등록", description = "수업을 등록합니다.")
@@ -81,7 +83,7 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<LessonCreateResponse> createLesson(
+    public ResponseEntity<DataResponse<LessonCreateResponse>> createLesson(
             @Valid @RequestBody LessonWithExerciseRequest lessonWithExerciseRequest) {
 
         LessonCreate lessonRequestDto = lessonWithExerciseRequest.getLessonRequestDto();
@@ -96,34 +98,36 @@ public class LessonController {
 
         lessonService.save(lesson);
         ticketService.saveTicket(ticket);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(LessonCreateResponse.fromEntity(lesson, ticket.getId()));
+        LessonCreateResponse lessonCreateResponse = LessonCreateResponse.fromEntity(lesson, ticket.getId());
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "수업 생성 성공", lessonCreateResponse),
+                HttpStatus.CREATED);
     }
 
-    @Operation(summary = "피드백 추가", description = "수업에 대한 피드백을 추가합니다.")
+    @Operation(summary = "피드백 생성", description = "수업에 대한 피드백을 생성합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "피드백이 성공적으로 추가되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/feedback/{lessonId}")
-    public ResponseEntity<String> addFeedbackToLesson(@Valid @RequestBody Map<String, String> feedback,
-                                                      @PathVariable final long lessonId) {
-        lessonService.addFeedback(lessonId, feedback.get("feedback"));
-        return ResponseEntity.status(HttpStatus.OK).body("피드백이 성공적으로 추가되었습니다.");
+    public ResponseEntity<MessageResponse> addFeedbackToLesson(@Valid @RequestBody FeedbackCreate feedback,
+                                                               @PathVariable final long lessonId) {
+        lessonService.addFeedback(lessonId, feedback.getFeedback());
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.CREATED, "피드백 생성 성공"), HttpStatus.CREATED);
     }
 
 
-    @Operation(summary = "회고 추가", description = "수업에 대한 회고를 추가합니다.")
+    @Operation(summary = "회고 생성", description = "수업에 대한 회고를 생성합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "회고가 성공적으로 추가되었습니다."),
+            @ApiResponse(responseCode = "201", description = "회고가 생성되었습니다."),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/log")
-    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(
+    public ResponseEntity<DataResponse<LogReflectionResponseDto>> addLogToLesson(
             @Valid @RequestBody LessonLogReflectionDto lessonLogReflectionDto) {
 
         LogReflectionResponseDto logReflectionResponseDto = lessonService.addExerciseDiary(lessonLogReflectionDto);
-        return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "회고 추가 성공", logReflectionResponseDto),
+                HttpStatus.CREATED);
     }
 
     @Operation(summary = "회고 업데이트", description = "수업에 대한 회고 업데이트")
@@ -132,8 +136,9 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/log")
-    public ResponseEntity<String> updateLogToLesson(@Valid @RequestBody LessonLogUpdateDto lessonLogUpdateDto) {
+    public ResponseEntity<MessageResponse> updateLogToLesson(
+            @Valid @RequestBody LessonLogUpdateDto lessonLogUpdateDto) {
         lessonService.updateExerciseDiary(lessonLogUpdateDto);
-        return ResponseEntity.status(HttpStatus.OK).body("update success");
+        return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "회고 업데이트 성공"), HttpStatus.OK);
     }
 }
