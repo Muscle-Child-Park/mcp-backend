@@ -11,6 +11,7 @@ import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTick
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class TicketController {
 
     @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through unique tags and Create ticket")
     @PostMapping("/request")
-    public ResponseEntity<TicketBasicResponse> createTicket(@RequestBody TicketRequest.Create ticketCreateDto) {
+    public ResponseEntity<TicketBasicResponse> createTicket(@Valid @RequestBody TicketRequest.Create ticketCreateDto) {
         Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketService.createTicket(member, ticketCreateDto));

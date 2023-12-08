@@ -93,7 +93,7 @@ public class TrainerController {
     })
     @PostMapping("/profile/{trainerId}")
     public ResponseEntity<Void> addTrainerGym(@PathVariable Long trainerId,
-                                                    @RequestBody GymRequest gymRequest) {
+                                              @Valid @RequestBody GymRequest gymRequest) {
         Trainer trainer = trainerService.getTrainerById(trainerId);
         Gym gym = gymRequest.toEntity(gymRequest.getName());
         trainer.addGym(gym);
@@ -109,8 +109,8 @@ public class TrainerController {
     })
     @PostMapping("/dayoff/{trainerId}")
     public ResponseEntity<Void> addTrainerOff(@PathVariable Long trainerId,
-                                              @RequestBody List<DayOffRequest> dayOffRequest){
-        Trainer trainer= trainerService.getTrainerById(trainerId);
+                                              @Valid @RequestBody List<DayOffRequest> dayOffRequest) {
+        Trainer trainer = trainerService.getTrainerById(trainerId);
         trainerService.addTrainerOff(trainer, dayOffRequest);
         return ResponseEntity.ok().build();
     }

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class OnboardingController {
     })
     @PutMapping("/my-page/{memberId}")
     public ResponseEntity<UpdateOnboarding> updateOnboarding(@PathVariable Long memberId,
-                                                             @RequestBody UpdateRequest request) {
+                                                             @Valid @RequestBody UpdateRequest request) {
         UpdateOnboarding updateOnboarding = onboardingService.updateOnboard(memberId, request);
         return ResponseEntity.ok(updateOnboarding);
     }

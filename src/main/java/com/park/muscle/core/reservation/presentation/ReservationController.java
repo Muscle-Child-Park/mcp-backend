@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,7 @@ public class ReservationController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/member")
-    public void registerReservation(@RequestBody ReservationRequest.Create request) {
+    public void registerReservation(@Valid @RequestBody ReservationRequest.Create request) {
         reservationService.registerReservation(request);
     }
 

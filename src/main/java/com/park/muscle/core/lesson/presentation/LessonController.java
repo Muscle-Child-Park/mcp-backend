@@ -16,7 +16,10 @@ import com.park.muscle.core.lesson.dto.LessonResponse.LessonRetrieveResponse;
 import com.park.muscle.core.lesson.dto.LessonWithExerciseRequest;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.global.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,8 +50,15 @@ public class LessonController {
 
     @Operation(summary = "수업 조회", description = "수업을 조회합니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "수업 조회 성공"),
-            @ApiResponse(responseCode = "401", description = "잘못된 요청")
+            @ApiResponse(responseCode = "200", description = "수업 조회 성공", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = LessonRetrieveResponse.class))
+            }),
+            @ApiResponse(responseCode = "401", description = "잘못된 요청", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "잘못된 요청", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))
+            })
     })
     @GetMapping("/{lessonId}")
     public ResponseEntity<LessonRetrieveResponse> getLessonById(@PathVariable Long lessonId) {
@@ -96,7 +106,7 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/feedback/{lessonId}")
-    public ResponseEntity<String> addFeedbackToLesson(@RequestBody Map<String, String> feedback,
+    public ResponseEntity<String> addFeedbackToLesson(@Valid @RequestBody Map<String, String> feedback,
                                                       @PathVariable final long lessonId) {
         lessonService.addFeedback(lessonId, feedback.get("feedback"));
         return ResponseEntity.status(HttpStatus.OK).body("피드백이 성공적으로 추가되었습니다.");
@@ -109,7 +119,9 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/log")
-    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(@RequestBody LessonLogReflectionDto lessonLogReflectionDto) {
+    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(
+            @Valid @RequestBody LessonLogReflectionDto lessonLogReflectionDto) {
+
         LogReflectionResponseDto logReflectionResponseDto = lessonService.addExerciseDiary(lessonLogReflectionDto);
         return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
     }
@@ -120,7 +132,7 @@ public class LessonController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping("/log")
-    public ResponseEntity<String> updateLogToLesson(@RequestBody LessonLogUpdateDto lessonLogUpdateDto) {
+    public ResponseEntity<String> updateLogToLesson(@Valid @RequestBody LessonLogUpdateDto lessonLogUpdateDto) {
         lessonService.updateExerciseDiary(lessonLogUpdateDto);
         return ResponseEntity.status(HttpStatus.OK).body("update success");
     }

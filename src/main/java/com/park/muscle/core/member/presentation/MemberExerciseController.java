@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -86,7 +87,7 @@ public class MemberExerciseController {
     })
     @PostMapping("/{memberId}")
     public ResponseEntity<PersonalExerciseCreateResponse> addPersonalExercises(@PathVariable Long memberId,
-                                                                               @RequestBody CreatePersonalExercise createPersonalExercise) {
+                                                                               @Valid @RequestBody CreatePersonalExercise createPersonalExercise) {
 
         PersonalExercise personalExercise = createPersonalExercise.getPersonalExerciseRequest().toEntity();
         List<CreateExerciseWithPersonal> exerciseRequestDtos = createPersonalExercise.getExerciseRequestDtos();
@@ -108,7 +109,7 @@ public class MemberExerciseController {
     })
     @PutMapping("/{memberId}")
     public ResponseEntity<PersonalExerciseCreateResponse> updateMemberExercises(@PathVariable Long memberId,
-                                                                                @RequestBody UpdatePersonalExercise updatePersonalExercise) {
+                                                                                @Valid @RequestBody UpdatePersonalExercise updatePersonalExercise) {
         List<UpdateExerciseWithPersonal> exerciseUpdate = updatePersonalExercise.getExerciseUpdateRequestDtos();
         Update personalUpdate = updatePersonalExercise.getPersonalExerciseUpdateRequest();
 

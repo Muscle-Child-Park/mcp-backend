@@ -1,7 +1,9 @@
 package com.park.muscle.core.member.presentation;
 
+import static com.park.muscle.core.member.dto.request.MemberRequest.LoginRequest;
+import static com.park.muscle.core.member.dto.request.MemberRequest.OnboardingQuestionRequest;
+
 import com.park.muscle.core.member.application.MemberAuthService;
-import com.park.muscle.core.member.dto.request.MemberRequest;
 import com.park.muscle.core.member.dto.response.MemberResponse.LoginResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +34,7 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody MemberRequest.LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> loginMember(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse loginResponse = memberAuthService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(loginResponse);
@@ -47,7 +49,7 @@ public class MemberAuthController {
     @PostMapping("/add-onboarding/{memberId}")
     public ResponseEntity<Void> addOnboardingQuestion(@PathVariable Long memberId,
                                                       @Valid
-                                                      @RequestBody MemberRequest.OnboardingQuestionRequest onboardingQuestionRequest) {
+                                                      @RequestBody OnboardingQuestionRequest onboardingQuestionRequest) {
         memberAuthService.addOnboardingQuestion(memberId, onboardingQuestionRequest);
         return ResponseEntity.ok().build();
     }

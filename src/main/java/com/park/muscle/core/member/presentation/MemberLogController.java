@@ -10,6 +10,7 @@ import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,12 @@ public class MemberLogController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(@RequestBody PersonalLogReflectionDto personalLogReflectionDto) {
-        LogReflectionResponseDto logReflectionResponseDto = exerciseLogService.addPersonalExerciseDiary(personalLogReflectionDto);
+    public ResponseEntity<LogReflectionResponseDto> addLogToLesson(
+            @Valid @RequestBody PersonalLogReflectionDto personalLogReflectionDto) {
+
+        LogReflectionResponseDto logReflectionResponseDto =
+                exerciseLogService.addPersonalExerciseDiary(personalLogReflectionDto);
+
         return ResponseEntity.status(HttpStatus.OK).body(logReflectionResponseDto);
     }
 
@@ -45,11 +50,13 @@ public class MemberLogController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PutMapping
-    public ResponseEntity<String> updateLogToLesson(@RequestBody PersonalLogUpdateDto personalLogUpdateDto) {
+    public ResponseEntity<String> updateLogToLesson(@Valid @RequestBody PersonalLogUpdateDto personalLogUpdateDto) {
+
         ExerciseDiary exerciseDiary = exerciseLogService.updatePersonalExerciseLog(personalLogUpdateDto);
         PersonalExercise personalExercise = personalExerciseService.findPersonalExerciseById(
                 personalLogUpdateDto.getPersonalId());
         personalExercise.updateExerciseDiary(exerciseDiary);
+
         return ResponseEntity.status(HttpStatus.OK).body("update success");
     }
 }
