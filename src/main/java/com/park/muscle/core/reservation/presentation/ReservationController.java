@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/reserve")
@@ -40,6 +42,8 @@ public class ReservationController {
     })
     @PostMapping("/member")
     public ResponseEntity<MessageResponse> registerReservation(@Valid @RequestBody ReservationRequest.Create request) {
+        log.info("reservation request = {}", request);
+        log.info("reservation request.ticket = {}", request.getTicketId());
         reservationService.registerReservation(request);
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "예약 생성 성공"), HttpStatus.OK);
     }

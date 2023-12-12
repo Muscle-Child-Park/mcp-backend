@@ -6,6 +6,7 @@ import com.park.muscle.core.reservation.domain.ReserveTimeSlot;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
+import com.park.muscle.global.entity.Users;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "trainer")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Trainer extends BaseEntity {
+public class Trainer extends BaseEntity implements Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +84,10 @@ public class Trainer extends BaseEntity {
         this.uniqueTag = uniqueTag;
     }
 
+    public Long getUniqueTagId() {
+        return uniqueTag.getId();
+    }
+
     public void updateName(String name) {
         this.name = Name.from(name);
     }
@@ -97,5 +102,13 @@ public class Trainer extends BaseEntity {
 
     public void addDayOffs(DayOff dayOff) {
         this.dayOffs.add(dayOff);
+    }
+
+    public boolean isNew() {
+        return id == null;
+    }
+
+    public void addReservation(Reservation reservation) {
+        this.reservations.add(reservation);
     }
 }

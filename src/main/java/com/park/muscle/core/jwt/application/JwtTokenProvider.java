@@ -2,10 +2,12 @@ package com.park.muscle.core.jwt.application;
 
 import com.park.muscle.core.jwt.JwtProperties;
 import com.park.muscle.core.jwt.dto.SessionUser;
-import com.park.muscle.core.member.domain.Member;
-import com.park.muscle.core.member.domain.MemberRepository;
+import com.park.muscle.core.jwt.exception.InvalidTokenException;
 import com.park.muscle.core.member.domain.Role;
-import com.park.muscle.core.trainer.domain.Trainer;
+import com.park.muscle.core.uniquetag.domain.UniqueTag;
+import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
+import com.park.muscle.core.uniquetag.exception.TagNotFoundException;
+import com.park.muscle.global.entity.Users;
 import com.park.muscle.global.infra.redis.RefreshToken;
 import com.park.muscle.global.infra.redis.RefreshTokenRepository;
 import io.jsonwebtoken.Claims;
@@ -46,7 +48,7 @@ public class JwtTokenProvider {
     private static final Long ACCESS_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.ACCESS_TOKEN_EXPIRATION;
     public static final Long REFRESH_TOKEN_EXPIRE_LENGTH_MS = JwtProperties.REFRESH_TOKEN_EXPIRATION;
 
-    private final MemberRepository memberRepository;
+    private final UniqueTagRepository uniqueTagRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private String secretKey = JwtProperties.SECRET;
     private Key key;
@@ -68,13 +70,13 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(getSessionUser(id), "", getGrantedAuthorities(role));
     }
 
-    public String createAccessToken(long memberId, Role role) {
+    public String createAccessToken(Long userId, Role role) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_LENGTH_MS);
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS256)
-                .setSubject(String.valueOf(memberId))
+                .setSubject(String.valueOf(userId))
                 .claim("role", role.getAuthority())
                 .setIssuer("mcpark")
                 .setIssuedAt(now)
@@ -82,17 +84,19 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(long memberId) {
+    public String createRefreshToken(Long userId) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_LENGTH_MS);
 
         String refreshToken = Jwts.builder()
-                .signWith(key, SignatureAlgorithm.HS256)
                 .setIssuer("mcpark")
+                .setSubject(userId.toString())
                 .setIssuedAt(now)
                 .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-        RefreshToken token = new RefreshToken(memberId, refreshToken);
+
+        RefreshToken token = new RefreshToken(userId, refreshToken);
         refreshTokenRepository.save(token);
         return refreshToken;
     }
@@ -115,13 +119,16 @@ public class JwtTokenProvider {
         }
     }
 
-    private SessionUser getSessionUser(long id) {
-        log.info("session user를 만들기 위해 id : {} 인 사람을 찾습니다.", id);
-        Optional<Member> optionalMember = memberRepository.findById(id);
-        if (optionalMember.isEmpty()) {
-            throw new JwtException("유효하지 않은 토큰");
-        }
-        return new SessionUser(optionalMember.get());
+    private SessionUser getSessionUser(Long tagId) {
+        log.info("session user를 만들기 위해 id : {} 인 사람을 찾습니다.", tagId);
+        UniqueTag uniqueTag = uniqueTagRepository.findById(tagId)
+                .orElseThrow(TagNotFoundException::new);
+        return createSessionUser(uniqueTag);
+    }
+
+    private SessionUser createSessionUser(UniqueTag uniqueTag) {
+        Users users = (uniqueTag.getTrainer() != null) ? uniqueTag.getTrainer() : uniqueTag.getMember();
+        return new SessionUser(users);
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(String role) {
@@ -140,11 +147,19 @@ public class JwtTokenProvider {
         return (Duration.between(now, expiration).compareTo(Duration.ofDays(3)) >= 0);
     }
 
-    public void saveMemberTokenInRedis(Member member, String refreshToken) {
-        refreshTokenRepository.save(new RefreshToken(member.getId(), refreshToken));
+    public void saveMemberTokenInRedis(Users users, String refreshToken) {
+        refreshTokenRepository.save(new RefreshToken(users.getUniqueTagId(), refreshToken));
     }
 
-    public void saveTrainerTokenInRedis(Trainer trainer, String refreshToken) {
-        refreshTokenRepository.save(new RefreshToken(trainer.getId(), refreshToken));
+    public void saveTrainerTokenInRedis(Users users, String refreshToken) {
+        refreshTokenRepository.save(new RefreshToken(users.getUniqueTagId(), refreshToken));
+    }
+
+    public String getValidRefreshToken(final Long uniqueTagId) {
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findById(uniqueTagId);
+        if (refreshToken.isEmpty()) {
+            throw new InvalidTokenException();
+        }
+        return refreshToken.get().getRefreshToken();
     }
 }

@@ -7,6 +7,7 @@ import com.park.muscle.core.personalexercise.domain.PersonalExercise;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.uniquetag.domain.UniqueTag;
 import com.park.muscle.global.entity.BaseEntity;
+import com.park.muscle.global.entity.Users;
 import com.park.muscle.global.enumerate.SocialType;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +84,10 @@ public class Member extends BaseEntity {
         this.uniqueTag = uniqueTag;
     }
 
+    public Long getUniqueTagId() {
+        return uniqueTag.getId();
+    }
+
     public void updateOnboarding(Onboarding onboarding) {
         this.onboarding = onboarding;
     }
@@ -97,5 +102,9 @@ public class Member extends BaseEntity {
 
     public void addPersonalExercises(PersonalExercise personalExercises) {
         this.personalExercises.add(personalExercises);
+    }
+
+    public boolean isNew() {
+        return this.id == null;
     }
 }

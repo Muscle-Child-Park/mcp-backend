@@ -10,6 +10,7 @@ import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoR
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReserveTimeSlotResponse;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
+import com.park.muscle.core.trainer.domain.Trainer;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,10 @@ public class ReservationService {
     @Transactional
     public void registerReservation(final Create request) {
         Ticket ticketById = ticketService.findTicketById(request.getTicketId());
+        log.info("ticket ID = {}", ticketById.getId());
+        Trainer trainer = ticketService.findTrainerByTagId(request.getTrainerTagId());
         Reservation reservation = request.toEntity();
+        trainer.addReservation(reservation);
         List<ReserveTimeSlot> reserveTimeSlots = reservation.getReserveTimeSlots();
         for (ReserveTimeSlot timeSlot : reserveTimeSlots){
             timeSlot.setReservation(reservation);

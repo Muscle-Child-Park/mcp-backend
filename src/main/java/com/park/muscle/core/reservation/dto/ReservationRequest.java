@@ -13,12 +13,12 @@ public class ReservationRequest {
     @Getter
     public static class Create {
         @NotNull(message = "Reservation ticket-id is required")
-        @Schema(description = "Reservation ticker ID")
+        @Schema(description = "Reservation ticket ID")
         private Long ticketId;
 
-        @NotNull(message = "Reservation trainer-id is required")
-        @Schema(description = "Trainer's identifier ID")
-        private Long trainerId;
+        @NotNull(message = "Reservation trainer-tag id is required")
+        @Schema(description = "Trainer's identifier Tag ID", example = "#00002")
+        private String trainerTagId;
 
         @NotNull(message = "Reservation date is required")
         @Schema(description = "Reservation date", example = "2023-11-17T08:00:00")

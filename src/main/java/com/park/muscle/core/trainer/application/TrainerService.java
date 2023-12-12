@@ -162,4 +162,8 @@ public class TrainerService {
         HttpHeaderUtil.setAccessToken(headers, tokenResponse.getAccessToken());
         return headers;
     }
+
+    public void save(final Trainer trainer) {
+        trainerRepository.save(trainer);
+    }
 }

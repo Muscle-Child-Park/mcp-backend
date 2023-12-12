@@ -6,8 +6,9 @@ import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.member.domain.MemberRepository;
 import com.park.muscle.core.member.dto.request.MemberRequest.LoginRequest;
 import com.park.muscle.core.member.dto.request.MemberRequest.OnboardingQuestionRequest;
-import com.park.muscle.core.member.dto.response.MemberResponse;
 import com.park.muscle.core.member.dto.response.MemberResponse.LoginResponse;
+import com.park.muscle.core.member.dto.response.MemberResponse.SignUpResponse;
+import com.park.muscle.core.member.dto.response.MemberResponse.TokenResponse;
 import com.park.muscle.core.onboarding.domain.OnboardingRepository;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
@@ -36,14 +37,24 @@ public class MemberAuthService {
         String userNumber = String.format("%s#%s", SocialType.KAKAO, loginRequest.getSocialId());
         Optional<Member> loginMember = memberService.getMemberBySocialId(userNumber);
 
-        if (loginMember.isPresent()) {
-            Member member = loginMember.get();
-            updateMemberName(loginRequest, member);
+        Member member = loginMember.orElseGet(() -> singUp(loginRequest));
+        TokenResponse tokenResponse = createTokenResponse(member);
+        HttpHeaders headers = setCookieAndHeader(tokenResponse);
+        SignUpResponse signUpResponse = SignUpResponse.fromEntity(member);
+        return LoginResponse.fromEntity(headers, signUpResponse);
+    }
+
+    private TokenResponse createTokenResponse(Member member) {
+        if (!member.isNew()) {
             return createSingUpResult(member);
         }
+        return createLoginResult(member);
+    }
 
-        Member member = singUp(loginRequest);
-        return createSingUpResult(member);
+    private TokenResponse createLoginResult(final Member member) {
+        String accessToken = jwtTokenProvider.createAccessToken(member.getUniqueTagId(), member.getRole());
+        String refreshToken = jwtTokenProvider.getValidRefreshToken(member.getUniqueTagId());
+        return TokenResponse.fromEntity(accessToken, refreshToken);
     }
 
     private Member singUp(final LoginRequest loginRequest) {
@@ -52,12 +63,12 @@ public class MemberAuthService {
         return memberService.saveSocialInfo(member);
     }
 
-    private LoginResponse createSingUpResult(final Member member) {
-        String accessToken = jwtTokenProvider.createAccessToken(member.getId(), member.getRole());
-        String refreshToken = jwtTokenProvider.createRefreshToken(member.getId());
+    private TokenResponse createSingUpResult(final Member member) {
+        String accessToken = jwtTokenProvider.createAccessToken(member.getUniqueTagId(), member.getRole());
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getUniqueTagId());
 
         jwtTokenProvider.saveMemberTokenInRedis(member, refreshToken);
-        return MemberResponse.LoginResponse.fromEntity(accessToken, refreshToken, new MemberResponse.SignUpResponse(member));
+        return TokenResponse.fromEntity(accessToken, refreshToken);
     }
 
     private void updateMemberName(final LoginRequest loginRequest, final Member member) {
@@ -86,7 +97,7 @@ public class MemberAuthService {
         return headers;
     }
 
-    public static HttpHeaders setCookieAndHeader(LoginResponse loginResult) {
+    public static HttpHeaders setCookieAndHeader(TokenResponse loginResult) {
         HttpHeaders headers = new HttpHeaders();
         CookieUtil.setRefreshCookie(headers, loginResult.getRefreshToken());
         HttpHeaderUtil.setAccessToken(headers, loginResult.getAccessToken());

@@ -10,7 +10,7 @@ import org.springframework.data.redis.core.index.Indexed;
 public class RefreshToken {
 
     @Id
-    private final Long memberId;
+    private final Long userId;
 
     /**
      * 사용자가 가지고 있는 refreshToken
@@ -18,8 +18,8 @@ public class RefreshToken {
     @Indexed
     private final String refreshToken;
 
-    public RefreshToken(Long memberId, String refreshToken) {
-        this.memberId = memberId;
+    public RefreshToken(Long userId, String refreshToken) {
+        this.userId = userId;
         this.refreshToken = refreshToken;
     }
 }

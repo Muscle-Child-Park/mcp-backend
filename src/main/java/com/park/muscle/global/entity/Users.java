@@ -1,8 +1,8 @@
-package com.park.muscle.core;
+package com.park.muscle.global.entity;
 
 import com.park.muscle.core.member.domain.Role;
 
-public interface User {
+public interface Users {
     Long getId();
 
     Role getRole();

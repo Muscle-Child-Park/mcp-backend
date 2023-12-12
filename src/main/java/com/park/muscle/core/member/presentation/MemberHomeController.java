@@ -33,6 +33,7 @@ public class MemberHomeController {
     @Operation(summary = "Member home", description = "Trainer, Reservation and log information")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "홈 페이지 접근 성공"),
+            @ApiResponse(responseCode = "204", description = "no content"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })

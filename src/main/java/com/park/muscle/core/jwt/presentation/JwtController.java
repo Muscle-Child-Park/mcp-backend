@@ -4,7 +4,7 @@ import static com.park.muscle.core.member.application.MemberAuthService.setCooki
 
 import com.park.muscle.core.jwt.application.JwtTokenReissueService;
 import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
-import com.park.muscle.global.response.MessageResponse;
+import com.park.muscle.global.response.DataResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,10 +30,11 @@ public class JwtController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @GetMapping("/api/jwt/refresh")
-    public ResponseEntity<MessageResponse> reIssueToken(@CookieValue(name = "refreshToken") String refreshToken) {
+    public ResponseEntity<DataResponse<ReIssueTokenDto>> reIssueToken(@CookieValue(name = "refreshToken") String refreshToken) {
         ReIssueTokenDto reIssueTokenDto = jwtTokenReissueService.reIssueToken(refreshToken);
         HttpHeaders headers = setCookieAndHeader(reIssueTokenDto);
-        return new ResponseEntity<>(
-                MessageResponse.of(HttpStatus.CREATED, "TOKEN 재발급 성공"), headers, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "Token 재발급 성공", reIssueTokenDto),
+                HttpStatus.CREATED);
     }
 }

@@ -29,7 +29,7 @@ public class RedisService {
     public Long findMemberByToken(String refreshToken) {
         RefreshToken token = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new JwtException(REFRESH_JWT_EXPIRED));
-        return token.getMemberId();
+        return token.getUserId();
     }
 
     private final RedisTemplate<String, Object> redisTemplate;

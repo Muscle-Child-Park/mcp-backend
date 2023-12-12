@@ -63,7 +63,6 @@ public class MemberAuthController {
     })
     @DeleteMapping("/delete/{memberId}")
     public ResponseEntity<MessageResponse> deleteOwnMemberAccount(@PathVariable Long memberId) {
-
         memberAuthService.deleteMember(memberId);
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.NO_CONTENT, "Member deleted successfully"),
                 HttpStatus.OK);

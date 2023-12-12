@@ -1,6 +1,6 @@
 package com.park.muscle.core.jwt.dto;
 
-import com.park.muscle.core.member.domain.Member;
+import com.park.muscle.global.entity.Users;
 import java.io.Serializable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,11 +9,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SessionUser implements Serializable {
 
-    private final Long uuid;
+    private final Long id;
     private final String authority;
 
-    public SessionUser(Member member) {
-        this.uuid = member.getId();
-        this.authority = member.getRole().getAuthority();
+    public SessionUser(Users users) {
+        this.id = users.getId();
+        this.authority = users.getRole().getAuthority();
     }
 }

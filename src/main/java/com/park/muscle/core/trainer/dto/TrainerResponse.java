@@ -4,17 +4,34 @@ import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoR
 import com.park.muscle.core.ticket.dto.response.TicketResponse.PendingMemberNameResponse;
 import com.park.muscle.core.trainer.domain.Trainer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 
 public class TrainerResponse {
 
     @Getter
     @Builder
-    @Schema(name = "Trainer-LoginResponseDTO")
+    @ApiResponse(description = "JWT와 로그인 정보를 반환하는 리스폰스")
     public static class LoginResponse {
+        private final SignUpResponse signUpResponse;
+        private final HttpHeaders httpHeaders;
+
+        public static LoginResponse fromEntity(HttpHeaders httpHeaders, SignUpResponse signUpResponse) {
+            return LoginResponse.builder()
+                    .signUpResponse(signUpResponse)
+                    .httpHeaders(httpHeaders)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @Schema(name = "Trainer-LoginResponseDTO")
+    public static class TokenResponse {
 
         @Schema(description = "발급된 액세스 토큰")
         private String accessToken;
@@ -22,18 +39,16 @@ public class TrainerResponse {
         @Schema(description = "발급된 리프래쉬 토큰")
         private String refreshToken;
 
-        private SignUpResponse trainer;
-
-        public static LoginResponse fromEntity(String accessToken, String refreshToken, SignUpResponse trainer) {
-            return LoginResponse.builder()
+        public static TokenResponse fromEntity(String accessToken, String refreshToken) {
+            return TokenResponse.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
-                    .trainer(trainer)
                     .build();
         }
     }
 
     @Getter
+    @Builder
     @Schema(name = "Trainer-SingUp Response DTO")
     public static class SignUpResponse {
         @Schema(description = "trainer 고유 아이디")
@@ -41,9 +56,11 @@ public class TrainerResponse {
         @Schema(description = "trainer 고유 태그")
         private final String trainerTag;
 
-        public SignUpResponse(Trainer trainer) {
-            this.trainerId = trainer.getId();
-            this.trainerTag = trainer.getUniqueTag().formattedId();
+        public static SignUpResponse fromEntity(final Trainer trainer) {
+            return SignUpResponse.builder()
+                    .trainerId(trainer.getId())
+                    .trainerTag(trainer.getUniqueTag().formattedId())
+                    .build();
         }
     }
 

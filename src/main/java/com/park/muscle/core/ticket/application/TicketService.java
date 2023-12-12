@@ -89,26 +89,32 @@ public class TicketService {
         return members;
     }
 
+    private Map<Long, Trainer> getTrainerMap(List<Trainer> trainers) {
+        return trainers.stream()
+                .collect(Collectors.toMap(Trainer::getId, Function.identity()));
+    }
+
+    private TrainerTicketInfoResponse mapTicketToTrainerTicketInfo(Ticket ticket, Map<Long, Trainer> trainerMap) {
+        Trainer trainer = trainerMap.get(ticket.getTrainer().getId());
+        return TrainerTicketInfoResponse.builder()
+                .trainerId(trainer.getId())
+                .name(trainer.getName())
+                .ticketGenerateInfo(ticket.getCreatedDate())
+                .totalQuantity(ticket.getTotalQuantity())
+                .leftQuantity(ticket.getLeftQuantity())
+                .build();
+    }
+
     @Transactional
     public List<TrainerTicketInfoResponse> getTrainerReservations(final Long memberId) {
         List<Trainer> trainers = findAllTrainerByMemberId(memberId);
         List<Ticket> tickets = ticketRepository.findAllTicketByMemberId(memberId);
 
-        Map<Long, Trainer> trainerMap = trainers.stream()
-                .collect(Collectors.toMap(Trainer::getId, Function.identity()));
+        Map<Long, Trainer> trainerMap = getTrainerMap(trainers);
 
         return tickets.stream()
                 .filter(ticket -> trainerMap.containsKey(ticket.getTrainer().getId()))
-                .map(ticket -> {
-                    Trainer trainer = trainerMap.get(ticket.getTrainer().getId());
-                    return TrainerTicketInfoResponse.builder()
-                            .trainerId(trainer.getId())
-                            .name(trainer.getName())
-                            .ticketGenerateInfo(ticket.getCreatedDate())
-                            .totalQuantity(ticket.getTotalQuantity())
-                            .leftQuantity(ticket.getLeftQuantity())
-                            .build();
-                })
+                .map(ticket -> mapTicketToTrainerTicketInfo(ticket, trainerMap))
                 .collect(Collectors.toList());
     }
 
@@ -117,5 +123,9 @@ public class TicketService {
         return allTicketByMember.stream()
                 .map(TrainerInfoByTicketResponse::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public Trainer findTrainerByTagId(final String trainerTagId) {
+        return uniqueTageService.findTrainerByTagId(trainerTagId);
     }
 }
