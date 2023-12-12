@@ -51,7 +51,7 @@ public class TrainerController {
     })
     @GetMapping("/{trainerId}")
     public ResponseEntity<DataResponse<TrainerHomeResponse>> trainerHome(@PathVariable Long trainerId) {
-        Trainer trainer = trainerService.getTrainerById(trainerId);
+        Trainer trainer = trainerService.findTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
         if (tickets == null) {
             return ResponseEntity.noContent().build();
@@ -82,7 +82,7 @@ public class TrainerController {
     })
     @GetMapping("/tickets/{trainerId}")
     public ResponseEntity<DataResponse<List<TicketTrainerResponse>>> getTrainerTickets(@PathVariable Long trainerId) {
-        Trainer trainer = trainerService.getTrainerById(trainerId);
+        Trainer trainer = trainerService.findTrainerById(trainerId);
         List<Ticket> tickets = trainer.getTickets();
         List<TicketTrainerResponse> ticketTrainerResponse = trainerService.getTrainerTickets(tickets);
         return new ResponseEntity<>(DataResponse.of(HttpStatus.OK, "티켓 조회 성공", ticketTrainerResponse), HttpStatus.OK);
@@ -97,7 +97,7 @@ public class TrainerController {
     @PostMapping("/profile/{trainerId}")
     public ResponseEntity<MessageResponse> addTrainerGym(@PathVariable Long trainerId,
                                                          @Valid @RequestBody GymRequest gymRequest) {
-        Trainer trainer = trainerService.getTrainerById(trainerId);
+        Trainer trainer = trainerService.findTrainerById(trainerId);
         Gym gym = gymRequest.toEntity(gymRequest.getName());
         trainer.addGym(gym);
         trainerService.saveGym(trainer, gym);
@@ -113,7 +113,7 @@ public class TrainerController {
     @PostMapping("/dayoff/{trainerId}")
     public ResponseEntity<MessageResponse> addTrainerOff(@PathVariable Long trainerId,
                                               @Valid @RequestBody List<DayOffRequest> dayOffRequest) {
-        Trainer trainer = trainerService.getTrainerById(trainerId);
+        Trainer trainer = trainerService.findTrainerById(trainerId);
         trainerService.addTrainerOff(trainer, dayOffRequest);
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.CREATED, "트레이너 휴무일 생성 성공"), HttpStatus.CREATED);
     }

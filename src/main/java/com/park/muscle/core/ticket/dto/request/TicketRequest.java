@@ -9,8 +9,8 @@ public class TicketRequest {
 
     @Getter
     public static class Create {
-        private Long memberId;
-        private String trainerTagId;
+        private Long trainerId;
+        private String memberTagId;
         private int totalQuantity;
 
         public Ticket toEntity(Member member, Trainer trainer) {
@@ -21,6 +21,4 @@ public class TicketRequest {
                     .build();
         }
     }
-
-
 }

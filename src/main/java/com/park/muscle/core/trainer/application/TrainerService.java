@@ -1,9 +1,10 @@
 package com.park.muscle.core.trainer.application;
 
-import static com.park.muscle.core.trainer.dto.TrainerResponse.LoginResponse;
 import static com.park.muscle.core.trainer.dto.TrainerResponse.SignUpResponse;
+import static com.park.muscle.core.trainer.dto.TrainerResponse.TokenResponse;
 
 import com.park.muscle.core.jwt.application.JwtTokenProvider;
+import com.park.muscle.core.jwt.dto.ReIssueTokenDto;
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.reservation.application.ReservationService;
 import com.park.muscle.core.reservation.dto.ReservationResponse.ReservationInfoResponse;
@@ -18,14 +19,18 @@ import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.core.trainer.domain.TrainerRepository;
 import com.park.muscle.core.trainer.dto.TrainerRequest.DayOffRequest;
 import com.park.muscle.core.trainer.dto.TrainerRequest.LoginRequest;
+import com.park.muscle.core.trainer.dto.TrainerResponse.LoginResponse;
 import com.park.muscle.core.trainer.exception.TrainerNotFoundException;
 import com.park.muscle.core.uniquetag.domain.UniqueTagRepository;
 import com.park.muscle.global.enumerate.SocialType;
+import com.park.muscle.global.util.CookieUtil;
+import com.park.muscle.global.util.HttpHeaderUtil;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,14 +50,26 @@ public class TrainerService {
         String userNumber = String.format("%s#%s", SocialType.KAKAO, loginRequest.getSocialId());
         Optional<Trainer> loginTrainer = trainerRepository.findByUsername(userNumber);
 
-        if (loginTrainer.isPresent()) {
-            Trainer trainer = loginTrainer.get();
-            updateTrainerInfo(loginRequest, trainer);
+        Trainer trainer = loginTrainer.orElseGet(() -> singUp(loginRequest));
+        TokenResponse tokenResponse = createTokenResponse(trainer);
+        HttpHeaders headers = setCookieAndHeader(tokenResponse);
+        SignUpResponse signUpResponse = SignUpResponse.fromEntity(trainer);
+        return LoginResponse.fromEntity(headers, signUpResponse);
+    }
+
+    private TokenResponse createTokenResponse(Trainer trainer) {
+        if (!trainer.isNew()) {
             return createSingUpResult(trainer);
         }
+        return createLoginResult(trainer);
+    }
 
-        Trainer trainer = singUp(loginRequest);
-        return createSingUpResult(trainer);
+    private TokenResponse createLoginResult(final Trainer trainer) {
+        String accessToken = jwtTokenProvider.createAccessToken(trainer.getUniqueTagId(), trainer.getRole());
+        String refreshToken = jwtTokenProvider.getValidRefreshToken(trainer.getUniqueTagId());
+        log.info("refresh token = {}", refreshToken);
+        jwtTokenProvider.saveMemberTokenInRedis(trainer, refreshToken);
+        return TokenResponse.fromEntity(accessToken, refreshToken);
     }
 
     private Trainer singUp(final LoginRequest loginRequest) {
@@ -61,19 +78,19 @@ public class TrainerService {
         return trainerRepository.save(trainer);
     }
 
-    private void updateTrainerInfo(final LoginRequest loginRequest, final Trainer trainer) {
-        trainer.updateName(loginRequest.getName());
-    }
-
-    private LoginResponse createSingUpResult(final Trainer trainer) {
+    private TokenResponse createSingUpResult(final Trainer trainer) {
         String accessToken = jwtTokenProvider.createAccessToken(trainer.getId(), trainer.getRole());
         String refreshToken = jwtTokenProvider.createRefreshToken(trainer.getId());
 
         jwtTokenProvider.saveTrainerTokenInRedis(trainer, refreshToken);
-        return LoginResponse.fromEntity(accessToken, refreshToken, new SignUpResponse(trainer));
+        return TokenResponse.fromEntity(accessToken, refreshToken);
     }
 
-    public Trainer getTrainerById(final Long trainerId) {
+    private void updateTrainerInfo(final LoginRequest loginRequest, final Trainer trainer) {
+        trainer.updateName(loginRequest.getName());
+    }
+
+    public Trainer findTrainerById(final Long trainerId) {
         return trainerRepository.findById(trainerId)
                 .orElseThrow(TrainerNotFoundException::new);
     }
@@ -110,7 +127,7 @@ public class TrainerService {
 
     @Transactional
     public void deleteTrainerAccount(final Long trainerId) {
-        Trainer trainer = getTrainerById(trainerId);
+        Trainer trainer = findTrainerById(trainerId);
         trainerRepository.delete(trainer);
     }
 
@@ -130,5 +147,19 @@ public class TrainerService {
                 })
                 .collect(Collectors.toList());
         dayOffRepository.saveAll(dayOffs);
+    }
+
+    public static HttpHeaders setCookieAndHeader(ReIssueTokenDto reIssueTokenDto) {
+        HttpHeaders headers = new HttpHeaders();
+        CookieUtil.setRefreshCookie(headers, reIssueTokenDto.getRefreshToken());
+        HttpHeaderUtil.setAccessToken(headers, reIssueTokenDto.getAccessToken());
+        return headers;
+    }
+
+    public static HttpHeaders setCookieAndHeader(TokenResponse tokenResponse) {
+        HttpHeaders headers = new HttpHeaders();
+        CookieUtil.setRefreshCookie(headers, tokenResponse.getRefreshToken());
+        HttpHeaderUtil.setAccessToken(headers, tokenResponse.getAccessToken());
+        return headers;
     }
 }

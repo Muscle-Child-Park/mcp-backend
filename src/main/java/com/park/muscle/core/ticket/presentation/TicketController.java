@@ -1,13 +1,13 @@
 package com.park.muscle.core.ticket.presentation;
 
-import com.park.muscle.core.member.application.MemberService;
-import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.ticket.application.TicketService;
 import com.park.muscle.core.ticket.domain.Ticket;
 import com.park.muscle.core.ticket.dto.request.TicketRequest;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.LessonByTicketResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TicketBasicResponse;
 import com.park.muscle.core.ticket.dto.response.TicketResponse.TrainerInfoByTicketResponse;
+import com.park.muscle.core.trainer.application.TrainerService;
+import com.park.muscle.core.trainer.domain.Trainer;
 import com.park.muscle.global.response.DataResponse;
 import com.park.muscle.global.response.MessageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,14 +30,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Ticket Management", description = "Endpoints for managing tickets")
 public class TicketController {
     private final TicketService ticketService;
-    private final MemberService memberService;
+    private final TrainerService trainerService;
 
-    @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through unique tags and Create ticket")
+    @Operation(summary = "LessonCreate a ticket", description = "Connected with trainer through Member unique tags and Create ticket")
     @PostMapping("/request")
     public ResponseEntity<DataResponse<TicketBasicResponse>> createTicket(@Valid @RequestBody TicketRequest.Create ticketCreateDto) {
-        Member member = memberService.findMemberById(ticketCreateDto.getMemberId());
-        TicketBasicResponse ticket = ticketService.createTicket(member, ticketCreateDto);
-        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "유니크 태그를 통해 티켓 생성에 성공했습니다.", ticket),
+        Trainer trainer = trainerService.findTrainerById(ticketCreateDto.getTrainerId());
+        TicketBasicResponse ticket = ticketService.createTicket(trainer, ticketCreateDto);
+        return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "멤버 유니크 태그를 통해 티켓 생성에 성공했습니다.", ticket),
                 HttpStatus.CREATED);
     }
 

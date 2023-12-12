@@ -2,6 +2,7 @@ package com.park.muscle.core.uniquetag.domain;
 
 import com.park.muscle.core.member.domain.Member;
 import com.park.muscle.core.trainer.domain.Trainer;
+import com.park.muscle.global.entity.User;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,13 @@ public class UniqueTag {
         this.uniqueTag = generateUniqueTag();
     }
 
+    public User getUser() {
+        if (member == null) {
+            return trainer;
+        }
+        return member;
+    }
+
     public void updateMember(Member member) {
         this.member = member;
     }
@@ -66,4 +74,5 @@ public class UniqueTag {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();
     }
+
 }

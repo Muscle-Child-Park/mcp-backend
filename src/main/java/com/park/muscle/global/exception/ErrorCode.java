@@ -25,6 +25,7 @@ public enum ErrorCode {
     TRAINER_NOT_FOUND(HttpStatus.NOT_FOUND, "TR001", "해당 트레이너를 찾을 수 없습니다."),
 
     // JWT
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"J001", "존재하지않은 토큰입니다."),
     REFRESH_JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "J003", "만료된 리프레시 토큰입니다."),
 
     // Exercise
@@ -42,7 +43,10 @@ public enum ErrorCode {
     PERSONAL_EXERCISE_NOT_FOUND(HttpStatus.NOT_FOUND, "P001", "해당 개인 운동을 찾을 수 없습니다."),
 
     // Ticket
-    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "해당 티켓을 찾을 수 없습니다.");
+    TICKET_NOT_FOUND(HttpStatus.NOT_FOUND, "T001", "해당 티켓을 찾을 수 없습니다."),
+
+    // UniqueTag
+    UNIQUE_TAG_NOT_FOUND(HttpStatus.NOT_FOUND, "U001", "해당 유니크 태그를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

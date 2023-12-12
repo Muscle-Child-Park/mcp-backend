@@ -32,8 +32,8 @@ public class TicketService {
     private final TicketRepository ticketRepository;
 
     @Transactional
-    public TicketBasicResponse createTicket(final Member member, final Create ticketCreateDto) {
-        Trainer trainer = uniqueTageService.getTrainerByTagId(ticketCreateDto.getTrainerTagId());
+    public TicketBasicResponse createTicket(final Trainer trainer, final Create ticketCreateDto) {
+        Member member = uniqueTageService.findMemberByMemberTagId(ticketCreateDto.getMemberTagId());
         Ticket ticket = ticketCreateDto.toEntity(member, trainer);
         ticketRepository.save(ticket);
         return TicketBasicResponse.fromEntity(member, trainer, ticket);
