@@ -88,15 +88,15 @@ public class LessonController {
 
         LessonCreate lessonRequestDto = lessonWithExerciseRequest.getLessonRequestDto();
         Lesson lesson = lessonRequestDto.toEntity();
+        lessonService.save(lesson);
 
         List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequest.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
+        lesson.addExercise(exercises);
+        lessonService.save(lesson);
 
         Ticket ticket = ticketService.findTicketById(lessonRequestDto.getTicketId());
-        lesson.addExercise(exercises);
         ticket.setLesson(lesson);
-
-        lessonService.save(lesson);
         ticketService.saveTicket(ticket);
         LessonCreateResponse lessonCreateResponse = LessonCreateResponse.fromEntity(lesson, ticket.getId());
         return new ResponseEntity<>(DataResponse.of(HttpStatus.CREATED, "수업 생성 성공", lessonCreateResponse),
