@@ -39,6 +39,9 @@ public class TicketService {
         return TicketBasicResponse.fromEntity(member, trainer, ticket);
     }
 
+    /**TODO: 2023-12-14, 목, 19:33  -JEON
+    *  TASK: 사용 보류
+    */
     @Transactional
     public void acceptTicket(final Long ticketId) {
         Ticket ticket = findTicketById(ticketId);
@@ -65,6 +68,7 @@ public class TicketService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveTicket(final Ticket ticket) {
         ticketRepository.save(ticket);
     }

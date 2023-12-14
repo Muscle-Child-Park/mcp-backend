@@ -19,6 +19,7 @@ public class LessonService {
     private final ExerciseLogService exerciseLogService;
     private final LessonRepository lessonRepository;
 
+    @Transactional
     public void save(final Lesson lesson) {
         lessonRepository.save(lesson);
     }

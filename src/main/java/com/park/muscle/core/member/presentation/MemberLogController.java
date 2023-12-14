@@ -63,5 +63,3 @@ public class MemberLogController {
         return new ResponseEntity<>(MessageResponse.of(HttpStatus.OK, "개인 운동 회고 업데이트 성공"), HttpStatus.OK);
     }
 }
-
-

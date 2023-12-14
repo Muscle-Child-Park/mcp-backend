@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
 
+    @Transactional
     public List<Exercise> saveExerciseWithLesson(final List<CreateExerciseWithLesson> exerciseRequestDto) {
         List<Exercise> exercises = exerciseRequestDto.stream()
                 .map(CreateExerciseWithLesson::toEntity)
@@ -29,6 +30,7 @@ public class ExerciseService {
     }
 
 
+    @Transactional
     public List<Exercise> saveExerciseWithMember(final List<CreateExerciseWithPersonal> exerciseRequestDto) {
         List<Exercise> exercises = exerciseRequestDto.stream()
                 .map(CreateExerciseWithPersonal::toEntity)
