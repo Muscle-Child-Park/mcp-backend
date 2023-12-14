@@ -88,7 +88,6 @@ public class LessonController {
 
         LessonCreate lessonRequestDto = lessonWithExerciseRequest.getLessonRequestDto();
         Lesson lesson = lessonRequestDto.toEntity();
-        lessonService.save(lesson);
 
         List<CreateExerciseWithLesson> exercisesRequestDto = lessonWithExerciseRequest.getExerciseRequestDtos();
         List<Exercise> exercises = exerciseService.saveExerciseWithLesson(exercisesRequestDto);
